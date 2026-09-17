@@ -17,9 +17,18 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+          cache: gradle
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+      # SMCPKG_SUPPORT>>>Cursor002
+      # android-actions/setup-android@v3 failed in CI: sdkmanager --licenses
+      # prompted interactively and exited 1 (licenses not auto-accepted).
+      # GitHub-hosted ubuntu-latest already has ANDROID_HOME with licenses.
+      # - name: Set up Android SDK
+      #   uses: android-actions/setup-android@v3
+      # SMCPKG_SUPPORT<<<Cursor002
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
 
       - name: Assemble debug APK
         run: ./gradlew assembleDebug --stacktrace
