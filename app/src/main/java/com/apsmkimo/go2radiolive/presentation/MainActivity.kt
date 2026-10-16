@@ -10,7 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
-import com.apsmkimo.go2radiolive.presentation.ui.home.HomeScreen
+import com.apsmkimo.go2radiolive.presentation.ui.Go2RadioRoot
 import com.apsmkimo.go2radiolive.presentation.ui.theme.Go2RadioTheme
 
 class MainActivity : ComponentActivity() {
@@ -25,7 +25,10 @@ class MainActivity : ComponentActivity() {
         requestNotificationPermissionIfNeeded()
         setContent {
             Go2RadioTheme {
-                HomeScreen()
+                // SMCPKG_SUPPORT>>>Cursor014
+                // HomeScreen()
+                Go2RadioRoot()
+                // SMCPKG_SUPPORT<<<Cursor014
             }
         }
     }

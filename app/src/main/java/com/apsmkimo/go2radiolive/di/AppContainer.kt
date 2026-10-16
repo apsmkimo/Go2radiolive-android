@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.di
 
 import android.content.Context
+import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
@@ -28,6 +29,13 @@ import java.util.concurrent.TimeUnit
 class AppContainer(context: Context) {
 
     private val appContext = context.applicationContext
+
+    // SMCPKG_SUPPORT>>>Cursor017
+    init {
+        AudioSettingsRepository.start(appContext)
+    }
+    // SMCPKG_SUPPORT<<<Cursor017
+
     val gson: Gson = Gson()
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()

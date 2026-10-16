@@ -12,8 +12,12 @@ android {
         applicationId = "com.apsmkimo.go2radiolive"
         minSdk = 26
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0.0"
+        // SMCPKG_SUPPORT>>>Cursor010
+        // versionCode = 1
+        // versionName = "1.0.0"
+        versionCode = 2
+        versionName = "1.1.0"
+        // SMCPKG_SUPPORT<<<Cursor010
 
         vectorDrawables {
             useSupportLibrary = true

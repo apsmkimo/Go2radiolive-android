@@ -12,6 +12,8 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.audio.dsp.Go2RenderersFactory
 import com.apsmkimo.go2radiolive.presentation.MainActivity
 
 @OptIn(UnstableApi::class)
@@ -21,13 +23,21 @@ class RadioPlaybackService : MediaSessionService() {
 
     override fun onCreate() {
         super.onCreate()
+        // SMCPKG_SUPPORT>>>Cursor011
+        AudioSettingsRepository.start(this)
+        // SMCPKG_SUPPORT<<<Cursor011
         val dataSourceFactory = DefaultHttpDataSource.Factory()
             .setUserAgent(USER_AGENT)
             .setAllowCrossProtocolRedirects(true)
             .setConnectTimeoutMs(15_000)
             .setReadTimeoutMs(20_000)
 
+        // SMCPKG_SUPPORT>>>Cursor012
+        // val player = ExoPlayer.Builder(this)
+        //     .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
+        //     .setAudioAttributes(
         val player = ExoPlayer.Builder(this)
+            .setRenderersFactory(Go2RenderersFactory(this))
             .setMediaSourceFactory(DefaultMediaSourceFactory(dataSourceFactory))
             .setAudioAttributes(
                 AudioAttributes.Builder()
@@ -39,6 +49,7 @@ class RadioPlaybackService : MediaSessionService() {
             .setHandleAudioBecomingNoisy(true)
             .setWakeMode(C.WAKE_MODE_NETWORK)
             .build()
+        // SMCPKG_SUPPORT<<<Cursor012
         player.repeatMode = Player.REPEAT_MODE_OFF
 
         val sessionActivity = PendingIntent.getActivity(
@@ -76,6 +87,9 @@ class RadioPlaybackService : MediaSessionService() {
     }
 
     companion object {
-        const val USER_AGENT = "Go2RadioLive/1.0.0"
+        // SMCPKG_SUPPORT>>>Cursor013
+        // const val USER_AGENT = "Go2RadioLive/1.0.0"
+        const val USER_AGENT = "Go2RadioLive/1.1.0"
+        // SMCPKG_SUPPORT<<<Cursor013
     }
 }
