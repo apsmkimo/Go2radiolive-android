@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.presentation.ui.settings
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,7 +17,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -31,6 +34,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.BuildConfig
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.domain.model.AudioSettings
+import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
 import com.apsmkimo.go2radiolive.presentation.ui.components.AudioEffectControls
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,12 +102,15 @@ fun SettingsScreen(onBack: () -> Unit) {
                 checked = settings.voiceEnhancement,
                 onCheckedChange = AudioSettingsRepository::setVoiceEnhancement,
             )
-            SettingsSwitchRow(
-                title = stringResource(R.string.virtual_surround),
-                summary = stringResource(R.string.virtual_surround_summary),
-                checked = settings.virtualSurround,
-                onCheckedChange = AudioSettingsRepository::setVirtualSurround,
-            )
+            // SMCPKG_SUPPORT>>>Cursor064
+            // SettingsSwitchRow(
+            //     title = stringResource(R.string.virtual_surround),
+            //     summary = stringResource(R.string.virtual_surround_summary),
+            //     checked = settings.virtualSurround,
+            //     onCheckedChange = AudioSettingsRepository::setVirtualSurround,
+            // )
+            SpatialAudioSection(settings = settings)
+            // SMCPKG_SUPPORT<<<Cursor064
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
 
@@ -128,6 +136,133 @@ fun SettingsScreen(onBack: () -> Unit) {
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
         }
+    }
+}
+
+@Composable
+private fun SpatialAudioSection(settings: AudioSettings) {
+    Text(
+        text = stringResource(R.string.spatial_section),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+    )
+    SpatialModeRow(
+        title = stringResource(R.string.spatial_off),
+        summary = stringResource(R.string.spatial_off_summary),
+        selected = settings.spatialMode == SpatialAudioMode.OFF,
+        onSelect = { AudioSettingsRepository.setSpatialMode(SpatialAudioMode.OFF) },
+    )
+    SpatialModeRow(
+        title = stringResource(R.string.spatial_natural),
+        summary = stringResource(R.string.spatial_natural_summary),
+        selected = settings.spatialMode == SpatialAudioMode.NATURAL,
+        onSelect = { AudioSettingsRepository.setSpatialMode(SpatialAudioMode.NATURAL) },
+    )
+    SpatialModeRow(
+        title = stringResource(R.string.spatial_surround),
+        summary = stringResource(R.string.spatial_surround_summary),
+        selected = settings.spatialMode == SpatialAudioMode.SURROUND,
+        onSelect = { AudioSettingsRepository.setSpatialMode(SpatialAudioMode.SURROUND) },
+    )
+    SpatialModeRow(
+        title = stringResource(R.string.spatial_orbit),
+        summary = stringResource(R.string.spatial_orbit_summary),
+        selected = settings.spatialMode == SpatialAudioMode.ORBIT,
+        onSelect = { AudioSettingsRepository.setSpatialMode(SpatialAudioMode.ORBIT) },
+    )
+    if (settings.spatialMode == SpatialAudioMode.ORBIT) {
+        OrbitControls(settings)
+    }
+}
+
+@Composable
+private fun SpatialModeRow(
+    title: String,
+    summary: String,
+    selected: Boolean,
+    onSelect: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onSelect)
+            .padding(horizontal = 8.dp, vertical = 2.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        RadioButton(selected = selected, onClick = onSelect)
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = summary,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+@Composable
+private fun OrbitControls(settings: AudioSettings) {
+    Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.orbit_speed),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f),
+            )
+            Text(
+                text = stringResource(R.string.orbit_speed_value, settings.orbitPeriodSec),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Slider(
+            value = settings.orbitPeriodSec,
+            onValueChange = AudioSettingsRepository::setOrbitPeriodSec,
+            valueRange = AudioSettings.ORBIT_PERIOD_MIN..AudioSettings.ORBIT_PERIOD_MAX,
+        )
+        Text(
+            text = stringResource(R.string.orbit_direction),
+            style = MaterialTheme.typography.bodyMedium,
+            modifier = Modifier.padding(top = 4.dp),
+        )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            RadioButton(
+                selected = settings.orbitClockwise,
+                onClick = { AudioSettingsRepository.setOrbitClockwise(true) },
+            )
+            Text(
+                text = stringResource(R.string.orbit_clockwise),
+                modifier = Modifier
+                    .clickable { AudioSettingsRepository.setOrbitClockwise(true) }
+                    .padding(end = 12.dp),
+            )
+            RadioButton(
+                selected = !settings.orbitClockwise,
+                onClick = { AudioSettingsRepository.setOrbitClockwise(false) },
+            )
+            Text(
+                text = stringResource(R.string.orbit_counterclockwise),
+                modifier = Modifier.clickable { AudioSettingsRepository.setOrbitClockwise(false) },
+            )
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = stringResource(R.string.orbit_strength),
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.weight(1f),
+            )
+            Text(
+                text = stringResource(R.string.orbit_strength_value, settings.orbitStrength * 100f),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Slider(
+            value = settings.orbitStrength,
+            onValueChange = AudioSettingsRepository::setOrbitStrength,
+            valueRange = 0f..1f,
+        )
     }
 }
 

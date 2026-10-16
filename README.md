@@ -14,7 +14,10 @@ SMCPKG_SUPPORT<<<Cursor016 -->
 <!-- SMCPKG_SUPPORT>>>Cursor039
 - `versionName`: `1.1.0` / `versionCode`: `2`
 SMCPKG_SUPPORT<<<Cursor039 -->
+<!-- SMCPKG_SUPPORT>>>Cursor057
 - `versionName`: `1.1.1` / `versionCode`: `3`
+SMCPKG_SUPPORT<<<Cursor057 -->
+- `versionName`: `1.2.0` / `versionCode`: `4`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
@@ -26,14 +29,15 @@ SMCPKG_SUPPORT<<<Cursor039 -->
 - 電台列表：favicon（Coil，失敗時 fallback）、點卡片播放、愛心收藏
 - Mini Player：目前電台名稱 + 播放/暫停
 - 右上角齒輪進入設定，顯示 versionName / versionCode
-- 音效面板按鈕、四段等化器（Bass / Low / Mid / High）、左右平衡、語音增強、虛擬環繞（自訂 PCM DSP，DataStore 持久化）
+- 音效面板按鈕、四段等化器（Bass / Low / Mid / High）、左右平衡、語音增強（自訂 PCM DSP，DataStore 持久化）
+- 3D 空間音效：關閉 / 自然 3D / 環繞 / 環軌 四選一（參數化雙耳模型，取代虛擬環繞）
 - 背景播放：AndroidX Media3 ExoPlayer + `MediaSessionService` 前景服務，支援通知列 / 鎖屏控制
 - 底部分頁：在地 / 世界 / 保留 / 分類 / 我的最愛
 - 我的最愛以 DataStore Preferences（Gson JSON）持久化
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.1.1`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.2.0`。
 
 | 分頁 | 端點 | 說明 |
 | --- | --- | --- |

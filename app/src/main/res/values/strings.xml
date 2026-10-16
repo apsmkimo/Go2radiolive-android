@@ -32,8 +32,26 @@
     <string name="audio_panel_button_summary">在播放列的播放按鈕旁顯示音效面板按鈕</string>
     <string name="voice_enhancement">語音增強</string>
     <string name="voice_enhancement_summary">加強人聲頻段，並稍微降低低頻混濁</string>
-    <string name="virtual_surround">虛擬環繞</string>
-    <string name="virtual_surround_summary">加寬立體聲聲場</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor058 -->
+    <!-- <string name="virtual_surround">虛擬環繞</string> -->
+    <!-- <string name="virtual_surround_summary">加寬立體聲聲場</string> -->
+    <string name="spatial_section">3D 空間音效</string>
+    <string name="spatial_off">關閉</string>
+    <string name="spatial_off_summary">關閉空間處理，恢復原始音訊</string>
+    <string name="spatial_natural">自然 3D</string>
+    <string name="spatial_natural_summary">溫和的雙耳空間感，適合長時間聆聽，並保留人聲清晰</string>
+    <string name="spatial_surround">環繞</string>
+    <string name="spatial_surround_summary">以雙耳方位與早期反射呈現前、側、後方向</string>
+    <string name="spatial_orbit">環軌</string>
+    <string name="spatial_orbit_summary">虛擬聲源沿水平面平緩繞行</string>
+    <string name="orbit_speed">旋轉速度</string>
+    <string name="orbit_speed_value">%1$.0f 秒／圈</string>
+    <string name="orbit_direction">旋轉方向</string>
+    <string name="orbit_clockwise">順時針</string>
+    <string name="orbit_counterclockwise">逆時針</string>
+    <string name="orbit_strength">效果強度</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor058 -->
     <string name="eq_section">等化器與平衡</string>
     <string name="eq_shared_hint">這裡的調整會即時套用，並與播放列音效面板共用</string>
     <!-- SMCPKG_SUPPORT>>>Cursor037 -->

@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.audio.dsp
 
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
 import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
@@ -61,6 +62,7 @@ internal object DspRuntime {
     private var smoothedBalance = 0.0
     private var smoothedVoice = 0.0
     private var smoothedSurround = 0.0
+    private var spatialEngaged = false
 
     private var designedRate = 0
     private var designedBass = Double.NaN
@@ -100,7 +102,11 @@ internal object DspRuntime {
         smoothedHigh = target.highDb.toDouble()
         smoothedBalance = target.balance.toDouble()
         smoothedVoice = if (target.voiceEnhancement) 1.0 else 0.0
-        smoothedSurround = if (target.virtualSurround) 1.0 else 0.0
+        // SMCPKG_SUPPORT>>>Cursor054
+        // smoothedSurround = if (target.virtualSurround) 1.0 else 0.0
+        smoothedSurround = 0.0
+        spatialEngaged = target.spatialMode != SpatialAudioMode.OFF
+        // SMCPKG_SUPPORT<<<Cursor054
     }
 
     private fun approach(target: com.apsmkimo.go2radiolive.domain.model.AudioSettings, k: Double) {
@@ -110,9 +116,13 @@ internal object DspRuntime {
         smoothedHigh = move(smoothedHigh, target.highDb.toDouble(), k, 0.01)
         smoothedBalance = move(smoothedBalance, target.balance.toDouble(), k, 0.002)
         val voiceTarget = if (target.voiceEnhancement) 1.0 else 0.0
-        val surroundTarget = if (target.virtualSurround) 1.0 else 0.0
+        // SMCPKG_SUPPORT>>>Cursor055
+        // val surroundTarget = if (target.virtualSurround) 1.0 else 0.0
+        // smoothedSurround = move(smoothedSurround, surroundTarget, k, 0.002)
         smoothedVoice = move(smoothedVoice, voiceTarget, k, 0.002)
-        smoothedSurround = move(smoothedSurround, surroundTarget, k, 0.002)
+        smoothedSurround = 0.0
+        spatialEngaged = target.spatialMode != SpatialAudioMode.OFF
+        // SMCPKG_SUPPORT<<<Cursor055
     }
 
     private fun move(current: Double, target: Double, k: Double, snapDistance: Double): Double {
@@ -156,8 +166,12 @@ internal object DspRuntime {
     private fun publish(): DspFrame {
         val eqActive = abs(smoothedBass) > 0.04 || abs(smoothedLow) > 0.04 ||
             abs(smoothedMid) > 0.04 || abs(smoothedHigh) > 0.04
+        // SMCPKG_SUPPORT>>>Cursor063
+        // val processingActive = eqActive || smoothedVoice > 0.004 ||
+        //     smoothedSurround > 0.004 || abs(smoothedBalance) > 0.004
         val processingActive = eqActive || smoothedVoice > 0.004 ||
-            smoothedSurround > 0.004 || abs(smoothedBalance) > 0.004
+            smoothedSurround > 0.004 || abs(smoothedBalance) > 0.004 || spatialEngaged
+        // SMCPKG_SUPPORT<<<Cursor063
         val theta = (smoothedBalance.coerceIn(-1.0, 1.0) + 1.0) * (PI / 4.0)
         val gainL = cos(theta) * SQRT_2
         val gainR = sin(theta) * SQRT_2
