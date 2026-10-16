@@ -74,16 +74,21 @@ internal class StereoFieldAudioProcessor : BaseAudioProcessor() {
                 output.putShort(floatToPcm16(applyLimiter(sample)))
             }
         } else {
-            if (frame.surroundMix < 0.0008) {
-                if (surroundArmed) {
-                    clearDelay()
-                    surroundArmed = false
-                }
-            } else {
-                surroundArmed = true
-                if (delayLength == 0) configureDelay(inputAudioFormat.sampleRate)
-            }
-            val applySurround = frame.surroundMix >= 0.0008 && delayLength > 0
+            // SMCPKG_SUPPORT>>>Cursor051
+            // The old mid/side widener is not part of the live chain anymore.
+            // Spatial modes run in SpatialAudioProcessor, one at a time.
+            // if (frame.surroundMix < 0.0008) {
+            //     if (surroundArmed) {
+            //         clearDelay()
+            //         surroundArmed = false
+            //     }
+            // } else {
+            //     surroundArmed = true
+            //     if (delayLength == 0) configureDelay(inputAudioFormat.sampleRate)
+            // }
+            // val applySurround = frame.surroundMix >= 0.0008 && delayLength > 0
+            val applySurround = false
+            // SMCPKG_SUPPORT<<<Cursor051
             val applyBalance = abs(frame.balance) > 0.0008
             repeat(frames) {
                 var left = inputBuffer.getFloat().toDouble()

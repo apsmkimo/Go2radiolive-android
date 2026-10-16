@@ -19,9 +19,13 @@ android {
         // SMCPKG_SUPPORT>>>Cursor038
         // versionCode = 2
         // versionName = "1.1.0"
-        versionCode = 3
-        versionName = "1.1.1"
+        // versionCode = 3
+        // versionName = "1.1.1"
         // SMCPKG_SUPPORT<<<Cursor038
+        // SMCPKG_SUPPORT>>>Cursor052
+        versionCode = 4
+        versionName = "1.2.0"
+        // SMCPKG_SUPPORT<<<Cursor052
 
         vectorDrawables {
             useSupportLibrary = true
@@ -96,4 +100,6 @@ dependencies {
     implementation(libs.datastore.preferences)
     implementation(libs.play.services.ads)
     implementation(libs.kotlinx.coroutines.android)
+
+    testImplementation(libs.junit)
 }

@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.audio.AudioSink
 import androidx.media3.exoplayer.audio.DefaultAudioSink
+import com.apsmkimo.go2radiolive.audio.spatial.SpatialAudioProcessor
 
 /**
  * Installs the original PCM processor chain:
- * 16-bit EQ -> float voice enhancement -> stereo field / balance / soft limit -> 16-bit.
+ * 16-bit EQ -> float voice enhancement -> spatial binaural -> balance / soft limit -> 16-bit.
  * Float output is left off because Media3 only inserts app processors on the 16-bit path.
  */
 class Go2RenderersFactory(context: Context) : DefaultRenderersFactory(context) {
@@ -23,7 +24,11 @@ class Go2RenderersFactory(context: Context) : DefaultRenderersFactory(context) {
                 arrayOf(
                     EqBiquadAudioProcessor(),
                     VoiceEnhanceAudioProcessor(),
+                    // SMCPKG_SUPPORT>>>Cursor056
+                    // StereoFieldAudioProcessor(),
+                    SpatialAudioProcessor(),
                     StereoFieldAudioProcessor(),
+                    // SMCPKG_SUPPORT<<<Cursor056
                 ),
             )
             .build()
