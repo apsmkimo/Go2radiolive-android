@@ -5,7 +5,6 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.exp
-import kotlin.math.pow
 import kotlin.math.sin
 import kotlin.math.sqrt
 
@@ -135,7 +134,12 @@ internal object DspRuntime {
         designedLow = smoothedLow
         designedMid = smoothedMid
         designedHigh = smoothedHigh
-        bassCoeff = designLowShelf(rate, 60.0, smoothedBass)
+        // SMCPKG_SUPPORT>>>Cursor030
+        // bassCoeff = designLowShelf(rate, 60.0, smoothedBass)
+        // Low shelf (RBJ cookbook, shelf slope S = 1). Corner was 60 Hz; headphones lose
+        // energy that low, so the corner is 70 Hz. Peaking Q is not used for this shelf.
+        bassCoeff = designLowShelf(rate, 70.0, smoothedBass)
+        // SMCPKG_SUPPORT<<<Cursor030
         lowCoeff = designPeaking(rate, 250.0, smoothedLow, q = 1.0)
         midCoeff = designPeaking(rate, 1_000.0, smoothedMid, q = 1.0)
         highCoeff = designHighShelf(rate, 8_000.0, smoothedHigh)
@@ -157,18 +161,22 @@ internal object DspRuntime {
         val theta = (smoothedBalance.coerceIn(-1.0, 1.0) + 1.0) * (PI / 4.0)
         val gainL = cos(theta) * SQRT_2
         val gainR = sin(theta) * SQRT_2
-        val positives = doubleArrayOf(smoothedBass, smoothedLow, smoothedMid, smoothedHigh)
-            .filter { it > 0.0 }
-        val eqBoost = if (positives.isEmpty()) {
-            0.0
-        } else {
-            val max = positives.max()
-            val rest = positives.sum() - max
-            max + 0.45 * rest
-        }
-        val boost = (eqBoost + 4.5 * smoothedVoice + 4.0 * smoothedSurround + 3.0 * abs(smoothedBalance))
-            .coerceIn(0.0, 24.0)
-        val headroom = 10.0.pow(-boost / 20.0)
+        // SMCPKG_SUPPORT>>>Cursor031
+        // Global pre-gain tracked the positive boost and made Bass feel quiet.
+        // val positives = doubleArrayOf(smoothedBass, smoothedLow, smoothedMid, smoothedHigh)
+        //     .filter { it > 0.0 }
+        // val eqBoost = if (positives.isEmpty()) {
+        //     0.0
+        // } else {
+        //     val max = positives.max()
+        //     val rest = positives.sum() - max
+        //     max + 0.45 * rest
+        // }
+        // val boost = (eqBoost + 4.5 * smoothedVoice + 4.0 * smoothedSurround + 3.0 * abs(smoothedBalance))
+        //     .coerceIn(0.0, 24.0)
+        // val headroom = 10.0.pow(-boost / 20.0)
+        val headroom = 1.0
+        // SMCPKG_SUPPORT<<<Cursor031
         return DspFrame(
             headroom = headroom,
             bass = bassCoeff,

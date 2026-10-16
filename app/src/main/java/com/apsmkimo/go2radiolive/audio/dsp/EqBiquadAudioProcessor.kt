@@ -7,8 +7,9 @@ import java.nio.ByteBuffer
 
 /**
  * Four-band EQ on 16-bit PCM, emitted as float so later processors can stay linear
- * until the final soft limiter. Bands: low shelf 60 Hz, peaking 250 Hz, peaking 1 kHz,
- * high shelf 8 kHz, each ±12 dB.
+ * until the final soft limiter. Bands: low shelf 70 Hz (Bass up to +15 dB),
+ * peaking 250 Hz, peaking 1 kHz, high shelf 8 kHz. Low/Mid/High stay ±12 dB.
+ * No global pre-gain; the last processor limits peaks.
  */
 internal class EqBiquadAudioProcessor : BaseAudioProcessor() {
     private var filters: Array<Array<Biquad>> = emptyArray()
@@ -69,16 +70,23 @@ internal class EqBiquadAudioProcessor : BaseAudioProcessor() {
                 output.putFloat((inputBuffer.getShort().toDouble() / PCM16_SCALE).toFloat())
             }
         } else if (!frame.eqActive) {
-            val headroom = frame.headroom.toFloat()
+            // SMCPKG_SUPPORT>>>Cursor032
+            // val headroom = frame.headroom.toFloat()
+            // repeat(frames * channels) {
+            //     output.putFloat(inputBuffer.getShort().toFloat() / PCM16_SCALE_F * headroom)
+            // }
             repeat(frames * channels) {
-                output.putFloat(inputBuffer.getShort().toFloat() / PCM16_SCALE_F * headroom)
+                output.putFloat(inputBuffer.getShort().toFloat() / PCM16_SCALE_F)
             }
+            // SMCPKG_SUPPORT<<<Cursor032
         } else {
-            val headroom = frame.headroom
             repeat(frames) {
                 for (ch in 0 until channels) {
                     var sample = inputBuffer.getShort().toDouble() / PCM16_SCALE
-                    sample *= headroom
+                    // SMCPKG_SUPPORT>>>Cursor033
+                    // val headroom = frame.headroom
+                    // sample *= headroom
+                    // SMCPKG_SUPPORT<<<Cursor033
                     val band = filters[ch]
                     sample = band[0].process(sample)
                     sample = band[1].process(sample)

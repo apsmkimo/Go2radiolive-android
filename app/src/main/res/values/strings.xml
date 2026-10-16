@@ -36,7 +36,10 @@
     <string name="virtual_surround_summary">加寬立體聲聲場</string>
     <string name="eq_section">等化器與平衡</string>
     <string name="eq_shared_hint">這裡的調整會即時套用，並與播放列音效面板共用</string>
-    <string name="eq_bass">低音 Bass</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor037 -->
+    <!-- <string name="eq_bass">低音 Bass</string> -->
+    <string name="eq_bass">低音 Bass（−12～+15 dB）</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor037 -->
     <string name="eq_low">低頻 Low</string>
     <string name="eq_mid">中頻 Mid</string>
     <string name="eq_high">高音 High</string>

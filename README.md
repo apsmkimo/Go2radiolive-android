@@ -11,7 +11,10 @@ Kotlin + Jetpack Compose + Material 3 網路收音機 App，採用 **MVVM + Clea
 <!-- SMCPKG_SUPPORT>>>Cursor016
 - `versionName`: `1.0.0` / `versionCode`: `1`
 SMCPKG_SUPPORT<<<Cursor016 -->
+<!-- SMCPKG_SUPPORT>>>Cursor039
 - `versionName`: `1.1.0` / `versionCode`: `2`
+SMCPKG_SUPPORT<<<Cursor039 -->
+- `versionName`: `1.1.1` / `versionCode`: `3`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
@@ -30,7 +33,7 @@ SMCPKG_SUPPORT<<<Cursor016 -->
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.1.0`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.1.1`。
 
 | 分頁 | 端點 | 說明 |
 | --- | --- | --- |
