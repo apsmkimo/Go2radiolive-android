@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go2Radio Live</string>
+    <string name="search_hint">搜尋目前列表</string>
+    <string name="refresh">重新整理</string>
+    <string name="alarm">鬧鐘</string>
+    <string name="alarm_coming_soon">鬧鐘功能開發中</string>
+    <string name="tab_local">在地</string>
+    <string name="tab_world">世界</string>
+    <string name="tab_reserved">保留</string>
+    <string name="tab_categories">分類</string>
+    <string name="tab_favorites">我的最愛</string>
+    <string name="favorite">我的最愛</string>
+    <string name="online_radio">網路電台</string>
+    <string name="retry">點擊重試</string>
+    <string name="empty_stations">目前沒有電台</string>
+    <string name="empty_favorites">尚未加入最愛電台</string>
+    <string name="empty_categories">目前沒有分類</string>
+    <string name="station_count">%d 個電台</string>
+    <string name="no_station_playing">尚未播放電台</string>
+    <string name="buffering">連線中…</string>
+    <string name="now_playing">播放中</string>
+    <string name="paused">已暫停</string>
+    <string name="tap_station_to_play">點選電台開始播放</string>
+    <string name="play">播放</string>
+    <string name="pause">暫停</string>
+    <string name="back">返回</string>
+</resources>
