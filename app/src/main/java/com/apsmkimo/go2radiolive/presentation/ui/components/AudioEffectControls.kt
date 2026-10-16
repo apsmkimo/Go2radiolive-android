@@ -33,7 +33,10 @@ fun AudioEffectControls(
             label = stringResource(R.string.eq_bass),
             valueLabel = stringResource(R.string.db_value, settings.bassDb),
             value = settings.bassDb,
-            valueRange = AudioSettings.BAND_DB_MIN..AudioSettings.BAND_DB_MAX,
+            // SMCPKG_SUPPORT>>>Cursor036
+            // valueRange = AudioSettings.BAND_DB_MIN..AudioSettings.BAND_DB_MAX,
+            valueRange = AudioSettings.BASS_DB_MIN..AudioSettings.BASS_DB_MAX,
+            // SMCPKG_SUPPORT<<<Cursor036
             onValueChange = onBassChange,
         )
         LevelSlider(

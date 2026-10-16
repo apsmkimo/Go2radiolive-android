@@ -89,7 +89,8 @@ class RadioPlaybackService : MediaSessionService() {
     companion object {
         // SMCPKG_SUPPORT>>>Cursor013
         // const val USER_AGENT = "Go2RadioLive/1.0.0"
-        const val USER_AGENT = "Go2RadioLive/1.1.0"
+        // const val USER_AGENT = "Go2RadioLive/1.1.0"
+        const val USER_AGENT = "Go2RadioLive/1.1.1"
         // SMCPKG_SUPPORT<<<Cursor013
     }
 }
