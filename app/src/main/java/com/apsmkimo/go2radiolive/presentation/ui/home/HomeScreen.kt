@@ -229,6 +229,7 @@ fun HomeScreen(
                         } else {
                             null
                         },
+                        showNativeAds = true,
                     )
                 }
                 else -> {
@@ -237,6 +238,8 @@ fun HomeScreen(
                         state.selectedTab == BrowseTab.PODCAST -> stringResource(R.string.empty_episodes)
                         else -> stringResource(R.string.empty_stations)
                     }
+                    val nativeAds = state.selectedTab == BrowseTab.LOCAL ||
+                        (state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null)
                     StationList(
                         stations = state.visibleStations,
                         favoriteIds = state.favoriteIds,
@@ -246,6 +249,7 @@ fun HomeScreen(
                         onStationClick = viewModel::onStationClick,
                         onToggleFavorite = viewModel::onToggleFavorite,
                         onRetry = viewModel::refresh,
+                        showNativeAds = nativeAds,
                     )
                 }
             }

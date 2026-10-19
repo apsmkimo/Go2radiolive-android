@@ -10,6 +10,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import com.apsmkimo.go2radiolive.ads.AdsConsent
 import com.apsmkimo.go2radiolive.presentation.ui.Go2RadioRoot
 import com.apsmkimo.go2radiolive.presentation.ui.theme.Go2RadioTheme
 
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
         requestNotificationPermissionIfNeeded()
+        AdsConsent.request(this)
         setContent {
             Go2RadioTheme {
                 // SMCPKG_SUPPORT>>>Cursor014

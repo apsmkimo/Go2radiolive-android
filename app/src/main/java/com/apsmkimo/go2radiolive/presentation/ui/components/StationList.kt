@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.ads.nativeAdInsertAfterIndex
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
 
@@ -35,6 +36,7 @@ fun StationList(
     onToggleFavorite: (RadioStation) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    showNativeAds: Boolean = false,
 ) {
     when {
         isLoading && stations.isEmpty() -> {
@@ -66,13 +68,16 @@ fun StationList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(stations, key = { it.stationUuid }) { station ->
+                itemsIndexed(stations, key = { _, station -> station.stationUuid }) { index, station ->
                     StationCard(
                         station = station,
                         isFavorite = station.stationUuid in favoriteIds,
                         onClick = { onStationClick(station) },
                         onToggleFavorite = { onToggleFavorite(station) },
                     )
+                    if (showNativeAds && nativeAdInsertAfterIndex(index)) {
+                        NativeAdSlot()
+                    }
                 }
             }
         }
@@ -124,6 +129,7 @@ fun BrowseRowList(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     header: String? = null,
+    showNativeAds: Boolean = false,
 ) {
     when {
         isLoading && rows.isEmpty() -> {
@@ -175,7 +181,7 @@ fun BrowseRowList(
                         )
                     }
                 }
-                items(rows, key = { it.id }) { row ->
+                itemsIndexed(rows, key = { _, row -> row.id }) { index, row ->
                     androidx.compose.material3.ElevatedCard(
                         onClick = { onRowClick(row) },
                         modifier = Modifier.fillMaxWidth(),
@@ -198,6 +204,9 @@ fun BrowseRowList(
                                 )
                             }
                         }
+                    }
+                    if (showNativeAds && nativeAdInsertAfterIndex(index)) {
+                        NativeAdSlot()
                     }
                 }
             }

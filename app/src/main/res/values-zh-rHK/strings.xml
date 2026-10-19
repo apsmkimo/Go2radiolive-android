@@ -35,6 +35,9 @@
     <string name="settings">設定</string>
     <string name="settings_version_title">版本資訊</string>
     <string name="settings_version_value">%1$s（versionCode %2$d）</string>
+    <string name="privacy_options">隱私選項</string>
+    <string name="privacy_options_summary">管理廣告個人化方式</string>
+    <string name="ad_label">廣告</string>
     <string name="audio_panel_button">音效面板按鈕</string>
     <string name="audio_panel_button_summary">在播放列的播放按鈕旁顯示音效面板按鈕</string>
     <string name="voice_enhancement">語音增強</string>

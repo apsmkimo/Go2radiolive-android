@@ -28,11 +28,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import android.app.Activity
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.BuildConfig
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.ads.AdsConsent
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
@@ -43,6 +48,8 @@ import com.apsmkimo.go2radiolive.presentation.ui.components.AudioEffectControls
 fun SettingsScreen(onBack: () -> Unit) {
     BackHandler(onBack = onBack)
     val settings by AudioSettingsRepository.settings.collectAsStateWithLifecycle()
+    val privacyOptionsRequired by AdsConsent.privacyOptionsRequired.collectAsStateWithLifecycle()
+    val activity = LocalContext.current.findActivity()
 
     Scaffold(
         topBar = {
@@ -88,6 +95,14 @@ fun SettingsScreen(onBack: () -> Unit) {
                         modifier = Modifier.padding(top = 4.dp),
                     )
                 }
+            }
+
+            if (privacyOptionsRequired) {
+                SettingsClickRow(
+                    title = stringResource(R.string.privacy_options),
+                    summary = stringResource(R.string.privacy_options_summary),
+                    onClick = { activity?.let(AdsConsent::showPrivacyOptions) },
+                )
             }
 
             SettingsSwitchRow(
@@ -264,6 +279,39 @@ private fun OrbitControls(settings: AudioSettings) {
             valueRange = 0f..1f,
         )
     }
+}
+
+@Composable
+private fun SettingsClickRow(
+    title: String,
+    summary: String,
+    onClick: () -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onClick)
+            .padding(horizontal = 16.dp, vertical = 10.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(modifier = Modifier.weight(1f)) {
+            Text(text = title, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                text = summary,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+    }
+}
+
+private fun Context.findActivity(): Activity? {
+    var current = this
+    while (current is ContextWrapper) {
+        if (current is Activity) return current
+        current = current.baseContext
+    }
+    return null
 }
 
 @Composable
