@@ -23,7 +23,9 @@ import com.apsmkimo.go2radiolive.domain.usecase.ObserveFavoritesUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ResolveStreamUrlUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ToggleFavoriteUseCase
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlayerController
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -49,6 +51,9 @@ data class HomeUiState(
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
     val isLoading: Boolean = false,
+    val userRefreshEvent: Int = 0,
+    val userRefreshOk: Boolean = true,
+    val scrollToken: Int = 0,
     @StringRes val errorResId: Int? = null,
     val errorDetail: String? = null,
     val playback: PlaybackState = PlaybackState(),
@@ -242,10 +247,23 @@ class HomeViewModel(
     }
     // SMCPKG_SUPPORT<<<Cursor092
 
-    fun refresh() {
+    fun onRefreshClick() {
+        refresh(userInitiated = true)
+    }
+
+    fun refresh(userInitiated: Boolean = false) {
         val snapshot = internalState.value
         if (snapshot.selectedTab == BrowseTab.FAVORITES) {
-            internalState.update { it.copy(isLoading = false, errorResId = null, errorDetail = null) }
+            if (!userInitiated) {
+                internalState.update { it.copy(isLoading = false, errorResId = null, errorDetail = null) }
+                return
+            }
+            loadJob?.cancel()
+            loadJob = viewModelScope.launch {
+                internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+                delay(300)
+                finishLoad(userInitiated = true, ok = true) { it }
+            }
             return
         }
         loadJob?.cancel()
@@ -254,15 +272,15 @@ class HomeViewModel(
             runCatching {
                 when {
                     snapshot.selectedTab == BrowseTab.CATEGORIES && snapshot.selectedCategory == null -> {
-                        val categories = getCategories()
-                        internalState.update {
-                            it.copy(isLoading = false, categories = categories, stations = emptyList())
+                        val categories = getCategories(bypassCache = userInitiated)
+                        finishLoad(userInitiated, ok = true) {
+                            it.copy(categories = categories, stations = emptyList())
                         }
                     }
                     snapshot.selectedTab == BrowseTab.WORLD && snapshot.selectedCountry == null -> {
-                        val countries = getCountries()
-                        internalState.update {
-                            it.copy(isLoading = false, countries = countries, stations = emptyList())
+                        val countries = getCountries(bypassCache = userInitiated)
+                        finishLoad(userInitiated, ok = true) {
+                            it.copy(countries = countries, stations = emptyList())
                         }
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null -> {
@@ -270,10 +288,9 @@ class HomeViewModel(
                         podcastRegion.awaitLoaded()
                         val saved = podcastRegion.selection.value
                         val region = saved.ifBlank { deviceRegion() }
-                        val chart: PodcastChart = getPodcastShows(region)
-                        internalState.update {
+                        val chart: PodcastChart = getPodcastShows(region, bypassCache = userInitiated)
+                        finishLoad(userInitiated, ok = true) {
                             it.copy(
-                                isLoading = false,
                                 podcasts = chart.shows,
                                 podcastUsFallback = chart.usedUsFallback,
                                 podcastRegionCode = saved,
@@ -299,8 +316,8 @@ class HomeViewModel(
                         val region = if (snapshot.podcastUsFallback) "us" else selectedRegion
                         // val region = if (snapshot.podcastUsFallback) "us" else deviceRegion()
                         // SMCPKG_SUPPORT<<<Cursor092
-                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region)
-                        internalState.update { it.copy(isLoading = false, stations = episodes) }
+                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region, bypassCache = userInitiated)
+                        finishLoad(userInitiated, ok = true) { it.copy(stations = episodes) }
                     }
                     else -> {
                         val country = if (snapshot.selectedTab == BrowseTab.LOCAL) {
@@ -312,20 +329,37 @@ class HomeViewModel(
                             snapshot.selectedTab,
                             snapshot.selectedCategory?.name,
                             country,
+                            bypassCache = userInitiated,
                         )
-                        internalState.update { it.copy(isLoading = false, stations = stations) }
+                        finishLoad(userInitiated, ok = true) { it.copy(stations = stations) }
                     }
                 }
             }.onFailure { error ->
-                internalState.update {
+                if (error is CancellationException) throw error
+                finishLoad(userInitiated, ok = false) {
                     it.copy(
-                        isLoading = false,
                         errorResId = R.string.load_failed,
                         errorDetail = error.message?.takeIf { message -> message.isNotBlank() },
                         podcastUsFallback = false,
                     )
                 }
             }
+        }
+    }
+
+    private fun finishLoad(
+        userInitiated: Boolean,
+        ok: Boolean,
+        block: (HomeUiState) -> HomeUiState,
+    ) {
+        internalState.update { current ->
+            val next = block(current)
+            next.copy(
+                isLoading = false,
+                userRefreshEvent = if (userInitiated) current.userRefreshEvent + 1 else current.userRefreshEvent,
+                userRefreshOk = if (userInitiated) ok else current.userRefreshOk,
+                scrollToken = if (userInitiated && ok) current.scrollToken + 1 else current.scrollToken,
+            )
         }
     }
 

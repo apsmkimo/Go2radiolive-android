@@ -25,6 +25,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import androidx.compose.ui.window.PopupPositionProvider
 import androidx.compose.ui.window.PopupProperties
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.alarm.PlaybackSignals
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 
@@ -154,8 +157,12 @@ fun MiniPlayer(
                     playback.station != null -> stringResource(R.string.paused)
                     else -> stringResource(R.string.tap_station_to_play)
                 }
+                val sleep by PlaybackSignals.sleep.collectAsStateWithLifecycle()
+                val sleepLabel = sleepRemainingLabel(sleep)
                 Text(
-                    text = status,
+                    text = if (sleepLabel == null) status else "$status · $sleepLabel",
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

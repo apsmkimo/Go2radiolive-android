@@ -34,10 +34,10 @@ class PodcastRepositoryImpl(
     private val gson: Gson,
 ) : PodcastRepository {
 
-    override suspend fun topShows(region: String?): PodcastChart = withContext(Dispatchers.IO) {
+    override suspend fun topShows(region: String?, bypassCache: Boolean): PodcastChart = withContext(Dispatchers.IO) {
         val country = podcastStorefront(region)
         if (country == "us") {
-            return@withContext PodcastChart(loadCatalog("us"), usedUsFallback = false)
+            return@withContext PodcastChart(loadCatalog("us", bypassCache), usedUsFallback = false)
         }
         // SMCPKG_SUPPORT>>>Cursor073
         // val local = runCatching { loadCatalog(country) }.getOrNull()
@@ -47,21 +47,25 @@ class PodcastRepositoryImpl(
         // PodcastChart(loadCatalog("us"), usedUsFallback = true)
         // SMCPKG_SUPPORT<<<Cursor073
         // SMCPKG_SUPPORT>>>Cursor090
-        val local = if (AppleStorefronts.supports(country)) loadCatalog(country) else emptyList()
+        val local = if (AppleStorefronts.supports(country)) loadCatalog(country, bypassCache) else emptyList()
         if (!usesUsPodcastFallback(country, chartFailed = false, catalogEmpty = local.isEmpty())) {
             return@withContext PodcastChart(local, usedUsFallback = false)
         }
-        PodcastChart(loadCatalog("us"), usedUsFallback = true)
+        PodcastChart(loadCatalog("us", bypassCache), usedUsFallback = true)
         // SMCPKG_SUPPORT<<<Cursor090
     }
 
-    override suspend fun episodes(show: PodcastShow, region: String?): List<RadioStation> =
+    override suspend fun episodes(
+        show: PodcastShow,
+        region: String?,
+        bypassCache: Boolean,
+    ): List<RadioStation> =
         withContext(Dispatchers.IO) {
             val country = podcastStorefront(region)
-            val feedUrl = lookupFeedUrl(show.id, country)
+            val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
                 ?: throw IOException("missing feed")
             val request = Request.Builder().url(feedUrl).build()
-            client.newCall(request).execute().use { response ->
+            client.newCall(bust(request, bypassCache)).execute().use { response ->
                 if (!response.isSuccessful) throw IOException("rss ${response.code}")
                 val body = response.body ?: throw IOException("empty rss")
                 body.byteStream().use { stream ->
@@ -70,27 +74,27 @@ class PodcastRepositoryImpl(
             }
         }
 
-    private fun loadCatalog(country: String): List<PodcastShow> {
+    private fun loadCatalog(country: String, bypassCache: Boolean): List<PodcastShow> {
         val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
-        groups.add(loadChart(country))
+        groups.add(loadChart(country, bypassCache))
         for (genre in GENRES) {
             if (dedupePodcasts(groups, TARGET).size >= TARGET) break
-            val extra = runCatching { loadGenre(country, genre) }.getOrDefault(emptyList())
+            val extra = runCatching { loadGenre(country, genre, bypassCache) }.getOrDefault(emptyList())
             groups.add(extra)
         }
         return dedupePodcasts(groups, TARGET)
     }
 
-    private fun loadChart(country: String): List<PodcastShow> {
+    private fun loadChart(country: String, bypassCache: Boolean): List<PodcastShow> {
         val url = "$CHART_ROOT/$country/podcasts/top/100/podcasts.json"
-        val body = getString(url)
+        val body = getString(url, bypassCache)
         val parsed = gson.fromJson(body, ChartResponse::class.java)
         return parsed.feed?.results.orEmpty().mapNotNull { it.toShow() }
     }
 
-    private fun loadGenre(country: String, genre: Int): List<PodcastShow> {
+    private fun loadGenre(country: String, genre: Int, bypassCache: Boolean): List<PodcastShow> {
         val url = "https://itunes.apple.com/$country/rss/toppodcasts/limit=100/genre=$genre/json"
-        val body = getString(url)
+        val body = getString(url, bypassCache)
         val feed = JsonParser.parseString(body).asJsonObject.getAsJsonObject("feed") ?: return emptyList()
         val entry = feed.get("entry") ?: return emptyList()
         val elements = when {
@@ -121,16 +125,29 @@ class PodcastRepositoryImpl(
         return shows
     }
 
-    private fun lookupFeedUrl(id: String, country: String): String? {
-        val body = getString("https://itunes.apple.com/lookup?id=$id&country=$country")
+    private fun lookupFeedUrl(id: String, country: String, bypassCache: Boolean): String? {
+        val body = getString("https://itunes.apple.com/lookup?id=$id&country=$country", bypassCache)
         val parsed = gson.fromJson(body, LookupResponse::class.java)
         return parsed.results.orEmpty().firstNotNullOfOrNull { result ->
             result.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
         }
     }
 
-    private fun getString(url: String): String {
-        val request = Request.Builder().url(url).header("Accept", "application/json").build()
+    private fun bust(request: Request, bypassCache: Boolean): Request {
+        if (!bypassCache) return request
+        val url = request.url.newBuilder().addQueryParameter("cb", System.currentTimeMillis().toString()).build()
+        return request.newBuilder()
+            .url(url)
+            .header("Cache-Control", "no-cache")
+            .header("Pragma", "no-cache")
+            .build()
+    }
+
+    private fun getString(url: String, bypassCache: Boolean): String {
+        val request = bust(
+            Request.Builder().url(url).header("Accept", "application/json").build(),
+            bypassCache,
+        )
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("http ${response.code}")
             return response.body?.string().orEmpty()

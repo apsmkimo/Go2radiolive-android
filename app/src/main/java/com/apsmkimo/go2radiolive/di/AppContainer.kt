@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.di
 
 import android.content.Context
 import android.telephony.TelephonyManager
+import com.apsmkimo.go2radiolive.alarm.WakeAlarmRepository
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
@@ -46,6 +47,10 @@ class AppContainer(context: Context) {
     // SMCPKG_SUPPORT<<<Cursor017
 
     val gson: Gson = Gson()
+
+    // SMCPKG_SUPPORT>>>Cursor098
+    val wakeAlarmRepository = WakeAlarmRepository(appContext, gson)
+    // SMCPKG_SUPPORT<<<Cursor098
 
     private val okHttpClient: OkHttpClient = OkHttpClient.Builder()
         .connectTimeout(20, TimeUnit.SECONDS)

@@ -2,14 +2,12 @@ package com.apsmkimo.go2radiolive.presentation.player
 
 import android.content.ComponentName
 import android.content.Context
-import android.os.Bundle
-import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MediaMetadata
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import com.apsmkimo.go2radiolive.Go2RadioApp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
@@ -100,23 +98,10 @@ class RadioPlayerController(
         _playbackState.update {
             it.copy(station = station, isBuffering = true, errorMessage = null)
         }
-        val extras = Bundle().apply {
-            putString(EXTRA_STATION_JSON, gson.toJson(station))
-        }
-        val artwork = station.faviconUrl.takeIf { it.isNotBlank() }?.toUri()
-        val mediaItem = MediaItem.Builder()
-            .setMediaId(station.stationUuid)
-            .setUri(streamUrl)
-            .setMediaMetadata(
-                MediaMetadata.Builder()
-                    .setTitle(station.name)
-                    .setArtist(station.country.ifBlank { context.getString(R.string.app_name) })
-                    .setArtworkUri(artwork)
-                    .setIsPlayable(true)
-                    .setExtras(extras)
-                    .build(),
-            )
-            .build()
+        // SMCPKG_SUPPORT>>>Cursor098
+        (context.applicationContext as? Go2RadioApp)?.container?.wakeAlarmRepository?.remember(station)
+        val mediaItem = stationMediaItem(context, gson, station, streamUrl)
+        // SMCPKG_SUPPORT<<<Cursor098
         val mediaController = controller
         if (mediaController == null) {
             pendingPlay = station to streamUrl

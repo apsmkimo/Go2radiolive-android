@@ -41,6 +41,12 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     private var coldStartStarted = false
     private var coldStartResolved = false
     private var coldStartTimeout: Runnable? = null
+    @Volatile
+    private var suppressNext = false
+
+    fun suppressNextShow() {
+        suppressNext = true
+    }
 
     fun install(application: Application) {
         if (installed) return
@@ -136,6 +142,10 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     }
 
     private fun maybeShow() {
+        if (suppressNext) {
+            suppressNext = false
+            return
+        }
         val ad = appOpenAd ?: return
         val activity = currentActivity ?: return
         if (activity.isFinishing || activity.isDestroyed) return

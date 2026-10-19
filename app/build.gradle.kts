@@ -35,12 +35,28 @@ android {
         // versionName = "1.3.0"
         // SMCPKG_SUPPORT<<<Cursor081
         // SMCPKG_SUPPORT>>>Cursor087
-        versionCode = 7
-        versionName = "1.4.0"
+        // versionCode = 7
+        // versionName = "1.4.0"
         // SMCPKG_SUPPORT<<<Cursor087
+        // SMCPKG_SUPPORT>>>Cursor094
+        versionCode = 8
+        versionName = "1.5.0"
+        // SMCPKG_SUPPORT<<<Cursor094
 
         vectorDrawables {
             useSupportLibrary = true
+        }
+    }
+
+    val releaseKeystore = System.getenv("KEYSTORE_FILE")
+    signingConfigs {
+        if (!releaseKeystore.isNullOrBlank()) {
+            create("release") {
+                storeFile = file(releaseKeystore)
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
         }
     }
 
@@ -51,6 +67,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // SMCPKG_SUPPORT>>>Cursor099
+            signingConfig = when {
+                !releaseKeystore.isNullOrBlank() -> signingConfigs.getByName("release")
+                System.getenv("SIGN_RELEASE_WITH_DEBUG") == "1" -> signingConfigs.getByName("debug")
+                else -> null
+            }
+            // SMCPKG_SUPPORT<<<Cursor099
             // SMCPKG_SUPPORT>>>Cursor078
             manifestPlaceholders["admobAppId"] = "ca-app-pub-6138247296137119~5720425997"
             buildConfigField(
