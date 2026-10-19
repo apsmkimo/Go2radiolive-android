@@ -18,7 +18,12 @@
     <string name="empty_categories">目前没有分类</string>
     <string name="empty_countries">目前没有国家</string>
     <string name="empty_podcasts">目前没有播客</string>
-    <string name="podcast_us_fallback">本地排行榜无法获取，目前显示美国排行榜。</string>
+    <string name="podcast_us_fallback">此地区没有播客排行榜，因此显示美国排行榜。</string>
+    <string name="podcast_region">国家或地区</string>
+    <string name="podcast_region_automatic">自动（设备地区）</string>
+    <string name="podcast_region_search">搜索国家或地区</string>
+    <string name="podcast_region_device">设备地区：%1$s</string>
+    <string name="close">关闭</string>
     <string name="empty_episodes">目前没有单集</string>
     <string name="station_count">%d 个电台</string>
     <string name="no_station_playing">尚未播放电台</string>

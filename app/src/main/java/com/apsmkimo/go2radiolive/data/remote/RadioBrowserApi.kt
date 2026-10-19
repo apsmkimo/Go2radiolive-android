@@ -11,13 +11,16 @@ import retrofit2.http.Query
 interface RadioBrowserApi {
 
     /**
-     * Local (Taiwan) stations.
-     * GET /json/stations/bycountrycodeexact/TW?limit=100
+     * Stations for one country, most-clicked first.
+     * GET /json/stations/bycountrycodeexact/{cc}?hidebroken=true&order=clickcount&reverse=true&limit=500
+     *
+     * limit 100 omitted ICRT: on 2026-10-19 the healthy TW list was 193 stations and
+     * "Radio ICRT" / "ICRT" ranked 102 and 159 (both lastcheckok=1).
      */
     @GET("json/stations/bycountrycodeexact/{countryCode}")
     suspend fun getStationsByCountry(
         @Path("countryCode") countryCode: String,
-        @Query("limit") limit: Int = 100,
+        @Query("limit") limit: Int = 500,
         @Query("hidebroken") hideBroken: Boolean = true,
         @Query("order") order: String = "clickcount",
         @Query("reverse") reverse: Boolean = true,

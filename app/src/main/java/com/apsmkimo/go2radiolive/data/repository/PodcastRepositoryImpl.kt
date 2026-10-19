@@ -1,5 +1,6 @@
 package com.apsmkimo.go2radiolive.data.repository
 
+import com.apsmkimo.go2radiolive.data.remote.AppleStorefronts
 import com.apsmkimo.go2radiolive.data.remote.dedupePodcasts
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
 import com.apsmkimo.go2radiolive.data.remote.usesUsPodcastFallback
@@ -25,8 +26,8 @@ import java.io.IOException
  * returns at most 100 shows (a limit of 200 responds with HTTP 500). Extra shows
  * come from iTunes genre RSS feeds, also capped at 100, then deduped to 200.
  * Episode audio comes from the iTunes Lookup `feedUrl` and that show's RSS.
- * A missing or unknown storefront uses `us`. A device region whose chart
- * fails or comes back empty is replaced by the full US chart.
+ * A missing or unknown storefront code uses `us`. A known region with an empty
+ * chart is replaced by the full US chart. A failed request is reported as an error.
  */
 class PodcastRepositoryImpl(
     private val client: OkHttpClient,
@@ -39,12 +40,19 @@ class PodcastRepositoryImpl(
             return@withContext PodcastChart(loadCatalog("us"), usedUsFallback = false)
         }
         // SMCPKG_SUPPORT>>>Cursor073
-        val local = runCatching { loadCatalog(country) }.getOrNull()
-        if (!usesUsPodcastFallback(country, chartFailed = local == null, catalogEmpty = local.isNullOrEmpty())) {
-            return@withContext PodcastChart(local.orEmpty(), usedUsFallback = false)
+        // val local = runCatching { loadCatalog(country) }.getOrNull()
+        // if (!usesUsPodcastFallback(country, chartFailed = local == null, catalogEmpty = local.isNullOrEmpty())) {
+        //     return@withContext PodcastChart(local.orEmpty(), usedUsFallback = false)
+        // }
+        // PodcastChart(loadCatalog("us"), usedUsFallback = true)
+        // SMCPKG_SUPPORT<<<Cursor073
+        // SMCPKG_SUPPORT>>>Cursor090
+        val local = if (AppleStorefronts.supports(country)) loadCatalog(country) else emptyList()
+        if (!usesUsPodcastFallback(country, chartFailed = false, catalogEmpty = local.isEmpty())) {
+            return@withContext PodcastChart(local, usedUsFallback = false)
         }
         PodcastChart(loadCatalog("us"), usedUsFallback = true)
-        // SMCPKG_SUPPORT<<<Cursor073
+        // SMCPKG_SUPPORT<<<Cursor090
     }
 
     override suspend fun episodes(show: PodcastShow, region: String?): List<RadioStation> =

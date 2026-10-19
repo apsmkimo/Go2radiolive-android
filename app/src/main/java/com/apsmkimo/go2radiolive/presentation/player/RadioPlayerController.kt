@@ -32,6 +32,13 @@ class RadioPlayerController(
     private var controller: MediaController? = null
     private var pendingPlay: Pair<RadioStation, String>? = null
 
+    // SMCPKG_SUPPORT>>>Cursor091
+    /** True after the MediaController has reported playback at least once. */
+    @Volatile
+    var playbackObserved: Boolean = false
+        private set
+    // SMCPKG_SUPPORT<<<Cursor091
+
     private val listener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             _playbackState.update { it.copy(isPlaying = isPlaying, errorMessage = null) }
@@ -76,6 +83,9 @@ class RadioPlayerController(
                     controller = mediaController
                     mediaController.addListener(listener)
                     syncFromController(mediaController)
+                    // SMCPKG_SUPPORT>>>Cursor091
+                    playbackObserved = true
+                    // SMCPKG_SUPPORT<<<Cursor091
                     pendingPlay?.let { (station, url) ->
                         pendingPlay = null
                         play(station, url)

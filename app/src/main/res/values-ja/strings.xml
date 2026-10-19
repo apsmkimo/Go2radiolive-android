@@ -18,7 +18,12 @@
     <string name="empty_categories">カテゴリがありません</string>
     <string name="empty_countries">国がありません</string>
     <string name="empty_podcasts">ポッドキャストがありません</string>
-    <string name="podcast_us_fallback">地域のチャートを取得できないため、米国のチャートを表示しています。</string>
+    <string name="podcast_us_fallback">この地域にはポッドキャストチャートがないため、米国のチャートを表示しています。</string>
+    <string name="podcast_region">国・地域</string>
+    <string name="podcast_region_automatic">自動（端末の地域）</string>
+    <string name="podcast_region_search">国・地域を検索</string>
+    <string name="podcast_region_device">端末の地域：%1$s</string>
+    <string name="close">閉じる</string>
     <string name="empty_episodes">エピソードがありません</string>
     <string name="station_count">%d 局</string>
     <string name="no_station_playing">再生中の放送局はありません</string>
