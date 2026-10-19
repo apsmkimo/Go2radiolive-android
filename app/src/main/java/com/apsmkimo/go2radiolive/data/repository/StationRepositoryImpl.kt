@@ -3,6 +3,8 @@ package com.apsmkimo.go2radiolive.data.repository
 import com.apsmkimo.go2radiolive.data.mapper.toDomain
 import com.apsmkimo.go2radiolive.data.mapper.toDomainStations
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
+import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
+import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
 import com.apsmkimo.go2radiolive.domain.repository.StationRepository
@@ -12,19 +14,30 @@ class StationRepositoryImpl(
 ) : StationRepository {
 
     override suspend fun getLocalStations(limit: Int): List<RadioStation> {
-        return api.getStationsByCountry(countryCode = LOCAL_COUNTRY_CODE, limit = limit)
-            .toDomainStations()
+        return getStationsByCountry(LOCAL_COUNTRY_CODE, limit)
     }
 
-    override suspend fun getWorldStations(limit: Int): List<RadioStation> {
-        return api.searchStations(limit = limit, order = "clickcount")
-            .toDomainStations()
+    override suspend fun getCountries(): List<CountryOption> {
+        return api.getCountries()
+            .mapNotNull { country: CountryDto -> country.toDomain() }
+            .sortedByDescending { it.stationCount }
     }
 
-    override suspend fun getReservedStations(limit: Int): List<RadioStation> {
-        return api.searchStations(limit = limit, order = "votes")
-            .toDomainStations()
+    override suspend fun getStationsByCountry(countryCode: String, limit: Int): List<RadioStation> {
+        val code = countryCode.trim().uppercase()
+        if (code.length != 2) return emptyList()
+        return api.getStationsByCountry(countryCode = code, limit = limit).toDomainStations()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor067
+    // override suspend fun getWorldStations(limit: Int): List<RadioStation> {
+    //     return api.searchStations(limit = limit, order = "clickcount").toDomainStations()
+    // }
+    //
+    // override suspend fun getReservedStations(limit: Int): List<RadioStation> {
+    //     return api.searchStations(limit = limit, order = "votes").toDomainStations()
+    // }
+    // SMCPKG_SUPPORT<<<Cursor067
 
     override suspend fun getCategories(): List<StationCategory> {
         return api.getTags()

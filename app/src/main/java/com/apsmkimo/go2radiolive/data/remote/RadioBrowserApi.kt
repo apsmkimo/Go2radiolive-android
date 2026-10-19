@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.data.remote
 
 import com.apsmkimo.go2radiolive.data.remote.dto.ClickResponseDto
+import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
 import com.apsmkimo.go2radiolive.data.remote.dto.StationDto
 import com.apsmkimo.go2radiolive.data.remote.dto.TagDto
 import retrofit2.http.GET
@@ -22,10 +23,11 @@ interface RadioBrowserApi {
         @Query("reverse") reverse: Boolean = true,
     ): List<StationDto>
 
+    @GET("json/countries")
+    suspend fun getCountries(): List<CountryDto>
+
     /**
-     * World / reserved search.
-     * World: order=clickcount (most clicked worldwide).
-     * Reserved: order=votes (highest voted featured placeholder).
+     * Worldwide search kept for callers that still want a flat list.
      */
     @GET("json/stations/search")
     suspend fun searchStations(

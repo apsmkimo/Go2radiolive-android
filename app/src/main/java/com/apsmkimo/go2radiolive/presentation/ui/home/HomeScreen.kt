@@ -8,9 +8,9 @@ import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.Category
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Podcasts
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material.icons.outlined.StarOutline
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,6 +35,8 @@ import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.presentation.ui.components.AdMobBanner
+import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
+import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
 import com.apsmkimo.go2radiolive.presentation.ui.components.CategoryList
 import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
@@ -69,7 +71,10 @@ fun HomeScreen(
     val tabs = listOf(
         TabSpec(BrowseTab.LOCAL, R.string.tab_local, Icons.Outlined.Home),
         TabSpec(BrowseTab.WORLD, R.string.tab_world, Icons.Outlined.Public),
-        TabSpec(BrowseTab.RESERVED, R.string.tab_reserved, Icons.Outlined.StarOutline),
+        // SMCPKG_SUPPORT>>>Cursor069
+        // TabSpec(BrowseTab.RESERVED, R.string.tab_reserved, Icons.Outlined.StarOutline),
+        TabSpec(BrowseTab.PODCAST, R.string.tab_podcast, Icons.Outlined.Podcasts),
+        // SMCPKG_SUPPORT<<<Cursor069
         TabSpec(BrowseTab.CATEGORIES, R.string.tab_categories, Icons.Outlined.Category),
         TabSpec(BrowseTab.FAVORITES, R.string.tab_favorites, Icons.Outlined.Favorite),
     )
@@ -78,15 +83,29 @@ fun HomeScreen(
         topBar = {
             TopAppBar(
                 title = {
-                    val title = state.selectedCategory
-                        ?.takeIf { state.selectedTab == BrowseTab.CATEGORIES }
-                        ?.name
-                        ?: stringResource(R.string.app_name)
+                    val title = when {
+                        state.selectedTab == BrowseTab.CATEGORIES && state.selectedCategory != null ->
+                            state.selectedCategory?.name
+                        state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null ->
+                            state.selectedCountry?.name
+                        state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null ->
+                            state.selectedPodcast?.name
+                        else -> null
+                    } ?: stringResource(R.string.app_name)
                     Text(title)
                 },
                 navigationIcon = {
-                    if (state.selectedTab == BrowseTab.CATEGORIES && state.selectedCategory != null) {
-                        IconButton(onClick = viewModel::onClearCategory) {
+                    val onBack: (() -> Unit)? = when {
+                        state.selectedTab == BrowseTab.CATEGORIES && state.selectedCategory != null ->
+                            viewModel::onClearCategory
+                        state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null ->
+                            viewModel::onClearCountry
+                        state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null ->
+                            viewModel::onClearPodcast
+                        else -> null
+                    }
+                    if (onBack != null) {
+                        IconButton(onClick = onBack) {
                             Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = stringResource(R.string.back))
                         }
                     }
@@ -154,29 +173,76 @@ fun HomeScreen(
                 onQueryChange = viewModel::onSearchQueryChange,
                 onRefresh = viewModel::refresh,
             )
-            if (state.showingCategories) {
-                CategoryList(
-                    categories = state.visibleCategories,
-                    isLoading = state.isLoading,
-                    errorMessage = state.errorMessage,
-                    onCategoryClick = viewModel::onCategorySelected,
-                    onRetry = viewModel::refresh,
-                )
-            } else {
-                val emptyText = when (state.selectedTab) {
-                    BrowseTab.FAVORITES -> stringResource(R.string.empty_favorites)
-                    else -> stringResource(R.string.empty_stations)
+            val errorText = when {
+                state.errorResId != null -> {
+                    val base = stringResource(state.errorResId!!)
+                    if (state.errorDetail.isNullOrBlank()) base else base + "\n" + state.errorDetail
                 }
-                StationList(
-                    stations = state.visibleStations,
-                    favoriteIds = state.favoriteIds,
-                    isLoading = state.isLoading,
-                    errorMessage = state.errorMessage,
-                    emptyText = emptyText,
-                    onStationClick = viewModel::onStationClick,
-                    onToggleFavorite = viewModel::onToggleFavorite,
-                    onRetry = viewModel::refresh,
-                )
+                else -> state.playback.errorMessage
+            }
+            when {
+                state.showingCategories -> {
+                    CategoryList(
+                        categories = state.visibleCategories,
+                        isLoading = state.isLoading,
+                        errorMessage = errorText,
+                        onCategoryClick = viewModel::onCategorySelected,
+                        onRetry = viewModel::refresh,
+                    )
+                }
+                state.showingCountries -> {
+                    BrowseRowList(
+                        rows = state.visibleCountries.map { country ->
+                            BrowseRow(
+                                id = country.code,
+                                title = country.name,
+                                subtitle = context.getString(R.string.station_count, country.stationCount),
+                            )
+                        },
+                        isLoading = state.isLoading,
+                        errorMessage = errorText,
+                        emptyText = stringResource(R.string.empty_countries),
+                        onRowClick = { row ->
+                            state.countries.firstOrNull { it.code == row.id }?.let(viewModel::onCountrySelected)
+                        },
+                        onRetry = viewModel::refresh,
+                    )
+                }
+                state.showingPodcasts -> {
+                    BrowseRowList(
+                        rows = state.visiblePodcasts.map { show ->
+                            BrowseRow(
+                                id = show.id,
+                                title = show.name,
+                                subtitle = show.author,
+                            )
+                        },
+                        isLoading = state.isLoading,
+                        errorMessage = errorText,
+                        emptyText = stringResource(R.string.empty_podcasts),
+                        onRowClick = { row ->
+                            state.podcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
+                        },
+                        onRetry = viewModel::refresh,
+                    )
+                }
+                else -> {
+                    val emptyText = when {
+                        state.selectedTab == BrowseTab.FAVORITES -> stringResource(R.string.empty_favorites)
+                        state.selectedTab == BrowseTab.PODCAST -> stringResource(R.string.empty_episodes)
+                        else -> stringResource(R.string.empty_stations)
+                    }
+                    StationList(
+                        stations = state.visibleStations,
+                        favoriteIds = state.favoriteIds,
+                        isLoading = state.isLoading,
+                        errorMessage = errorText,
+                        emptyText = emptyText,
+                        onStationClick = viewModel::onStationClick,
+                        onToggleFavorite = viewModel::onToggleFavorite,
+                        onRetry = viewModel::refresh,
+                    )
+                }
             }
         }
     }

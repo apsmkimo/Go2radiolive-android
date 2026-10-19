@@ -15,11 +15,13 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
+import com.apsmkimo.go2radiolive.domain.model.StationCategory
 
 @Composable
 fun StationList(
@@ -78,29 +80,71 @@ fun StationList(
 
 @Composable
 fun CategoryList(
-    categories: List<com.apsmkimo.go2radiolive.domain.model.StationCategory>,
+    categories: List<StationCategory>,
     isLoading: Boolean,
     errorMessage: String?,
-    onCategoryClick: (com.apsmkimo.go2radiolive.domain.model.StationCategory) -> Unit,
+    onCategoryClick: (StationCategory) -> Unit,
+    onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val context = LocalContext.current
+    BrowseRowList(
+        rows = categories.map { category ->
+            BrowseRow(
+                id = category.name,
+                title = category.name,
+                subtitle = context.getString(R.string.station_count, category.stationCount),
+            )
+        },
+        isLoading = isLoading,
+        errorMessage = errorMessage,
+        emptyText = stringResource(R.string.empty_categories),
+        onRowClick = { row ->
+            categories.firstOrNull { it.name == row.id }?.let(onCategoryClick)
+        },
+        onRetry = onRetry,
+        modifier = modifier,
+    )
+}
+
+data class BrowseRow(
+    val id: String,
+    val title: String,
+    val subtitle: String,
+)
+
+@Composable
+fun BrowseRowList(
+    rows: List<BrowseRow>,
+    isLoading: Boolean,
+    errorMessage: String?,
+    emptyText: String,
+    onRowClick: (BrowseRow) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when {
-        isLoading && categories.isEmpty() -> {
+        isLoading && rows.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        errorMessage != null && categories.isEmpty() -> {
+        errorMessage != null && rows.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 TextButton(onClick = onRetry) {
                     Text(text = errorMessage + "\n" + stringResource(R.string.retry), textAlign = TextAlign.Center)
                 }
             }
         }
-        categories.isEmpty() -> {
+        rows.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(stringResource(R.string.empty_categories))
+                Text(
+                    text = emptyText,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(24.dp),
+                )
             }
         }
         else -> {
@@ -109,9 +153,9 @@ fun CategoryList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(categories, key = { it.name }) { category ->
+                items(rows, key = { it.id }) { row ->
                     androidx.compose.material3.ElevatedCard(
-                        onClick = { onCategoryClick(category) },
+                        onClick = { onRowClick(row) },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         androidx.compose.foundation.layout.Row(
@@ -120,15 +164,17 @@ fun CategoryList(
                             horizontalArrangement = Arrangement.SpaceBetween,
                         ) {
                             Text(
-                                text = category.name,
+                                text = row.title,
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.weight(1f),
                             )
-                            Text(
-                                text = stringResource(R.string.station_count, category.stationCount),
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            )
+                            if (row.subtitle.isNotEmpty()) {
+                                Text(
+                                    text = row.subtitle,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                )
+                            }
                         }
                     }
                 }

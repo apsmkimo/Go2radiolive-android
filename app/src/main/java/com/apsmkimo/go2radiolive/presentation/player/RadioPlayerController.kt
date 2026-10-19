@@ -10,6 +10,7 @@ import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.session.MediaController
 import androidx.media3.session.SessionToken
+import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.google.common.util.concurrent.ListenableFuture
@@ -53,7 +54,8 @@ class RadioPlayerController(
                 it.copy(
                     isPlaying = false,
                     isBuffering = false,
-                    errorMessage = error.localizedMessage ?: "播放失敗",
+                    errorMessage = error.localizedMessage
+                        ?: context.getString(R.string.playback_failed),
                 )
             }
         }
@@ -98,7 +100,7 @@ class RadioPlayerController(
             .setMediaMetadata(
                 MediaMetadata.Builder()
                     .setTitle(station.name)
-                    .setArtist(station.country.ifBlank { "Go2Radio Live" })
+                    .setArtist(station.country.ifBlank { context.getString(R.string.app_name) })
                     .setArtworkUri(artwork)
                     .setIsPlayable(true)
                     .setExtras(extras)

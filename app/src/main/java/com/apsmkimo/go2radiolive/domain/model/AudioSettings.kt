@@ -12,7 +12,13 @@ data class AudioSettings(
     val highDb: Float = 0f,
     val balance: Float = 0f,
     val voiceEnhancement: Boolean = false,
-    val virtualSurround: Boolean = false,
+    // SMCPKG_SUPPORT>>>Cursor050
+    // val virtualSurround: Boolean = false,
+    val spatialMode: SpatialAudioMode = SpatialAudioMode.OFF,
+    val orbitPeriodSec: Float = 60f,
+    val orbitClockwise: Boolean = true,
+    val orbitStrength: Float = 0.6f,
+    // SMCPKG_SUPPORT<<<Cursor050
 ) {
     fun sanitized(): AudioSettings = copy(
         // SMCPKG_SUPPORT>>>Cursor034
@@ -23,6 +29,10 @@ data class AudioSettings(
         midDb = midDb.coerceIn(BAND_DB_MIN, BAND_DB_MAX),
         highDb = highDb.coerceIn(BAND_DB_MIN, BAND_DB_MAX),
         balance = balance.coerceIn(BALANCE_MIN, BALANCE_MAX),
+        // SMCPKG_SUPPORT>>>Cursor053
+        orbitPeriodSec = orbitPeriodSec.coerceIn(ORBIT_PERIOD_MIN, ORBIT_PERIOD_MAX),
+        orbitStrength = orbitStrength.coerceIn(0f, 1f),
+        // SMCPKG_SUPPORT<<<Cursor053
     )
 
     companion object {
@@ -34,5 +44,7 @@ data class AudioSettings(
         // SMCPKG_SUPPORT<<<Cursor035
         const val BALANCE_MIN = -1f
         const val BALANCE_MAX = 1f
+        const val ORBIT_PERIOD_MIN = 30f
+        const val ORBIT_PERIOD_MAX = 120f
     }
 }

@@ -9,11 +9,26 @@ data class RadioStation(
     val tags: String = "",
     val country: String = "",
     val countryCode: String = "",
+    /** Podcast enclosures already point at the media file and skip Radio-Browser. */
+    val directStream: Boolean = false,
 )
 
 data class StationCategory(
     val name: String,
     val stationCount: Int,
+)
+
+data class CountryOption(
+    val code: String,
+    val name: String,
+    val stationCount: Int,
+)
+
+data class PodcastShow(
+    val id: String,
+    val name: String,
+    val author: String,
+    val artworkUrl: String = "",
 )
 
 data class PlaybackState(
@@ -26,7 +41,10 @@ data class PlaybackState(
 enum class BrowseTab {
     LOCAL,
     WORLD,
-    RESERVED,
+    // SMCPKG_SUPPORT>>>Cursor066
+    // RESERVED,
+    PODCAST,
+    // SMCPKG_SUPPORT<<<Cursor066
     CATEGORIES,
     FAVORITES,
 }
