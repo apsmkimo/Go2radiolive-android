@@ -5,10 +5,15 @@ import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
+import com.apsmkimo.go2radiolive.data.repository.PodcastRepositoryImpl
 import com.apsmkimo.go2radiolive.data.repository.StationRepositoryImpl
 import com.apsmkimo.go2radiolive.domain.repository.FavoriteRepository
+import com.apsmkimo.go2radiolive.domain.repository.PodcastRepository
 import com.apsmkimo.go2radiolive.domain.repository.StationRepository
 import com.apsmkimo.go2radiolive.domain.usecase.GetCategoriesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetCountriesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetPodcastEpisodesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetPodcastShowsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.GetStationsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ObserveFavoritesUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ResolveStreamUrlUseCase
@@ -20,6 +25,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 /**
@@ -63,13 +69,31 @@ class AppContainer(context: Context) {
         .build()
         .create(RadioBrowserApi::class.java)
 
+    private val podcastClient: OkHttpClient = OkHttpClient.Builder()
+        .connectTimeout(20, TimeUnit.SECONDS)
+        .readTimeout(25, TimeUnit.SECONDS)
+        .callTimeout(40, TimeUnit.SECONDS)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .header("User-Agent", RadioPlaybackService.USER_AGENT)
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
     val stationRepository: StationRepository = StationRepositoryImpl(radioBrowserApi)
+    val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson)
     val favoriteRepository: FavoriteRepository = FavoriteRepositoryImpl(
         FavoriteLocalDataSource(appContext, gson),
     )
 
     val getStationsUseCase = GetStationsUseCase(stationRepository)
     val getCategoriesUseCase = GetCategoriesUseCase(stationRepository)
+    val getCountriesUseCase = GetCountriesUseCase(stationRepository)
+    val getPodcastShowsUseCase = GetPodcastShowsUseCase(podcastRepository)
+    val getPodcastEpisodesUseCase = GetPodcastEpisodesUseCase(podcastRepository)
+
+    fun deviceRegion(): String = Locale.getDefault().country.orEmpty()
     val observeFavoritesUseCase = ObserveFavoritesUseCase(favoriteRepository)
     val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoriteRepository)
     val resolveStreamUrlUseCase = ResolveStreamUrlUseCase(stationRepository)

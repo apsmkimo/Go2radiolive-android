@@ -19,6 +19,12 @@ data class TagDto(
     @SerializedName("stationcount") val stationCount: Int? = null,
 )
 
+data class CountryDto(
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("iso_3166_1") val isoCode: String? = null,
+    @SerializedName("stationcount") val stationCount: Int? = null,
+)
+
 data class ClickResponseDto(
     @SerializedName("ok") val ok: Boolean? = null,
     @SerializedName("url") val url: String? = null,

@@ -1,14 +1,21 @@
 package com.apsmkimo.go2radiolive.presentation.ui.home
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.di.AppContainer
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
+import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
+import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
 import com.apsmkimo.go2radiolive.domain.usecase.GetCategoriesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetCountriesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetPodcastEpisodesUseCase
+import com.apsmkimo.go2radiolive.domain.usecase.GetPodcastShowsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.GetStationsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ObserveFavoritesUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ResolveStreamUrlUseCase
@@ -29,10 +36,15 @@ data class HomeUiState(
     val stations: List<RadioStation> = emptyList(),
     val categories: List<StationCategory> = emptyList(),
     val selectedCategory: StationCategory? = null,
+    val countries: List<CountryOption> = emptyList(),
+    val selectedCountry: CountryOption? = null,
+    val podcasts: List<PodcastShow> = emptyList(),
+    val selectedPodcast: PodcastShow? = null,
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
     val isLoading: Boolean = false,
-    val errorMessage: String? = null,
+    @StringRes val errorResId: Int? = null,
+    val errorDetail: String? = null,
     val playback: PlaybackState = PlaybackState(),
 ) {
     val visibleStations: List<RadioStation>
@@ -51,26 +63,60 @@ data class HomeUiState(
         }
 
     val visibleCategories: List<StationCategory>
+        get() = filterByName(categories, searchQuery) { it.name }
+
+    val visibleCountries: List<CountryOption>
         get() {
             val query = searchQuery.trim()
             return if (query.isEmpty()) {
-                categories
+                countries
             } else {
-                categories.filter { it.name.contains(query, ignoreCase = true) }
+                countries.filter {
+                    it.name.contains(query, ignoreCase = true) ||
+                        it.code.contains(query, ignoreCase = true)
+                }
+            }
+        }
+
+    val visiblePodcasts: List<PodcastShow>
+        get() {
+            val query = searchQuery.trim()
+            return if (query.isEmpty()) {
+                podcasts
+            } else {
+                podcasts.filter {
+                    it.name.contains(query, ignoreCase = true) ||
+                        it.author.contains(query, ignoreCase = true)
+                }
             }
         }
 
     val showingCategories: Boolean
         get() = selectedTab == BrowseTab.CATEGORIES && selectedCategory == null
+
+    val showingCountries: Boolean
+        get() = selectedTab == BrowseTab.WORLD && selectedCountry == null
+
+    val showingPodcasts: Boolean
+        get() = selectedTab == BrowseTab.PODCAST && selectedPodcast == null
+}
+
+private fun <T> filterByName(items: List<T>, query: String, name: (T) -> String): List<T> {
+    val trimmed = query.trim()
+    return if (trimmed.isEmpty()) items else items.filter { name(it).contains(trimmed, ignoreCase = true) }
 }
 
 class HomeViewModel(
     private val getStations: GetStationsUseCase,
     private val getCategories: GetCategoriesUseCase,
+    private val getCountries: GetCountriesUseCase,
+    private val getPodcastShows: GetPodcastShowsUseCase,
+    private val getPodcastEpisodes: GetPodcastEpisodesUseCase,
     observeFavorites: ObserveFavoritesUseCase,
     private val toggleFavorite: ToggleFavoriteUseCase,
     private val resolveStreamUrl: ResolveStreamUrlUseCase,
     private val playerController: RadioPlayerController,
+    private val deviceRegion: () -> String,
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(HomeUiState())
@@ -85,7 +131,6 @@ class HomeViewModel(
             favoriteStations = favorites,
             favoriteIds = favorites.map { it.stationUuid }.toSet(),
             playback = playback,
-            errorMessage = ui.errorMessage ?: playback.errorMessage,
         )
     }.stateIn(
         scope = viewModelScope,
@@ -102,8 +147,12 @@ class HomeViewModel(
             it.copy(
                 selectedTab = tab,
                 selectedCategory = if (tab == BrowseTab.CATEGORIES) it.selectedCategory else null,
+                selectedCountry = if (tab == BrowseTab.WORLD) it.selectedCountry else null,
+                selectedPodcast = if (tab == BrowseTab.PODCAST) it.selectedPodcast else null,
+                stations = emptyList(),
                 searchQuery = "",
-                errorMessage = null,
+                errorResId = null,
+                errorDetail = null,
             )
         }
         refresh()
@@ -115,14 +164,42 @@ class HomeViewModel(
 
     fun onCategorySelected(category: StationCategory) {
         internalState.update {
-            it.copy(selectedCategory = category, searchQuery = "", errorMessage = null)
+            it.copy(selectedCategory = category, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
         }
         refresh()
     }
 
     fun onClearCategory() {
         internalState.update {
-            it.copy(selectedCategory = null, stations = emptyList(), searchQuery = "")
+            it.copy(selectedCategory = null, stations = emptyList(), searchQuery = "", errorResId = null)
+        }
+        refresh()
+    }
+
+    fun onCountrySelected(country: CountryOption) {
+        internalState.update {
+            it.copy(selectedCountry = country, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
+        }
+        refresh()
+    }
+
+    fun onClearCountry() {
+        internalState.update {
+            it.copy(selectedCountry = null, stations = emptyList(), searchQuery = "", errorResId = null)
+        }
+        refresh()
+    }
+
+    fun onPodcastSelected(show: PodcastShow) {
+        internalState.update {
+            it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
+        }
+        refresh()
+    }
+
+    fun onClearPodcast() {
+        internalState.update {
+            it.copy(selectedPodcast = null, stations = emptyList(), searchQuery = "", errorResId = null)
         }
         refresh()
     }
@@ -130,26 +207,51 @@ class HomeViewModel(
     fun refresh() {
         val snapshot = internalState.value
         if (snapshot.selectedTab == BrowseTab.FAVORITES) {
-            internalState.update { it.copy(isLoading = false, errorMessage = null) }
+            internalState.update { it.copy(isLoading = false, errorResId = null, errorDetail = null) }
             return
         }
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
-            internalState.update { it.copy(isLoading = true, errorMessage = null) }
+            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
             runCatching {
-                if (snapshot.selectedTab == BrowseTab.CATEGORIES && snapshot.selectedCategory == null) {
-                    internalState.update {
-                        it.copy(isLoading = false, categories = getCategories(), stations = emptyList())
+                when {
+                    snapshot.selectedTab == BrowseTab.CATEGORIES && snapshot.selectedCategory == null -> {
+                        val categories = getCategories()
+                        internalState.update {
+                            it.copy(isLoading = false, categories = categories, stations = emptyList())
+                        }
                     }
-                } else {
-                    val stations = getStations(snapshot.selectedTab, snapshot.selectedCategory?.name)
-                    internalState.update { it.copy(isLoading = false, stations = stations) }
+                    snapshot.selectedTab == BrowseTab.WORLD && snapshot.selectedCountry == null -> {
+                        val countries = getCountries()
+                        internalState.update {
+                            it.copy(isLoading = false, countries = countries, stations = emptyList())
+                        }
+                    }
+                    snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null -> {
+                        val shows = getPodcastShows(deviceRegion())
+                        internalState.update {
+                            it.copy(isLoading = false, podcasts = shows, stations = emptyList())
+                        }
+                    }
+                    snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast != null -> {
+                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, deviceRegion())
+                        internalState.update { it.copy(isLoading = false, stations = episodes) }
+                    }
+                    else -> {
+                        val stations = getStations(
+                            snapshot.selectedTab,
+                            snapshot.selectedCategory?.name,
+                            snapshot.selectedCountry?.code,
+                        )
+                        internalState.update { it.copy(isLoading = false, stations = stations) }
+                    }
                 }
             }.onFailure { error ->
                 internalState.update {
                     it.copy(
                         isLoading = false,
-                        errorMessage = error.localizedMessage ?: "載入失敗，請稍後再試",
+                        errorResId = R.string.load_failed,
+                        errorDetail = error.message?.takeIf { message -> message.isNotBlank() },
                     )
                 }
             }
@@ -158,9 +260,12 @@ class HomeViewModel(
 
     fun onStationClick(station: RadioStation) {
         viewModelScope.launch {
-            internalState.update { it.copy(errorMessage = null) }
-            val streamUrl = runCatching { resolveStreamUrl(station) }
-                .getOrDefault(station.streamUrl)
+            internalState.update { it.copy(errorResId = null, errorDetail = null) }
+            val streamUrl = if (station.directStream) {
+                station.streamUrl
+            } else {
+                runCatching { resolveStreamUrl(station) }.getOrDefault(station.streamUrl)
+            }
             playerController.play(station, streamUrl)
         }
     }
@@ -185,10 +290,14 @@ class HomeViewModelFactory(
         return HomeViewModel(
             getStations = container.getStationsUseCase,
             getCategories = container.getCategoriesUseCase,
+            getCountries = container.getCountriesUseCase,
+            getPodcastShows = container.getPodcastShowsUseCase,
+            getPodcastEpisodes = container.getPodcastEpisodesUseCase,
             observeFavorites = container.observeFavoritesUseCase,
             toggleFavorite = container.toggleFavoriteUseCase,
             resolveStreamUrl = container.resolveStreamUrlUseCase,
             playerController = container.playerController,
+            deviceRegion = container::deviceRegion,
         ) as T
     }
 }

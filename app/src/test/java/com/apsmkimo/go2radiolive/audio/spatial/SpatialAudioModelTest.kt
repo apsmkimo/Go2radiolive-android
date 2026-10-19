@@ -1,5 +1,6 @@
 package com.apsmkimo.go2radiolive.audio.spatial
 
+import com.apsmkimo.go2radiolive.audio.dsp.designPeaking
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
 import org.junit.Assert.assertEquals
@@ -94,5 +95,81 @@ class SpatialAudioModelTest {
             assertTrue(filtered.isFinite())
         }
         assertTrue(abs(last) <= 0.5f)
+    }
+
+    @Test
+    fun naturalMonoStaysCenteredAndStereoWidthDoesNotJump() {
+        assertEquals(
+            0.0,
+            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = false),
+            1e-12,
+        )
+        assertEquals(
+            0.0,
+            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = true),
+            1e-12,
+        )
+        val below = naturalHalfRadians(0.97)
+        val above = naturalHalfRadians(0.99)
+        assertTrue(abs(Math.toDegrees(above - below)) < 3.0)
+        assertTrue(naturalHalfRadians(1.0) < naturalHalfRadians(0.80))
+        assertEquals(0.98, holdCorrelation(0.98, 0.99), 1e-9)
+        assertEquals(0.94, holdCorrelation(0.98, 0.94), 1e-9)
+        val half = naturalHalfRadians(0.5)
+        val left = sourceAzimuth(SpatialAudioMode.NATURAL, 2, 0.0, half, right = false)
+        val right = sourceAzimuth(SpatialAudioMode.NATURAL, 2, 0.0, half, right = true)
+        assertEquals(-half, left, 1e-12)
+        assertEquals(half, right, 1e-12)
+    }
+
+    @Test
+    fun dryAndWetShareTheBaseDelaySoTheMixIsOneImpulse() {
+        val delay = FractionalDelay(512)
+        val base = alignedBaseDelaySamples()
+        assertEquals(BinauralModel.BASE_DELAY_SAMPLES.toFloat(), base, 0f)
+        val frames = 128
+        val dry = FloatArray(frames)
+        val wet = FloatArray(frames)
+        var index = 0
+        while (index < frames) {
+            delay.push(if (index == 0) 1f else 0f)
+            dry[index] = delay.read(base)
+            wet[index] = delay.read(wetEarDelaySamples(0.0, 0.5))
+            index++
+        }
+        val dryPeak = dry.indexOfFirst { it > 0.5f }
+        val wetPeak = wet.indexOfFirst { it > 0.5f }
+        assertTrue(dryPeak >= 0)
+        assertEquals(dryPeak, wetPeak)
+        var mixedPeaks = 0
+        index = 0
+        while (index < frames) {
+            val mixed = 0.5f * dry[index] + 0.5f * wet[index]
+            if (mixed > 0.5f) mixedPeaks++
+            index++
+        }
+        assertEquals(1, mixedPeaks)
+    }
+
+    @Test
+    fun rearReflectionFiltersDoNotShareEarOrTapState() {
+        assertTrue(abs(BinauralModel.itdSeconds(Math.toRadians(-125.0))) > 1e-5)
+        assertTrue(BinauralModel.rearAmount(Math.toRadians(-125.0)) > 0.75)
+        assertTrue(BinauralModel.rearAmount(Math.toRadians(110.0)) < 0.75)
+        val coeffs = designPeaking(48_000, 7_600.0, -8.0, q = 2.2)
+        val side = EarSplitFilter()
+        val rear = EarSplitFilter()
+        side.set(coeffs)
+        rear.set(coeffs)
+        side.process(1.0, 0.0)
+        assertTrue(abs(side.outL) > 0.1)
+        assertEquals(0.0, side.outR, 1e-9)
+        assertEquals(0.0, rear.outL, 0.0)
+        rear.process(0.0, 0.0)
+        assertEquals(0.0, rear.outL, 1e-9)
+        assertEquals(0.0, rear.outR, 1e-9)
+        side.process(0.0, 0.0)
+        assertTrue(abs(side.outL) > 1e-4)
+        assertEquals(0.0, side.outR, 1e-6)
     }
 }

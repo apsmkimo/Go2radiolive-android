@@ -1,9 +1,12 @@
 package com.apsmkimo.go2radiolive.data.mapper
 
+import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
 import com.apsmkimo.go2radiolive.data.remote.dto.StationDto
 import com.apsmkimo.go2radiolive.data.remote.dto.TagDto
+import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
+import java.util.Locale
 
 fun StationDto.toDomain(): RadioStation? {
     val uuid = stationUuid?.trim().orEmpty()
@@ -35,3 +38,22 @@ fun TagDto.toDomain(): StationCategory? {
 fun List<StationDto>.toDomainStations(): List<RadioStation> =
     mapNotNull { it.toDomain() }
         .distinctBy { it.stationUuid }
+
+fun CountryDto.toDomain(locale: Locale = Locale.getDefault()): CountryOption? {
+    val code = isoCode?.trim()?.uppercase().orEmpty()
+    if (code.length != 2) return null
+    val count = stationCount ?: 0
+    if (count <= 0) return null
+    val fallback = name?.trim().orEmpty().ifBlank { code }
+    return CountryOption(
+        code = code,
+        name = localizedCountryName(code, fallback, locale),
+        stationCount = count,
+    )
+}
+
+fun localizedCountryName(code: String, fallback: String, locale: Locale = Locale.getDefault()): String {
+    if (code.length != 2) return fallback
+    val display = Locale("", code).getDisplayCountry(locale)
+    return display.ifBlank { fallback }
+}
