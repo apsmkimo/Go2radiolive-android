@@ -20,13 +20,17 @@ import kotlin.math.sqrt
  * mode is faded out before the next mode fades in, so two algorithms never
  * process the same samples.
  *
- * The dry signal is delayed by [BinauralModel.BASE_DELAY_SAMPLES], the same
- * center delay as the binaural path, so a partial wet mix does not comb.
+ * While a spatial mode is on, the dry signal uses the same
+ * [BinauralModel.BASE_DELAY_SAMPLES] center delay as the binaural path so the
+ * mix does not comb. Off does not use that delay. A mono stream configured
+ * while Off leaves this processor inactive, so the original mono buffer is
+ * not copied or delayed. Stereo Off copies both channels with no delay.
+ * Entering or leaving Off crossfades the direct and delayed paths (~30 ms)
+ * after the delay line is primed, so the switch does not click.
  * Natural stereo width follows correlation continuously; it is not a step
  * between two angles. Mono Natural stays at azimuth 0.
  *
- * Mono and stereo both leave this processor as stereo float. More than two
- * channels are copied through untouched.
+ * More than two channels stay inactive and are left untouched.
  */
 internal class SpatialAudioProcessor : BaseAudioProcessor() {
     private val leftSource = SourcePath()
@@ -37,7 +41,11 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
     private var wetCoeff = 0.01
     private var limitRelease = 0.01
     private var corrCoeff = 0.01
+    private var alignCoeff = 0.01
     private var wet = 0.0
+    private var align = 0.0
+    private var alignTarget = 0.0
+    private var priming = 0
     private var outGain = 1.0
     private var targetWet = 0.0
     private var activeMode = SpatialAudioMode.OFF
@@ -51,15 +59,25 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
     private var naturalHalf = naturalHalfRadians(0.0)
     private var azLeft = 0.0
     private var azRight = 0.0
+    private var configuredChannels = 0
+    private var bypassMono = false
 
     override fun onConfigure(inputAudioFormat: AudioProcessor.AudioFormat): AudioProcessor.AudioFormat {
         if (inputAudioFormat.encoding != C.ENCODING_PCM_FLOAT) {
             throw AudioProcessor.UnhandledAudioFormatException(inputAudioFormat)
         }
+        configuredChannels = inputAudioFormat.channelCount
+        SpatialRoute.inputChannels = inputAudioFormat.channelCount
+        val spatialOn = AudioSettingsRepository.settings.value.spatialMode != SpatialAudioMode.OFF
         val outChannels = when (inputAudioFormat.channelCount) {
-            1, 2 -> 2
+            1 -> if (spatialOn) 2 else 1
+            2 -> 2
             else -> inputAudioFormat.channelCount
         }
+        // SMCPKG_SUPPORT>>>Cursor071
+        // Mono Off is inactive so the pipeline never feeds this processor.
+        bypassMono = inputAudioFormat.channelCount == 1 && outChannels == 1
+        // SMCPKG_SUPPORT<<<Cursor071
         return AudioProcessor.AudioFormat(
             inputAudioFormat.sampleRate,
             outChannels,
@@ -73,7 +91,11 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         wetCoeff = 1.0 - exp(-1.0 / (sampleRate * WET_SECONDS))
         limitRelease = 1.0 - exp(-1.0 / (sampleRate * LIMIT_RELEASE_SECONDS))
         corrCoeff = 1.0 - exp(-1.0 / (sampleRate * CORR_SECONDS))
+        alignCoeff = 1.0 - exp(-1.0 / (sampleRate * ALIGN_SECONDS))
         wet = 0.0
+        align = 0.0
+        alignTarget = 0.0
+        priming = 0
         outGain = 1.0
         heldCorrelation = 0.0
         smoothedCorrelation = 0.0
@@ -86,9 +108,18 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         rightSource.prepare(0.0, sampleRate)
     }
 
+    override fun isActive(): Boolean {
+        // onConfigure runs before this check. The flag stays fixed until the
+        // sink configures again, because flush does not rebuild the format.
+        if (configuredChannels <= 0 || configuredChannels > 2) return false
+        return !bypassMono
+    }
+
     override fun onReset() {
         super.onReset()
         onFlush()
+        configuredChannels = 0
+        bypassMono = false
         activeMode = SpatialAudioMode.OFF
         pendingMode = SpatialAudioMode.OFF
         targetWet = 0.0
@@ -107,11 +138,14 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
             return
         }
         syncControls()
+        updateAlignTarget()
         val frames = inputBuffer.remaining() / (channels * 4)
-        val output = replaceOutputBuffer(frames * 2 * 4)
-        if (shouldBypass()) {
+        val outChannels = outputAudioFormat.channelCount.coerceAtLeast(1)
+        val output = replaceOutputBuffer(frames * outChannels * 4)
+        if (fullyDirect()) {
             outGain = 1.0
-            writeAlignedDry(inputBuffer, output, channels, frames)
+            priming = 0
+            writeDirect(inputBuffer, output, channels, outChannels, frames)
             finish(inputBuffer, output)
             return
         }
@@ -133,6 +167,20 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
                 leftIn = finite(inputBuffer.getFloat())
                 rightIn = finite(inputBuffer.getFloat())
             }
+            updateAlignTarget()
+            if (alignTarget > 0.5 && align < 0.0008 && priming == 0) {
+                priming = BinauralModel.BASE_DELAY_SAMPLES
+            }
+            if (priming > 0) {
+                leftSource.pushOnly(leftIn)
+                if (channels == 2) rightSource.pushOnly(rightIn)
+                writeDirectSample(output, leftIn, if (channels == 2) rightIn else leftIn, channels, outChannels)
+                priming--
+                index++
+                continue
+            }
+            align += (alignTarget - align) * alignCoeff
+            if (abs(align - alignTarget) < 0.0005) align = alignTarget
             if (activeMode == SpatialAudioMode.ORBIT) {
                 orbitAzimuth = BinauralModel.wrapAzimuth(orbitAzimuth + orbitSign * step)
             }
@@ -149,19 +197,21 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
             leftSource.render(leftIn, azLeft, sampleRate)
             var spatL = leftSource.renderedL
             var spatR = leftSource.renderedR
-            val dryL = leftSource.readDry().toDouble()
-            val dryR: Double
+            val delayedL = leftSource.readDry().toDouble()
+            val delayedR: Double
             if (channels == 2) {
                 rightSource.render(rightIn, azRight, sampleRate)
                 spatL = (spatL + rightSource.renderedL) * STEREO_SCALE
                 spatR = (spatR + rightSource.renderedR) * STEREO_SCALE
-                dryR = rightSource.readDry().toDouble()
+                delayedR = rightSource.readDry().toDouble()
                 sumL += leftIn * leftIn
                 sumR += rightIn * rightIn
                 sumLR += leftIn * rightIn
             } else {
-                dryR = dryL
+                delayedR = delayedL
             }
+            val dryL = bypassMix(leftIn.toDouble(), delayedL, align)
+            val dryR = bypassMix(rightIn.toDouble(), delayedR, align)
             if (activeMode == SpatialAudioMode.SURROUND) {
                 val mid = if (channels == 2) 0.5f * (leftIn + rightIn) else leftIn
                 reflections.process(mid, sampleRate)
@@ -169,7 +219,13 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
                 spatR += reflections.outR
             }
             val keep = 1.0 - wet
-            writeLimited(output, dryL * keep + spatL * wet, dryR * keep + spatR * wet)
+            val mixedL = dryL * keep + spatL * wet
+            val mixedR = dryR * keep + spatR * wet
+            if (outChannels == 1) {
+                writeLimitedMono(output, mixedL)
+            } else {
+                writeLimited(output, mixedL, mixedR)
+            }
             index++
         }
         if (channels == 2) {
@@ -209,11 +265,22 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         if (wet > 1.0) wet = 1.0
     }
 
-    private fun shouldBypass(): Boolean {
+    private fun updateAlignTarget() {
+        alignTarget = if (activeMode == SpatialAudioMode.OFF && pendingMode == SpatialAudioMode.OFF && wet <= 0.01) {
+            0.0
+        } else {
+            1.0
+        }
+    }
+
+    private fun fullyDirect(): Boolean {
         return activeMode == SpatialAudioMode.OFF &&
             pendingMode == SpatialAudioMode.OFF &&
             wet < 0.0008 &&
-            targetWet < 0.0008
+            targetWet < 0.0008 &&
+            align < 0.0008 &&
+            alignTarget < 0.0008 &&
+            priming == 0
     }
 
     private fun writeLimited(output: ByteBuffer, left: Double, right: Double) {
@@ -230,25 +297,56 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         output.putFloat(finite((right * gain).toFloat()))
     }
 
-    private fun writeAlignedDry(input: ByteBuffer, output: ByteBuffer, channels: Int, frames: Int) {
+    private fun writeDirect(
+        input: ByteBuffer,
+        output: ByteBuffer,
+        channels: Int,
+        outChannels: Int,
+        frames: Int,
+    ) {
         var index = 0
         while (index < frames) {
             if (channels == 1) {
                 val sample = finite(input.getFloat())
-                leftSource.pushOnly(sample)
-                val delayed = leftSource.readDry()
-                output.putFloat(delayed)
-                output.putFloat(delayed)
+                writeDirectSample(output, sample, sample, channels, outChannels)
             } else {
                 val left = finite(input.getFloat())
                 val right = finite(input.getFloat())
-                leftSource.pushOnly(left)
-                rightSource.pushOnly(right)
-                output.putFloat(leftSource.readDry())
-                output.putFloat(rightSource.readDry())
+                writeDirectSample(output, left, right, channels, outChannels)
             }
             index++
         }
+    }
+
+    private fun writeDirectSample(
+        output: ByteBuffer,
+        left: Float,
+        right: Float,
+        channels: Int,
+        outChannels: Int,
+    ) {
+        if (outChannels == 1) {
+            output.putFloat(if (channels == 1) left else ((left + right) * 0.5f))
+        } else if (channels == 1) {
+            output.putFloat(left)
+            output.putFloat(left)
+        } else {
+            output.putFloat(left)
+            output.putFloat(right)
+        }
+    }
+
+    private fun writeLimitedMono(output: ByteBuffer, sample: Double) {
+        val peak = abs(sample)
+        if (peak > LIMIT_CEILING && peak.isFinite()) {
+            val target = LIMIT_CEILING / peak
+            if (target < outGain) outGain = target
+        } else {
+            outGain += (1.0 - outGain) * limitRelease
+            if (outGain > 1.0) outGain = 1.0
+        }
+        val gain = if (outGain.isFinite()) outGain else 1.0
+        output.putFloat(finite((sample * gain).toFloat()))
     }
 
     private fun passthrough(inputBuffer: ByteBuffer, channels: Int) {
@@ -413,6 +511,7 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         const val WET_SECONDS = 0.045
         const val LIMIT_RELEASE_SECONDS = 0.05
         const val CORR_SECONDS = 0.15
+        const val ALIGN_SECONDS = 0.03
         const val LIMIT_CEILING = 0.98
         const val STEREO_SCALE = 0.72
         const val TAP_COUNT = 3
@@ -442,6 +541,17 @@ internal class EarSplitFilter {
         outL = left.process(leftSample)
         outR = right.process(rightSample)
     }
+}
+
+internal object SpatialRoute {
+    @Volatile
+    var inputChannels: Int = 0
+}
+
+/** 0 keeps the direct sample. 1 uses the delayed sample that matches the binaural path. */
+internal fun bypassMix(direct: Double, delayed: Double, align: Double): Double {
+    val mix = align.coerceIn(0.0, 1.0)
+    return direct * (1.0 - mix) + delayed * mix
 }
 
 internal fun alignedBaseDelaySamples(): Float = BinauralModel.BASE_DELAY_SAMPLES.toFloat()

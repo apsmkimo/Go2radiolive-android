@@ -2,6 +2,8 @@ package com.apsmkimo.go2radiolive.data.repository
 
 import com.apsmkimo.go2radiolive.data.mapper.toDomain
 import com.apsmkimo.go2radiolive.data.mapper.toDomainStations
+import com.apsmkimo.go2radiolive.data.remote.localStationsCountry
+import com.apsmkimo.go2radiolive.data.remote.normalizeRegion
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
@@ -13,9 +15,17 @@ class StationRepositoryImpl(
     private val api: RadioBrowserApi,
 ) : StationRepository {
 
-    override suspend fun getLocalStations(limit: Int): List<RadioStation> {
-        return getStationsByCountry(LOCAL_COUNTRY_CODE, limit)
+    // SMCPKG_SUPPORT>>>Cursor074
+    // override suspend fun getLocalStations(limit: Int): List<RadioStation> {
+    //     return getStationsByCountry(LOCAL_COUNTRY_CODE, limit)
+    // }
+    override suspend fun getLocalStations(countryHint: String?, limit: Int): List<RadioStation> {
+        val primary = normalizeRegion(countryHint) ?: "US"
+        val stations = getStationsByCountry(primary, limit)
+        val chosen = localStationsCountry(primary, stations.size)
+        return if (chosen == primary) stations else getStationsByCountry(chosen, limit)
     }
+    // SMCPKG_SUPPORT<<<Cursor074
 
     override suspend fun getCountries(): List<CountryOption> {
         return api.getCountries()
@@ -57,7 +67,7 @@ class StationRepositoryImpl(
     }
 
     companion object {
-        const val LOCAL_COUNTRY_CODE = "TW"
+        // const val LOCAL_COUNTRY_CODE = "TW"
         private const val MIN_CATEGORY_STATIONS = 20
         private const val MAX_CATEGORIES = 60
     }

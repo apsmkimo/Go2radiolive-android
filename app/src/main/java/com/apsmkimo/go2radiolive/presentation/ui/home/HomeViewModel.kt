@@ -9,6 +9,7 @@ import com.apsmkimo.go2radiolive.di.AppContainer
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
+import com.apsmkimo.go2radiolive.domain.model.PodcastChart
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
@@ -39,6 +40,7 @@ data class HomeUiState(
     val countries: List<CountryOption> = emptyList(),
     val selectedCountry: CountryOption? = null,
     val podcasts: List<PodcastShow> = emptyList(),
+    val podcastUsFallback: Boolean = false,
     val selectedPodcast: PodcastShow? = null,
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
@@ -228,20 +230,31 @@ class HomeViewModel(
                         }
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null -> {
-                        val shows = getPodcastShows(deviceRegion())
+                        val chart: PodcastChart = getPodcastShows(deviceRegion())
                         internalState.update {
-                            it.copy(isLoading = false, podcasts = shows, stations = emptyList())
+                            it.copy(
+                                isLoading = false,
+                                podcasts = chart.shows,
+                                podcastUsFallback = chart.usedUsFallback,
+                                stations = emptyList(),
+                            )
                         }
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast != null -> {
-                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, deviceRegion())
+                        val region = if (snapshot.podcastUsFallback) "us" else deviceRegion()
+                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region)
                         internalState.update { it.copy(isLoading = false, stations = episodes) }
                     }
                     else -> {
+                        val country = if (snapshot.selectedTab == BrowseTab.LOCAL) {
+                            deviceRegion()
+                        } else {
+                            snapshot.selectedCountry?.code
+                        }
                         val stations = getStations(
                             snapshot.selectedTab,
                             snapshot.selectedCategory?.name,
-                            snapshot.selectedCountry?.code,
+                            country,
                         )
                         internalState.update { it.copy(isLoading = false, stations = stations) }
                     }
@@ -252,6 +265,7 @@ class HomeViewModel(
                         isLoading = false,
                         errorResId = R.string.load_failed,
                         errorDetail = error.message?.takeIf { message -> message.isNotBlank() },
+                        podcastUsFallback = false,
                     )
                 }
             }

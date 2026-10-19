@@ -2,7 +2,9 @@ package com.apsmkimo.go2radiolive.data.repository
 
 import com.apsmkimo.go2radiolive.data.remote.dedupePodcasts
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
+import com.apsmkimo.go2radiolive.data.remote.usesUsPodcastFallback
 import com.apsmkimo.go2radiolive.data.remote.PodcastRssParser
+import com.apsmkimo.go2radiolive.domain.model.PodcastChart
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.repository.PodcastRepository
@@ -23,26 +25,26 @@ import java.io.IOException
  * returns at most 100 shows (a limit of 200 responds with HTTP 500). Extra shows
  * come from iTunes genre RSS feeds, also capped at 100, then deduped to 200.
  * Episode audio comes from the iTunes Lookup `feedUrl` and that show's RSS.
- * A missing or unknown storefront uses `us`.
+ * A missing or unknown storefront uses `us`. A device region whose chart
+ * fails or comes back empty is replaced by the full US chart.
  */
 class PodcastRepositoryImpl(
     private val client: OkHttpClient,
     private val gson: Gson,
 ) : PodcastRepository {
 
-    override suspend fun topShows(region: String?): List<PodcastShow> = withContext(Dispatchers.IO) {
+    override suspend fun topShows(region: String?): PodcastChart = withContext(Dispatchers.IO) {
         val country = podcastStorefront(region)
-        val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
-        groups.add(loadChart(country))
-        if (groups[0].isEmpty() && country != "us") {
-            groups[0] = loadChart("us")
+        if (country == "us") {
+            return@withContext PodcastChart(loadCatalog("us"), usedUsFallback = false)
         }
-        for (genre in GENRES) {
-            if (dedupePodcasts(groups, TARGET).size >= TARGET) break
-            val extra = runCatching { loadGenre(country, genre) }.getOrDefault(emptyList())
-            groups.add(extra)
+        // SMCPKG_SUPPORT>>>Cursor073
+        val local = runCatching { loadCatalog(country) }.getOrNull()
+        if (!usesUsPodcastFallback(country, chartFailed = local == null, catalogEmpty = local.isNullOrEmpty())) {
+            return@withContext PodcastChart(local.orEmpty(), usedUsFallback = false)
         }
-        dedupePodcasts(groups, TARGET)
+        PodcastChart(loadCatalog("us"), usedUsFallback = true)
+        // SMCPKG_SUPPORT<<<Cursor073
     }
 
     override suspend fun episodes(show: PodcastShow, region: String?): List<RadioStation> =
@@ -59,6 +61,17 @@ class PodcastRepositoryImpl(
                 }
             }
         }
+
+    private fun loadCatalog(country: String): List<PodcastShow> {
+        val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
+        groups.add(loadChart(country))
+        for (genre in GENRES) {
+            if (dedupePodcasts(groups, TARGET).size >= TARGET) break
+            val extra = runCatching { loadGenre(country, genre) }.getOrDefault(emptyList())
+            groups.add(extra)
+        }
+        return dedupePodcasts(groups, TARGET)
+    }
 
     private fun loadChart(country: String): List<PodcastShow> {
         val url = "$CHART_ROOT/$country/podcasts/top/100/podcasts.json"

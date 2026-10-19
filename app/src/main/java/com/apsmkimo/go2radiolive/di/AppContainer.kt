@@ -1,7 +1,9 @@
 package com.apsmkimo.go2radiolive.di
 
 import android.content.Context
+import android.telephony.TelephonyManager
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
@@ -93,7 +95,16 @@ class AppContainer(context: Context) {
     val getPodcastShowsUseCase = GetPodcastShowsUseCase(podcastRepository)
     val getPodcastEpisodesUseCase = GetPodcastEpisodesUseCase(podcastRepository)
 
-    fun deviceRegion(): String = Locale.getDefault().country.orEmpty()
+    fun deviceRegion(): String {
+        // SMCPKG_SUPPORT>>>Cursor075
+        val telephony = runCatching {
+            appContext.getSystemService(Context.TELEPHONY_SERVICE) as? TelephonyManager
+        }.getOrNull()
+        val network = runCatching { telephony?.networkCountryIso }.getOrNull()
+        val sim = runCatching { telephony?.simCountryIso }.getOrNull()
+        return preferredRegion(network, sim, Locale.getDefault().country).orEmpty()
+        // SMCPKG_SUPPORT<<<Cursor075
+    }
     val observeFavoritesUseCase = ObserveFavoritesUseCase(favoriteRepository)
     val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoriteRepository)
     val resolveStreamUrlUseCase = ResolveStreamUrlUseCase(stationRepository)
@@ -102,7 +113,10 @@ class AppContainer(context: Context) {
 
     companion object {
         const val RADIO_BROWSER_BASE_URL = "https://de1.api.radio-browser.info/"
-        const val ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
-        const val ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"
+        // SMCPKG_SUPPORT>>>Cursor076
+        // Debug and release ad ids live in the build type (manifestPlaceholders / BuildConfig).
+        // const val ADMOB_APP_ID = "ca-app-pub-3940256099942544~3347511713"
+        // const val ADMOB_BANNER_ID = "ca-app-pub-3940256099942544/6300978111"
+        // SMCPKG_SUPPORT<<<Cursor076
     }
 }

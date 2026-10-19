@@ -18,6 +18,7 @@
     <string name="empty_categories">カテゴリがありません</string>
     <string name="empty_countries">国がありません</string>
     <string name="empty_podcasts">ポッドキャストがありません</string>
+    <string name="podcast_us_fallback">地域のチャートを取得できないため、米国のチャートを表示しています。</string>
     <string name="empty_episodes">エピソードがありません</string>
     <string name="station_count">%d 局</string>
     <string name="no_station_playing">再生中の放送局はありません</string>
