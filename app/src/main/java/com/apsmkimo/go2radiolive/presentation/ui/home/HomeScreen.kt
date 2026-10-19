@@ -39,6 +39,7 @@ import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
 import com.apsmkimo.go2radiolive.presentation.ui.components.CategoryList
 import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
+import com.apsmkimo.go2radiolive.presentation.ui.components.PodcastRegionDialog
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.StationList
 import androidx.compose.ui.platform.LocalContext
@@ -168,11 +169,35 @@ fun HomeScreen(
                 .padding(innerPadding),
         ) {
             AdMobBanner()
+            // SMCPKG_SUPPORT>>>Cursor092
+            var regionPickerOpen by rememberSaveable { mutableStateOf(false) }
             SearchBarRow(
                 query = state.searchQuery,
                 onQueryChange = viewModel::onSearchQueryChange,
                 onRefresh = viewModel::refresh,
+                onPickPodcastRegion = if (state.selectedTab == BrowseTab.PODCAST) {
+                    { regionPickerOpen = true }
+                } else {
+                    null
+                },
             )
+            if (regionPickerOpen) {
+                PodcastRegionDialog(
+                    selectedCode = state.podcastRegionCode,
+                    deviceRegionCode = state.deviceRegionCode,
+                    onDismiss = { regionPickerOpen = false },
+                    onSelect = { code ->
+                        regionPickerOpen = false
+                        viewModel.onPodcastRegionSelected(code)
+                    },
+                )
+            }
+            // SearchBarRow(
+            //     query = state.searchQuery,
+            //     onQueryChange = viewModel::onSearchQueryChange,
+            //     onRefresh = viewModel::refresh,
+            // )
+            // SMCPKG_SUPPORT<<<Cursor092
             val errorText = when {
                 state.errorResId != null -> {
                     val base = stringResource(state.errorResId!!)

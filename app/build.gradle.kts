@@ -31,9 +31,13 @@ android {
         // versionName = "1.2.1"
         // SMCPKG_SUPPORT<<<Cursor077
         // SMCPKG_SUPPORT>>>Cursor081
-        versionCode = 6
-        versionName = "1.3.0"
+        // versionCode = 6
+        // versionName = "1.3.0"
         // SMCPKG_SUPPORT<<<Cursor081
+        // SMCPKG_SUPPORT>>>Cursor087
+        versionCode = 7
+        versionName = "1.4.0"
+        // SMCPKG_SUPPORT<<<Cursor087
 
         vectorDrawables {
             useSupportLibrary = true
@@ -60,6 +64,13 @@ android {
                 "\"ca-app-pub-6138247296137119/2601192653\"",
             )
             // SMCPKG_SUPPORT<<<Cursor078
+            // SMCPKG_SUPPORT>>>Cursor088
+            buildConfigField(
+                "String",
+                "ADMOB_APP_OPEN_ID",
+                "\"ca-app-pub-6138247296137119/7661947645\"",
+            )
+            // SMCPKG_SUPPORT<<<Cursor088
         }
         debug {
             isMinifyEnabled = false
@@ -75,6 +86,13 @@ android {
                 "ADMOB_NATIVE_ID",
                 "\"ca-app-pub-3940256099942544/2247696110\"",
             )
+            // SMCPKG_SUPPORT>>>Cursor088
+            buildConfigField(
+                "String",
+                "ADMOB_APP_OPEN_ID",
+                "\"ca-app-pub-3940256099942544/9257395921\"",
+            )
+            // SMCPKG_SUPPORT<<<Cursor088
         }
     }
 
@@ -108,6 +126,9 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    // SMCPKG_SUPPORT>>>Cursor088
+    implementation(libs.androidx.lifecycle.process)
+    // SMCPKG_SUPPORT<<<Cursor088
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

@@ -5,6 +5,7 @@ import android.telephony.TelephonyManager
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
+import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
 import com.apsmkimo.go2radiolive.data.repository.PodcastRepositoryImpl
@@ -82,6 +83,10 @@ class AppContainer(context: Context) {
             chain.proceed(request)
         }
         .build()
+
+    // SMCPKG_SUPPORT>>>Cursor092
+    val podcastRegionRepository = PodcastRegionRepository(appContext)
+    // SMCPKG_SUPPORT<<<Cursor092
 
     val stationRepository: StationRepository = StationRepositoryImpl(radioBrowserApi)
     val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson)

@@ -7,10 +7,17 @@ import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
 import kotlinx.coroutines.flow.Flow
 
+/**
+ * Healthy Taiwan stations measured 2026-10-19 on de1 (hidebroken=true, clickcount desc): 193.
+ * "Radio ICRT" was rank 102 and "ICRT" rank 159, so a limit of 100 dropped both.
+ * 500 keeps that catalog, with room to grow. Larger countries stay at the 500 most-clicked.
+ */
+const val COUNTRY_STATION_LIMIT = 500
+
 interface StationRepository {
-    suspend fun getLocalStations(countryHint: String? = null, limit: Int = 100): List<RadioStation>
+    suspend fun getLocalStations(countryHint: String? = null, limit: Int = COUNTRY_STATION_LIMIT): List<RadioStation>
     suspend fun getCountries(): List<CountryOption>
-    suspend fun getStationsByCountry(countryCode: String, limit: Int = 100): List<RadioStation>
+    suspend fun getStationsByCountry(countryCode: String, limit: Int = COUNTRY_STATION_LIMIT): List<RadioStation>
     suspend fun getCategories(): List<StationCategory>
     suspend fun getStationsByTag(tag: String, limit: Int = 100): List<RadioStation>
     suspend fun resolveStreamUrl(stationUuid: String): String?

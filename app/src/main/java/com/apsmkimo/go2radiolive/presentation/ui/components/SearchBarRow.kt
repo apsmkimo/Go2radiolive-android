@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AccessAlarm
+import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Refresh
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ fun SearchBarRow(
     onQueryChange: (String) -> Unit,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
+    onPickPodcastRegion: (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     Row(
@@ -47,6 +49,13 @@ fun SearchBarRow(
         IconButton(onClick = onRefresh) {
             Icon(Icons.Outlined.Refresh, contentDescription = stringResource(R.string.refresh))
         }
+        // SMCPKG_SUPPORT>>>Cursor092
+        if (onPickPodcastRegion != null) {
+            IconButton(onClick = onPickPodcastRegion) {
+                Icon(Icons.Outlined.Public, contentDescription = stringResource(R.string.podcast_region))
+            }
+        }
+        // SMCPKG_SUPPORT<<<Cursor092
         IconButton(
             onClick = {
                 Toast.makeText(context, context.getString(R.string.alarm_coming_soon), Toast.LENGTH_SHORT).show()

@@ -10,12 +10,17 @@ internal fun podcastStorefront(region: String?): String {
 }
 
 /**
- * A non-US storefront uses the US chart when its own chart failed or came back empty.
- * The US storefront reports its own failure instead of pretending the fallback worked.
+ * A non-US storefront uses the US chart only when its catalog is empty.
+ * HTTP and other failures stay failures so the UI can show an error.
+ * The US storefront reports its own result.
  */
 internal fun usesUsPodcastFallback(storefront: String, chartFailed: Boolean, catalogEmpty: Boolean): Boolean {
-    if (storefront == "us") return false
-    return chartFailed || catalogEmpty
+    // SMCPKG_SUPPORT>>>Cursor090
+    // if (storefront == "us") return false
+    // return chartFailed || catalogEmpty
+    if (storefront == "us" || chartFailed) return false
+    return catalogEmpty
+    // SMCPKG_SUPPORT<<<Cursor090
 }
 
 internal fun dedupePodcasts(groups: List<List<PodcastShow>>, limit: Int = 200): List<PodcastShow> {

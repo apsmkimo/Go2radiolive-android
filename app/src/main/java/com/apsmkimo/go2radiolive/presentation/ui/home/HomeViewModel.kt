@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.di.AppContainer
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
@@ -41,6 +42,9 @@ data class HomeUiState(
     val selectedCountry: CountryOption? = null,
     val podcasts: List<PodcastShow> = emptyList(),
     val podcastUsFallback: Boolean = false,
+    /** Empty means automatic (device region). Otherwise a lowercase Apple storefront. */
+    val podcastRegionCode: String = "",
+    val deviceRegionCode: String = "",
     val selectedPodcast: PodcastShow? = null,
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
@@ -119,6 +123,7 @@ class HomeViewModel(
     private val resolveStreamUrl: ResolveStreamUrlUseCase,
     private val playerController: RadioPlayerController,
     private val deviceRegion: () -> String,
+    private val podcastRegion: PodcastRegionRepository,
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(HomeUiState())
@@ -141,6 +146,15 @@ class HomeViewModel(
     )
 
     init {
+        viewModelScope.launch {
+            podcastRegion.awaitLoaded()
+            internalState.update {
+                it.copy(
+                    podcastRegionCode = podcastRegion.selection.value,
+                    deviceRegionCode = deviceRegion(),
+                )
+            }
+        }
         refresh()
     }
 
@@ -206,6 +220,28 @@ class HomeViewModel(
         refresh()
     }
 
+    // SMCPKG_SUPPORT>>>Cursor092
+    fun onPodcastRegionSelected(code: String) {
+        viewModelScope.launch {
+            podcastRegion.setSelection(code)
+            internalState.update {
+                it.copy(
+                    podcastRegionCode = podcastRegion.selection.value,
+                    deviceRegionCode = deviceRegion(),
+                    selectedPodcast = null,
+                    podcasts = emptyList(),
+                    stations = emptyList(),
+                    searchQuery = "",
+                    errorResId = null,
+                    errorDetail = null,
+                    podcastUsFallback = false,
+                )
+            }
+            refresh()
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor092
+
     fun refresh() {
         val snapshot = internalState.value
         if (snapshot.selectedTab == BrowseTab.FAVORITES) {
@@ -230,18 +266,39 @@ class HomeViewModel(
                         }
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null -> {
-                        val chart: PodcastChart = getPodcastShows(deviceRegion())
+                        // SMCPKG_SUPPORT>>>Cursor092
+                        podcastRegion.awaitLoaded()
+                        val saved = podcastRegion.selection.value
+                        val region = saved.ifBlank { deviceRegion() }
+                        val chart: PodcastChart = getPodcastShows(region)
                         internalState.update {
                             it.copy(
                                 isLoading = false,
                                 podcasts = chart.shows,
                                 podcastUsFallback = chart.usedUsFallback,
+                                podcastRegionCode = saved,
+                                deviceRegionCode = deviceRegion(),
                                 stations = emptyList(),
                             )
                         }
+                        // val chart: PodcastChart = getPodcastShows(deviceRegion())
+                        // internalState.update {
+                        //     it.copy(
+                        //         isLoading = false,
+                        //         podcasts = chart.shows,
+                        //         podcastUsFallback = chart.usedUsFallback,
+                        //         stations = emptyList(),
+                        //     )
+                        // }
+                        // SMCPKG_SUPPORT<<<Cursor092
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast != null -> {
-                        val region = if (snapshot.podcastUsFallback) "us" else deviceRegion()
+                        // SMCPKG_SUPPORT>>>Cursor092
+                        podcastRegion.awaitLoaded()
+                        val selectedRegion = podcastRegion.selection.value.ifBlank { deviceRegion() }
+                        val region = if (snapshot.podcastUsFallback) "us" else selectedRegion
+                        // val region = if (snapshot.podcastUsFallback) "us" else deviceRegion()
+                        // SMCPKG_SUPPORT<<<Cursor092
                         val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region)
                         internalState.update { it.copy(isLoading = false, stations = episodes) }
                     }
@@ -312,6 +369,7 @@ class HomeViewModelFactory(
             resolveStreamUrl = container.resolveStreamUrlUseCase,
             playerController = container.playerController,
             deviceRegion = container::deviceRegion,
+            podcastRegion = container.podcastRegionRepository,
         ) as T
     }
 }

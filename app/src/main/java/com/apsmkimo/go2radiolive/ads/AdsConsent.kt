@@ -28,6 +28,18 @@ object AdsConsent {
     private val _privacyOptionsRequired = MutableStateFlow(false)
     val privacyOptionsRequired: StateFlow<Boolean> = _privacyOptionsRequired.asStateFlow()
 
+    // SMCPKG_SUPPORT>>>Cursor091
+    private val _consentFormVisible = MutableStateFlow(false)
+    val consentFormVisible: StateFlow<Boolean> = _consentFormVisible.asStateFlow()
+
+    private var consentUpdateSettled = false
+    private var adsReadyListener: (() -> Unit)? = null
+
+    fun setAdsReadyListener(listener: () -> Unit) {
+        adsReadyListener = listener
+    }
+    // SMCPKG_SUPPORT<<<Cursor091
+
     private val initLock = Any()
     private var mobileAdsStarted = false
 
@@ -45,11 +57,22 @@ object AdsConsent {
             activity,
             params,
             {
+                // SMCPKG_SUPPORT>>>Cursor091
+                _consentFormVisible.value = true
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) {
+                    _consentFormVisible.value = false
+                    consentUpdateSettled = true
                     publish(activity)
                 }
+                // UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) {
+                //     publish(activity)
+                // }
+                // SMCPKG_SUPPORT<<<Cursor091
             },
             {
+                // SMCPKG_SUPPORT>>>Cursor091
+                consentUpdateSettled = true
+                // SMCPKG_SUPPORT<<<Cursor091
                 publish(activity)
             },
         )
@@ -57,9 +80,16 @@ object AdsConsent {
     }
 
     fun showPrivacyOptions(activity: Activity) {
+        // SMCPKG_SUPPORT>>>Cursor091
+        _consentFormVisible.value = true
         UserMessagingPlatform.showPrivacyOptionsForm(activity) {
+            _consentFormVisible.value = false
             publish(activity)
         }
+        // UserMessagingPlatform.showPrivacyOptionsForm(activity) {
+        //     publish(activity)
+        // }
+        // SMCPKG_SUPPORT<<<Cursor091
     }
 
     private fun ConsentRequestParameters.Builder.attachDebugSettings(activity: Activity) {
@@ -105,5 +135,10 @@ object AdsConsent {
         val allowed = UserMessagingPlatform.getConsentInformation(context).canRequestAds()
         _canRequestAds.value = allowed
         if (allowed) NativeAdPool.preload(context) else NativeAdPool.clear()
+        // SMCPKG_SUPPORT>>>Cursor091
+        if (allowed && consentUpdateSettled && !_consentFormVisible.value) {
+            adsReadyListener?.invoke()
+        }
+        // SMCPKG_SUPPORT<<<Cursor091
     }
 }
