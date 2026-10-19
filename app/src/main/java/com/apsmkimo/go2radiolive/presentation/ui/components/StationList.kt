@@ -9,11 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -37,14 +39,19 @@ fun StationList(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
     showNativeAds: Boolean = false,
+    scrollToken: Int = 0,
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(scrollToken) {
+        if (scrollToken > 0 && stations.isNotEmpty()) listState.scrollToItem(0)
+    }
     when {
         isLoading && stations.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        errorMessage != null && stations.isEmpty() -> {
+        errorMessage != null && stations.isEmpty() && !isLoading -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 TextButton(onClick = onRetry) {
                     Text(text = errorMessage + "\n" + stringResource(R.string.retry), textAlign = TextAlign.Center)
@@ -65,6 +72,7 @@ fun StationList(
         else -> {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
+                state = listState,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
@@ -92,6 +100,7 @@ fun CategoryList(
     onCategoryClick: (StationCategory) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    scrollToken: Int = 0,
 ) {
     val context = LocalContext.current
     BrowseRowList(
@@ -110,6 +119,7 @@ fun CategoryList(
         },
         onRetry = onRetry,
         modifier = modifier,
+        scrollToken = scrollToken,
     )
 }
 
@@ -130,14 +140,19 @@ fun BrowseRowList(
     modifier: Modifier = Modifier,
     header: String? = null,
     showNativeAds: Boolean = false,
+    scrollToken: Int = 0,
 ) {
+    val listState = rememberLazyListState()
+    LaunchedEffect(scrollToken) {
+        if (scrollToken > 0 && rows.isNotEmpty()) listState.scrollToItem(0)
+    }
     when {
         isLoading && rows.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 CircularProgressIndicator()
             }
         }
-        errorMessage != null && rows.isEmpty() -> {
+        errorMessage != null && rows.isEmpty() && !isLoading -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 TextButton(onClick = onRetry) {
                     Text(text = errorMessage + "\n" + stringResource(R.string.retry), textAlign = TextAlign.Center)
@@ -168,6 +183,7 @@ fun BrowseRowList(
         else -> {
             LazyColumn(
                 modifier = modifier.fillMaxSize(),
+                state = listState,
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {

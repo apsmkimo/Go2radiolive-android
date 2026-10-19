@@ -31,6 +31,7 @@ class RadioPlaybackService : MediaSessionService() {
     private var mediaSession: MediaSession? = null
     private val spatialRouteScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var spatialRouteJob: Job? = null
+    private var alarmPlayback: AlarmPlayback? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -62,6 +63,14 @@ class RadioPlaybackService : MediaSessionService() {
             .build()
         // SMCPKG_SUPPORT<<<Cursor012
         player.repeatMode = Player.REPEAT_MODE_OFF
+        // SMCPKG_SUPPORT>>>Cursor098
+        alarmPlayback = AlarmPlayback(
+            service = this,
+            player = player,
+            gson = com.google.gson.Gson(),
+            scope = spatialRouteScope,
+        ).also { it.attach() }
+        // SMCPKG_SUPPORT<<<Cursor098
 
         val sessionActivity = PendingIntent.getActivity(
             this,
@@ -117,6 +126,13 @@ class RadioPlaybackService : MediaSessionService() {
         }
     }
 
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        // SMCPKG_SUPPORT>>>Cursor098
+        alarmPlayback?.handle(intent)
+        // SMCPKG_SUPPORT<<<Cursor098
+        return super.onStartCommand(intent, flags, startId)
+    }
+
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaSession? {
         return mediaSession
     }
@@ -129,6 +145,7 @@ class RadioPlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
+        alarmPlayback?.release()
         spatialRouteJob?.cancel()
         spatialRouteScope.cancel()
         mediaSession?.run {
@@ -149,8 +166,18 @@ class RadioPlaybackService : MediaSessionService() {
         // const val USER_AGENT = "Go2RadioLive/1.3.0"
         // SMCPKG_SUPPORT<<<Cursor013
         // SMCPKG_SUPPORT>>>Cursor087
-        const val USER_AGENT = "Go2RadioLive/1.4.0"
+        // const val USER_AGENT = "Go2RadioLive/1.4.0"
         // SMCPKG_SUPPORT<<<Cursor087
+        // SMCPKG_SUPPORT>>>Cursor094
+        const val USER_AGENT = "Go2RadioLive/1.5.0"
+        // SMCPKG_SUPPORT<<<Cursor094
+        const val ACTION_SLEEP_MINUTES = "com.apsmkimo.go2radiolive.SLEEP_MINUTES"
+        const val ACTION_SLEEP_EPISODE = "com.apsmkimo.go2radiolive.SLEEP_EPISODE"
+        const val ACTION_SLEEP_CANCEL = "com.apsmkimo.go2radiolive.SLEEP_CANCEL"
+        const val ACTION_ALARM_PLAY = "com.apsmkimo.go2radiolive.ALARM_PLAY"
+        const val ACTION_ALARM_STOP = "com.apsmkimo.go2radiolive.ALARM_STOP"
+        const val ACTION_ALARM_SNOOZE = "com.apsmkimo.go2radiolive.ALARM_SNOOZE"
+        const val EXTRA_MINUTES = "extra_minutes"
         private const val VOLUME_STEPS = 6
         private const val VOLUME_STEP_MS = 15L
     }

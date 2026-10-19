@@ -11,30 +11,50 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Podcasts
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Settings
+import android.content.Intent
+import android.os.SystemClock
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apsmkimo.go2radiolive.Go2RadioApp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
+import com.apsmkimo.go2radiolive.alarm.PlaybackSignals
+import com.apsmkimo.go2radiolive.alarm.SleepTimerState
+import com.apsmkimo.go2radiolive.alarm.WakeAlarmScheduler
+import com.apsmkimo.go2radiolive.presentation.player.RadioPlaybackService
 import com.apsmkimo.go2radiolive.presentation.ui.components.AdMobBanner
+import com.apsmkimo.go2radiolive.presentation.ui.components.AlarmSheet
+import com.apsmkimo.go2radiolive.presentation.ui.components.sleepBadgeMinutes
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
 import com.apsmkimo.go2radiolive.presentation.ui.components.CategoryList
@@ -59,6 +79,37 @@ fun HomeScreen(
     val app = context.applicationContext as Go2RadioApp
     val viewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(app.container))
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+    val alarmStore = app.container.wakeAlarmRepository
+    val alarm by alarmStore.alarm.collectAsStateWithLifecycle()
+    val lastStation by alarmStore.lastStation.collectAsStateWithLifecycle()
+    val sleep by PlaybackSignals.sleep.collectAsStateWithLifecycle()
+    val lifecycleState by LocalLifecycleOwner.current.lifecycle.currentStateFlow.collectAsStateWithLifecycle()
+    val canExactAlarm = lifecycleState.isAtLeast(Lifecycle.State.STARTED) &&
+        WakeAlarmScheduler.canScheduleExact(context)
+    var alarmOpen by rememberSaveable { mutableStateOf(false) }
+    var badgeNow by remember { mutableLongStateOf(SystemClock.elapsedRealtime()) }
+    LaunchedEffect(sleep.active, sleep.endsAtElapsedMs, sleep.endOfEpisode) {
+        if (!sleep.active || sleep.endOfEpisode) return@LaunchedEffect
+        while (true) {
+            badgeNow = SystemClock.elapsedRealtime()
+            delay(1_000)
+        }
+    }
+    val updatedText = stringResource(R.string.refresh_updated)
+    val failedText = stringResource(R.string.load_failed)
+    LaunchedEffect(state.userRefreshEvent) {
+        if (state.userRefreshEvent == 0) return@LaunchedEffect
+        val message = if (state.userRefreshOk) {
+            updatedText
+        } else if (state.errorDetail.isNullOrBlank()) {
+            failedText
+        } else {
+            failedText + "\n" + state.errorDetail
+        }
+        snackbarHostState.showSnackbar(message)
+    }
     // SMCPKG_SUPPORT>>>Cursor021
     val audioSettings by AudioSettingsRepository.settings.collectAsStateWithLifecycle()
     var audioPanelExpanded by rememberSaveable { mutableStateOf(false) }
@@ -81,6 +132,7 @@ fun HomeScreen(
     )
 
     Scaffold(
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
                 title = {
@@ -169,17 +221,23 @@ fun HomeScreen(
                 .padding(innerPadding),
         ) {
             AdMobBanner()
+            if (state.isLoading) {
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            }
             // SMCPKG_SUPPORT>>>Cursor092
             var regionPickerOpen by rememberSaveable { mutableStateOf(false) }
             SearchBarRow(
                 query = state.searchQuery,
                 onQueryChange = viewModel::onSearchQueryChange,
-                onRefresh = viewModel::refresh,
+                onRefresh = viewModel::onRefreshClick,
+                isRefreshing = state.isLoading,
                 onPickPodcastRegion = if (state.selectedTab == BrowseTab.PODCAST) {
                     { regionPickerOpen = true }
                 } else {
                     null
                 },
+                onAlarm = { alarmOpen = true },
+                sleepBadge = sleepBadgeMinutes(sleep, badgeNow),
             )
             if (regionPickerOpen) {
                 PodcastRegionDialog(
@@ -198,12 +256,77 @@ fun HomeScreen(
             //     onRefresh = viewModel::refresh,
             // )
             // SMCPKG_SUPPORT<<<Cursor092
+            if (alarmOpen) {
+                AlarmSheet(
+                    alarm = alarm,
+                    lastStation = lastStation,
+                    favorites = state.favoriteStations,
+                    playback = state.playback,
+                    sleep = sleep,
+                    canExactAlarm = canExactAlarm,
+                    onDismiss = { alarmOpen = false },
+                    onSaveAlarm = { next ->
+                        scope.launch {
+                            alarmStore.save(next)
+                            WakeAlarmScheduler.apply(context, next)
+                            alarmOpen = false
+                            snackbarHostState.showSnackbar(context.getString(R.string.alarm_saved))
+                        }
+                    },
+                    onStartSleepMinutes = { minutes ->
+                        PlaybackSignals.updateSleep(
+                            SleepTimerState(
+                                active = true,
+                                endsAtElapsedMs = SystemClock.elapsedRealtime() + minutes * 60_000L,
+                            ),
+                        )
+                        context.startService(
+                            Intent(context, RadioPlaybackService::class.java).apply {
+                                action = RadioPlaybackService.ACTION_SLEEP_MINUTES
+                                putExtra(RadioPlaybackService.EXTRA_MINUTES, minutes)
+                            },
+                        )
+                        alarmOpen = false
+                    },
+                    onStartSleepEpisode = {
+                        PlaybackSignals.updateSleep(SleepTimerState(active = true, endOfEpisode = true))
+                        context.startService(
+                            Intent(context, RadioPlaybackService::class.java).apply {
+                                action = RadioPlaybackService.ACTION_SLEEP_EPISODE
+                            },
+                        )
+                        alarmOpen = false
+                    },
+                    onCancelSleep = {
+                        PlaybackSignals.updateSleep(SleepTimerState())
+                        context.startService(
+                            Intent(context, RadioPlaybackService::class.java).apply {
+                                action = RadioPlaybackService.ACTION_SLEEP_CANCEL
+                            },
+                        )
+                    },
+                    onRequestExactPermission = {
+                        WakeAlarmScheduler.exactAlarmSettingsIntent(context)?.let(context::startActivity)
+                    },
+                )
+            }
             val errorText = when {
                 state.errorResId != null -> {
                     val base = stringResource(state.errorResId!!)
                     if (state.errorDetail.isNullOrBlank()) base else base + "\n" + state.errorDetail
                 }
                 else -> state.playback.errorMessage
+            }
+            val hasItems = when {
+                state.showingCategories -> state.visibleCategories.isNotEmpty()
+                state.showingCountries -> state.visibleCountries.isNotEmpty()
+                state.showingPodcasts -> state.visiblePodcasts.isNotEmpty()
+                else -> state.visibleStations.isNotEmpty()
+            }
+            if (!state.isLoading && state.errorResId != null && hasItems && errorText != null) {
+                TextButton(onClick = viewModel::onRefreshClick, modifier = Modifier.fillMaxWidth()) {
+                    Text(errorText)
+                }
             }
             when {
                 state.showingCategories -> {
@@ -212,7 +335,8 @@ fun HomeScreen(
                         isLoading = state.isLoading,
                         errorMessage = errorText,
                         onCategoryClick = viewModel::onCategorySelected,
-                        onRetry = viewModel::refresh,
+                        onRetry = viewModel::onRefreshClick,
+                        scrollToken = state.scrollToken,
                     )
                 }
                 state.showingCountries -> {
@@ -230,7 +354,8 @@ fun HomeScreen(
                         onRowClick = { row ->
                             state.countries.firstOrNull { it.code == row.id }?.let(viewModel::onCountrySelected)
                         },
-                        onRetry = viewModel::refresh,
+                        onRetry = viewModel::onRefreshClick,
+                        scrollToken = state.scrollToken,
                     )
                 }
                 state.showingPodcasts -> {
@@ -248,7 +373,8 @@ fun HomeScreen(
                         onRowClick = { row ->
                             state.podcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
                         },
-                        onRetry = viewModel::refresh,
+                        onRetry = viewModel::onRefreshClick,
+                        scrollToken = state.scrollToken,
                         header = if (state.podcastUsFallback) {
                             stringResource(R.string.podcast_us_fallback)
                         } else {
@@ -273,7 +399,8 @@ fun HomeScreen(
                         emptyText = emptyText,
                         onStationClick = viewModel::onStationClick,
                         onToggleFavorite = viewModel::onToggleFavorite,
-                        onRetry = viewModel::refresh,
+                        onRetry = viewModel::onRefreshClick,
+                        scrollToken = state.scrollToken,
                         showNativeAds = nativeAds,
                     )
                 }

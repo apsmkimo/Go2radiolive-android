@@ -2,6 +2,8 @@ package com.apsmkimo.go2radiolive.data.repository
 
 import com.apsmkimo.go2radiolive.data.mapper.toDomain
 import com.apsmkimo.go2radiolive.data.mapper.toDomainStations
+import com.apsmkimo.go2radiolive.data.remote.cacheBustToken
+import com.apsmkimo.go2radiolive.data.remote.cacheControlHeader
 import com.apsmkimo.go2radiolive.data.remote.localStationsCountry
 import com.apsmkimo.go2radiolive.data.remote.normalizeRegion
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
@@ -19,24 +21,40 @@ class StationRepositoryImpl(
     // override suspend fun getLocalStations(limit: Int): List<RadioStation> {
     //     return getStationsByCountry(LOCAL_COUNTRY_CODE, limit)
     // }
-    override suspend fun getLocalStations(countryHint: String?, limit: Int): List<RadioStation> {
+    override suspend fun getLocalStations(
+        countryHint: String?,
+        limit: Int,
+        bypassCache: Boolean,
+    ): List<RadioStation> {
         val primary = normalizeRegion(countryHint) ?: "US"
-        val stations = getStationsByCountry(primary, limit)
+        val stations = getStationsByCountry(primary, limit, bypassCache)
         val chosen = localStationsCountry(primary, stations.size)
-        return if (chosen == primary) stations else getStationsByCountry(chosen, limit)
+        return if (chosen == primary) stations else getStationsByCountry(chosen, limit, bypassCache)
     }
     // SMCPKG_SUPPORT<<<Cursor074
 
-    override suspend fun getCountries(): List<CountryOption> {
-        return api.getCountries()
+    override suspend fun getCountries(bypassCache: Boolean): List<CountryOption> {
+        return api.getCountries(
+            cacheControl = cacheControlHeader(bypassCache),
+            cacheBust = cacheBustToken(bypassCache),
+        )
             .mapNotNull { country: CountryDto -> country.toDomain() }
             .sortedByDescending { it.stationCount }
     }
 
-    override suspend fun getStationsByCountry(countryCode: String, limit: Int): List<RadioStation> {
+    override suspend fun getStationsByCountry(
+        countryCode: String,
+        limit: Int,
+        bypassCache: Boolean,
+    ): List<RadioStation> {
         val code = countryCode.trim().uppercase()
         if (code.length != 2) return emptyList()
-        return api.getStationsByCountry(countryCode = code, limit = limit).toDomainStations()
+        return api.getStationsByCountry(
+            countryCode = code,
+            limit = limit,
+            cacheControl = cacheControlHeader(bypassCache),
+            cacheBust = cacheBustToken(bypassCache),
+        ).toDomainStations()
     }
 
     // SMCPKG_SUPPORT>>>Cursor067
@@ -49,16 +67,24 @@ class StationRepositoryImpl(
     // }
     // SMCPKG_SUPPORT<<<Cursor067
 
-    override suspend fun getCategories(): List<StationCategory> {
-        return api.getTags()
+    override suspend fun getCategories(bypassCache: Boolean): List<StationCategory> {
+        return api.getTags(
+            cacheControl = cacheControlHeader(bypassCache),
+            cacheBust = cacheBustToken(bypassCache),
+        )
             .mapNotNull { it.toDomain() }
             .filter { it.stationCount >= MIN_CATEGORY_STATIONS }
             .sortedByDescending { it.stationCount }
             .take(MAX_CATEGORIES)
     }
 
-    override suspend fun getStationsByTag(tag: String, limit: Int): List<RadioStation> {
-        return api.getStationsByTag(tag = tag, limit = limit).toDomainStations()
+    override suspend fun getStationsByTag(tag: String, limit: Int, bypassCache: Boolean): List<RadioStation> {
+        return api.getStationsByTag(
+            tag = tag,
+            limit = limit,
+            cacheControl = cacheControlHeader(bypassCache),
+            cacheBust = cacheBustToken(bypassCache),
+        ).toDomainStations()
     }
 
     override suspend fun resolveStreamUrl(stationUuid: String): String? {

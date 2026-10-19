@@ -5,6 +5,7 @@ import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
 import com.apsmkimo.go2radiolive.data.remote.dto.StationDto
 import com.apsmkimo.go2radiolive.data.remote.dto.TagDto
 import retrofit2.http.GET
+import retrofit2.http.Header
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -24,10 +25,15 @@ interface RadioBrowserApi {
         @Query("hidebroken") hideBroken: Boolean = true,
         @Query("order") order: String = "clickcount",
         @Query("reverse") reverse: Boolean = true,
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
     ): List<StationDto>
 
     @GET("json/countries")
-    suspend fun getCountries(): List<CountryDto>
+    suspend fun getCountries(
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
+    ): List<CountryDto>
 
     /**
      * Worldwide search kept for callers that still want a flat list.
@@ -38,6 +44,8 @@ interface RadioBrowserApi {
         @Query("hidebroken") hideBroken: Boolean = true,
         @Query("order") order: String = "clickcount",
         @Query("reverse") reverse: Boolean = true,
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
     ): List<StationDto>
 
     @GET("json/stations/bytagexact/{tag}")
@@ -47,10 +55,15 @@ interface RadioBrowserApi {
         @Query("hidebroken") hideBroken: Boolean = true,
         @Query("order") order: String = "clickcount",
         @Query("reverse") reverse: Boolean = true,
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
     ): List<StationDto>
 
     @GET("json/tags")
-    suspend fun getTags(): List<TagDto>
+    suspend fun getTags(
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
+    ): List<TagDto>
 
     @GET("json/url/{stationUuid}")
     suspend fun resolveStationUrl(

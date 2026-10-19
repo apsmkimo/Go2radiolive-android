@@ -15,17 +15,29 @@ import kotlinx.coroutines.flow.Flow
 const val COUNTRY_STATION_LIMIT = 500
 
 interface StationRepository {
-    suspend fun getLocalStations(countryHint: String? = null, limit: Int = COUNTRY_STATION_LIMIT): List<RadioStation>
-    suspend fun getCountries(): List<CountryOption>
-    suspend fun getStationsByCountry(countryCode: String, limit: Int = COUNTRY_STATION_LIMIT): List<RadioStation>
-    suspend fun getCategories(): List<StationCategory>
-    suspend fun getStationsByTag(tag: String, limit: Int = 100): List<RadioStation>
+    suspend fun getLocalStations(
+        countryHint: String? = null,
+        limit: Int = COUNTRY_STATION_LIMIT,
+        bypassCache: Boolean = false,
+    ): List<RadioStation>
+    suspend fun getCountries(bypassCache: Boolean = false): List<CountryOption>
+    suspend fun getStationsByCountry(
+        countryCode: String,
+        limit: Int = COUNTRY_STATION_LIMIT,
+        bypassCache: Boolean = false,
+    ): List<RadioStation>
+    suspend fun getCategories(bypassCache: Boolean = false): List<StationCategory>
+    suspend fun getStationsByTag(
+        tag: String,
+        limit: Int = 100,
+        bypassCache: Boolean = false,
+    ): List<RadioStation>
     suspend fun resolveStreamUrl(stationUuid: String): String?
 }
 
 interface PodcastRepository {
-    suspend fun topShows(region: String?): PodcastChart
-    suspend fun episodes(show: PodcastShow, region: String?): List<RadioStation>
+    suspend fun topShows(region: String?, bypassCache: Boolean = false): PodcastChart
+    suspend fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): List<RadioStation>
 }
 
 interface FavoriteRepository {

@@ -26,7 +26,10 @@ SMCPKG_SUPPORT<<<Cursor086 -->
 <!-- SMCPKG_SUPPORT>>>Cursor093
 - `versionName`: `1.3.0` / `versionCode`: `6`
 SMCPKG_SUPPORT<<<Cursor093 -->
+<!-- SMCPKG_SUPPORT>>>Cursor100
 - `versionName`: `1.4.0` / `versionCode`: `7`
+SMCPKG_SUPPORT<<<Cursor100 -->
+- `versionName`: `1.5.0` / `versionCode`: `8`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
@@ -52,7 +55,11 @@ SMCPKG_SUPPORT<<<Cursor093 -->
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.4.0`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.5.0`。
+
+重新整理會帶 `Cache-Control: no-cache` 與 `cb` 查詢參數，按鈕在載入時停用並顯示進度，完成後出現 Snackbar，失敗時列表仍在也會顯示錯誤。
+
+鬧鐘圖示開啟睡眠計時與定時開播。睡眠計時在播放服務裡倒數，結束前約 30 秒淡出。定時開播使用 `AlarmManager.setAlarmClock` 與 `SCHEDULE_EXACT_ALARM`（沒有 `USE_EXACT_ALARM`）。未允許精確鬧鐘時改為不精確排程並說明。開機與時區變更會重新排程。權限：`RECEIVE_BOOT_COMPLETED`、`SCHEDULE_EXACT_ALARM`。
 
 | 分頁 | 端點 | 說明 |
 | --- | --- | --- |

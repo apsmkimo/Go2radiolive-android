@@ -18,12 +18,13 @@ class GetStationsUseCase(
         tab: BrowseTab,
         categoryTag: String? = null,
         countryCode: String? = null,
+        bypassCache: Boolean = false,
     ): List<RadioStation> {
         return when (tab) {
-            BrowseTab.LOCAL -> stationRepository.getLocalStations(countryHint = countryCode)
+            BrowseTab.LOCAL -> stationRepository.getLocalStations(countryHint = countryCode, bypassCache = bypassCache)
             BrowseTab.WORLD -> {
                 val code = countryCode?.takeIf { it.isNotBlank() } ?: return emptyList()
-                stationRepository.getStationsByCountry(code)
+                stationRepository.getStationsByCountry(code, bypassCache = bypassCache)
             }
             // SMCPKG_SUPPORT>>>Cursor068
             // BrowseTab.RESERVED -> stationRepository.getReservedStations()
@@ -31,7 +32,7 @@ class GetStationsUseCase(
             // SMCPKG_SUPPORT<<<Cursor068
             BrowseTab.CATEGORIES -> {
                 val tag = categoryTag?.takeIf { it.isNotBlank() } ?: return emptyList()
-                stationRepository.getStationsByTag(tag)
+                stationRepository.getStationsByTag(tag, bypassCache = bypassCache)
             }
             BrowseTab.FAVORITES -> emptyList()
         }
@@ -41,27 +42,34 @@ class GetStationsUseCase(
 class GetCountriesUseCase(
     private val stationRepository: StationRepository,
 ) {
-    suspend operator fun invoke(): List<CountryOption> = stationRepository.getCountries()
+    suspend operator fun invoke(bypassCache: Boolean = false): List<CountryOption> =
+        stationRepository.getCountries(bypassCache)
 }
 
 class GetPodcastShowsUseCase(
     private val podcastRepository: PodcastRepository,
 ) {
-    suspend operator fun invoke(region: String?): PodcastChart = podcastRepository.topShows(region)
+    suspend operator fun invoke(region: String?, bypassCache: Boolean = false): PodcastChart =
+        podcastRepository.topShows(region, bypassCache)
 }
 
 class GetPodcastEpisodesUseCase(
     private val podcastRepository: PodcastRepository,
 ) {
-    suspend operator fun invoke(show: PodcastShow, region: String?): List<RadioStation> {
-        return podcastRepository.episodes(show, region)
+    suspend operator fun invoke(
+        show: PodcastShow,
+        region: String?,
+        bypassCache: Boolean = false,
+    ): List<RadioStation> {
+        return podcastRepository.episodes(show, region, bypassCache)
     }
 }
 
 class GetCategoriesUseCase(
     private val stationRepository: StationRepository,
 ) {
-    suspend operator fun invoke(): List<StationCategory> = stationRepository.getCategories()
+    suspend operator fun invoke(bypassCache: Boolean = false): List<StationCategory> =
+        stationRepository.getCategories(bypassCache)
 }
 
 class ObserveFavoritesUseCase(
