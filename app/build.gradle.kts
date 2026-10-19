@@ -153,6 +153,12 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     // SMCPKG_SUPPORT<<<Cursor088
     implementation(libs.androidx.activity.compose)
+    // SMCPKG_SUPPORT>>>Cursor101
+    // play-services-basement brings androidx.fragment:fragment:1.1.0.
+    // registerForActivityResult then fails lintVitalRelease
+    // (InvalidFragmentVersionForActivityResult requires fragment >= 1.3.0).
+    implementation(libs.androidx.fragment)
+    // SMCPKG_SUPPORT<<<Cursor101
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
