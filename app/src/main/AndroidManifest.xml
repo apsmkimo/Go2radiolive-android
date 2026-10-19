@@ -25,6 +25,11 @@
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="${admobAppId}" />
         <!-- SMCPKG_SUPPORT<<<Cursor079 -->
+        <!-- SMCPKG_SUPPORT>>>Cursor082 -->
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true" />
+        <!-- SMCPKG_SUPPORT<<<Cursor082 -->
 
         <activity
             android:name=".presentation.MainActivity"

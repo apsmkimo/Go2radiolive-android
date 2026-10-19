@@ -20,14 +20,19 @@ SMCPKG_SUPPORT<<<Cursor057 -->
 <!-- SMCPKG_SUPPORT>>>Cursor080
 - `versionName`: `1.2.0` / `versionCode`: `4`
 SMCPKG_SUPPORT<<<Cursor080 -->
+<!-- SMCPKG_SUPPORT>>>Cursor086
 - `versionName`: `1.2.1` / `versionCode`: `5`
+SMCPKG_SUPPORT<<<Cursor086 -->
+- `versionName`: `1.3.0` / `versionCode`: `6`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
 
-- 頂部 AdMob 橫幅。ID 依 build type 分開，debug 不會帶正式廣告單元
-  - debug（Google 官方測試 ID）：App `ca-app-pub-3940256099942544~3347511713`，Banner `ca-app-pub-3940256099942544/6300978111`
-  - release：App `ca-app-pub-6138247296137119~5720425997`，Banner `ca-app-pub-6138247296137119/7955882105`
+- 啟動時以 Google UMP 更新同意狀態；只有 `canRequestAds()` 為真才初始化 Mobile Ads 並載入廣告。設定頁在需要時顯示「隱私選項」。debug 不強制 DebugGeography，release 不會帶入
+- 頂部為錨定自適應橫幅（容器實際寬度）。ID 依 build type 分開，debug 不會帶正式廣告單元
+  - debug（Google 官方測試 ID）：App `ca-app-pub-3940256099942544~3347511713`，Banner `ca-app-pub-3940256099942544/6300978111`，Native `ca-app-pub-3940256099942544/2247696110`
+  - release：App `ca-app-pub-6138247296137119~5720425997`，Banner `ca-app-pub-6138247296137119/7955882105`，Native `ca-app-pub-6138247296137119/2601192653`
+- 原生廣告約每 8 列插入在地、世界的電台列表（含該列表搜尋結果）與 Podcast 列表。載入失敗或未同意時不占位。沒有插頁或開屏廣告
 - 搜尋列即時過濾目前列表；鬧鐘圖示顯示 Toast「鬧鐘功能開發中」
 - 電台列表：favicon（Coil，失敗時 fallback）、點卡片播放、愛心收藏
 - Mini Player：目前電台名稱 + 播放/暫停
@@ -41,7 +46,7 @@ SMCPKG_SUPPORT<<<Cursor080 -->
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.2.1`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.3.0`。
 
 | 分頁 | 端點 | 說明 |
 | --- | --- | --- |

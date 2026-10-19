@@ -35,6 +35,9 @@
     <string name="settings">Settings</string>
     <string name="settings_version_title">Version</string>
     <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Privacy options</string>
+    <string name="privacy_options_summary">Manage how ads are personalized</string>
+    <string name="ad_label">Ad</string>
     <string name="audio_panel_button">Audio panel button</string>
     <string name="audio_panel_button_summary">Show an audio panel button next to play in the player bar</string>
     <string name="voice_enhancement">Voice enhancement</string>

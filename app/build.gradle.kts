@@ -27,9 +27,13 @@ android {
         // versionName = "1.2.0"
         // SMCPKG_SUPPORT<<<Cursor052
         // SMCPKG_SUPPORT>>>Cursor077
-        versionCode = 5
-        versionName = "1.2.1"
+        // versionCode = 5
+        // versionName = "1.2.1"
         // SMCPKG_SUPPORT<<<Cursor077
+        // SMCPKG_SUPPORT>>>Cursor081
+        versionCode = 6
+        versionName = "1.3.0"
+        // SMCPKG_SUPPORT<<<Cursor081
 
         vectorDrawables {
             useSupportLibrary = true
@@ -50,6 +54,11 @@ android {
                 "ADMOB_BANNER_ID",
                 "\"ca-app-pub-6138247296137119/7955882105\"",
             )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_ID",
+                "\"ca-app-pub-6138247296137119/2601192653\"",
+            )
             // SMCPKG_SUPPORT<<<Cursor078
         }
         debug {
@@ -60,6 +69,11 @@ android {
                 "String",
                 "ADMOB_BANNER_ID",
                 "\"ca-app-pub-3940256099942544/6300978111\"",
+            )
+            buildConfigField(
+                "String",
+                "ADMOB_NATIVE_ID",
+                "\"ca-app-pub-3940256099942544/2247696110\"",
             )
         }
     }
@@ -117,6 +131,7 @@ dependencies {
 
     implementation(libs.datastore.preferences)
     implementation(libs.play.services.ads)
+    implementation(libs.user.messaging.platform)
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
