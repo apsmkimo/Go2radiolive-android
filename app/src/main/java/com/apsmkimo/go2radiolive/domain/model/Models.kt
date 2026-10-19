@@ -31,6 +31,12 @@ data class PodcastShow(
     val artworkUrl: String = "",
 )
 
+/** Chart page plus whether the device region was replaced by the US chart. */
+data class PodcastChart(
+    val shows: List<PodcastShow>,
+    val usedUsFallback: Boolean = false,
+)
+
 data class PlaybackState(
     val station: RadioStation? = null,
     val isPlaying: Boolean = false,

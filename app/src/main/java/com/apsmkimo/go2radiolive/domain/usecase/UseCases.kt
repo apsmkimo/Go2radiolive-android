@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.domain.usecase
 
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
+import com.apsmkimo.go2radiolive.domain.model.PodcastChart
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
@@ -19,7 +20,7 @@ class GetStationsUseCase(
         countryCode: String? = null,
     ): List<RadioStation> {
         return when (tab) {
-            BrowseTab.LOCAL -> stationRepository.getLocalStations()
+            BrowseTab.LOCAL -> stationRepository.getLocalStations(countryHint = countryCode)
             BrowseTab.WORLD -> {
                 val code = countryCode?.takeIf { it.isNotBlank() } ?: return emptyList()
                 stationRepository.getStationsByCountry(code)
@@ -46,7 +47,7 @@ class GetCountriesUseCase(
 class GetPodcastShowsUseCase(
     private val podcastRepository: PodcastRepository,
 ) {
-    suspend operator fun invoke(region: String?): List<PodcastShow> = podcastRepository.topShows(region)
+    suspend operator fun invoke(region: String?): PodcastChart = podcastRepository.topShows(region)
 }
 
 class GetPodcastEpisodesUseCase(

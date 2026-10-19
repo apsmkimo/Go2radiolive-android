@@ -224,6 +224,11 @@ fun HomeScreen(
                             state.podcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
                         },
                         onRetry = viewModel::refresh,
+                        header = if (state.podcastUsFallback) {
+                            stringResource(R.string.podcast_us_fallback)
+                        } else {
+                            null
+                        },
                     )
                 }
                 else -> {

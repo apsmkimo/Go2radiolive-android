@@ -123,6 +123,32 @@ class SpatialAudioModelTest {
     }
 
     @Test
+    fun offBypassKeepsTheImpulseOnTheDirectSample() {
+        assertEquals(0.25, bypassMix(0.25, 0.9, 0.0), 1e-12)
+        assertEquals(0.9, bypassMix(0.25, 0.9, 1.0), 1e-12)
+        val blended = bypassMix(0.25, 0.9, 0.5)
+        assertEquals(0.575, blended, 1e-12)
+        assertTrue(blended > 0.25 && blended < 0.9)
+
+        val delay = FractionalDelay(512)
+        val frames = 128
+        val direct = FloatArray(frames)
+        val delayed = FloatArray(frames)
+        var index = 0
+        while (index < frames) {
+            val sample = if (index == 0) 1f else 0f
+            direct[index] = sample
+            delay.push(sample)
+            delayed[index] = delay.read(alignedBaseDelaySamples())
+            val mixed = bypassMix(direct[index].toDouble(), delayed[index].toDouble(), align = 0.0)
+            assertEquals(direct[index].toDouble(), mixed, 1e-6)
+            index++
+        }
+        assertEquals(0, direct.indexOfFirst { it > 0.5f })
+        assertEquals(BinauralModel.BASE_DELAY_SAMPLES, delayed.indexOfFirst { it > 0.5f })
+    }
+
+    @Test
     fun dryAndWetShareTheBaseDelaySoTheMixIsOneImpulse() {
         val delay = FractionalDelay(512)
         val base = alignedBaseDelaySamples()

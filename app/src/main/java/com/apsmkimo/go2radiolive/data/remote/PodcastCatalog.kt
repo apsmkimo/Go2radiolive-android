@@ -9,6 +9,15 @@ internal fun podcastStorefront(region: String?): String {
     return code
 }
 
+/**
+ * A non-US storefront uses the US chart when its own chart failed or came back empty.
+ * The US storefront reports its own failure instead of pretending the fallback worked.
+ */
+internal fun usesUsPodcastFallback(storefront: String, chartFailed: Boolean, catalogEmpty: Boolean): Boolean {
+    if (storefront == "us") return false
+    return chartFailed || catalogEmpty
+}
+
 internal fun dedupePodcasts(groups: List<List<PodcastShow>>, limit: Int = 200): List<PodcastShow> {
     val seen = HashSet<String>()
     val out = ArrayList<PodcastShow>(limit.coerceAtMost(200))

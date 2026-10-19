@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.presentation.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -122,6 +123,7 @@ fun BrowseRowList(
     onRowClick: (BrowseRow) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    header: String? = null,
 ) {
     when {
         isLoading && rows.isEmpty() -> {
@@ -137,14 +139,24 @@ fun BrowseRowList(
             }
         }
         rows.isEmpty() -> {
-            Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(
-                    text = emptyText,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier.padding(24.dp),
-                )
+            Column(modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+                if (!header.isNullOrBlank()) {
+                    Text(
+                        text = header,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(start = 20.dp, end = 20.dp, top = 12.dp),
+                    )
+                }
+                Box(Modifier.weight(1f).fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Text(
+                        text = emptyText,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(24.dp),
+                    )
+                }
             }
         }
         else -> {
@@ -153,6 +165,16 @@ fun BrowseRowList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
+                if (!header.isNullOrBlank()) {
+                    item(key = "browse-header") {
+                        Text(
+                            text = header,
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(horizontal = 4.dp, vertical = 4.dp),
+                        )
+                    }
+                }
                 items(rows, key = { it.id }) { row ->
                     androidx.compose.material3.ElevatedCard(
                         onClick = { onRowClick(row) },

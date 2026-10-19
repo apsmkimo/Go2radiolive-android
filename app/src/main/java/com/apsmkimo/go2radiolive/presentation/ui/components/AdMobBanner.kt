@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import com.apsmkimo.go2radiolive.di.AppContainer
+import com.apsmkimo.go2radiolive.BuildConfig
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -20,7 +20,7 @@ fun AdMobBanner(modifier: Modifier = Modifier) {
             .wrapContentHeight(),
         factory = { context ->
             AdView(context).apply {
-                this.adUnitId = AppContainer.ADMOB_BANNER_ID
+                this.adUnitId = BuildConfig.ADMOB_BANNER_ID
                 setAdSize(AdSize.BANNER)
                 layoutParams = FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,

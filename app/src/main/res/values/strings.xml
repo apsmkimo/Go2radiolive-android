@@ -21,6 +21,7 @@
     <string name="empty_categories">No categories</string>
     <string name="empty_countries">No countries</string>
     <string name="empty_podcasts">No podcasts</string>
+    <string name="podcast_us_fallback">US charts are shown because local charts are unavailable.</string>
     <string name="empty_episodes">No episodes</string>
     <string name="station_count">%d stations</string>
     <string name="no_station_playing">Nothing playing</string>

@@ -23,9 +23,13 @@ android {
         // versionName = "1.1.1"
         // SMCPKG_SUPPORT<<<Cursor038
         // SMCPKG_SUPPORT>>>Cursor052
-        versionCode = 4
-        versionName = "1.2.0"
+        // versionCode = 4
+        // versionName = "1.2.0"
         // SMCPKG_SUPPORT<<<Cursor052
+        // SMCPKG_SUPPORT>>>Cursor077
+        versionCode = 5
+        versionName = "1.2.1"
+        // SMCPKG_SUPPORT<<<Cursor077
 
         vectorDrawables {
             useSupportLibrary = true
@@ -39,10 +43,24 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            // SMCPKG_SUPPORT>>>Cursor078
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-6138247296137119~5720425997"
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_ID",
+                "\"ca-app-pub-6138247296137119/7955882105\"",
+            )
+            // SMCPKG_SUPPORT<<<Cursor078
         }
         debug {
             isMinifyEnabled = false
             applicationIdSuffix = ""
+            manifestPlaceholders["admobAppId"] = "ca-app-pub-3940256099942544~3347511713"
+            buildConfigField(
+                "String",
+                "ADMOB_BANNER_ID",
+                "\"ca-app-pub-3940256099942544/6300978111\"",
+            )
         }
     }
 

@@ -21,6 +21,7 @@
     <string name="empty_categories">目前沒有分類</string>
     <string name="empty_countries">目前沒有國家</string>
     <string name="empty_podcasts">目前沒有 Podcast</string>
+    <string name="podcast_us_fallback">本地排行榜無法取得，目前顯示美國排行榜。</string>
     <string name="empty_episodes">目前沒有單集</string>
     <string name="station_count">%d 個電台</string>
     <string name="no_station_playing">尚未播放電台</string>

@@ -16,6 +16,32 @@ class PodcastCatalogTest {
     }
 
     @Test
+    fun failedOrEmptyRegionalChartUsesTheUsChart() {
+        assertEquals(true, usesUsPodcastFallback("tw", chartFailed = true, catalogEmpty = false))
+        assertEquals(true, usesUsPodcastFallback("jp", chartFailed = false, catalogEmpty = true))
+        assertEquals(false, usesUsPodcastFallback("tw", chartFailed = false, catalogEmpty = false))
+        assertEquals(false, usesUsPodcastFallback("us", chartFailed = true, catalogEmpty = true))
+    }
+
+    @Test
+    fun localCountryPrefersNetworkThenSimThenLocale() {
+        assertEquals("JP", preferredRegion("jp", "tw", "US"))
+        assertEquals("TW", preferredRegion("", "tw", "US"))
+        assertEquals("DE", preferredRegion(null, "??", "de"))
+        assertEquals(null, preferredRegion("", "1", "usa"))
+    }
+
+    @Test
+    fun localStationsKeepTaiwanAndFallBackToUs() {
+        assertEquals("TW", localStationsCountry("tw", 0))
+        assertEquals("US", localStationsCountry(null, 0))
+        assertEquals("US", localStationsCountry("usa", 10))
+        assertEquals("JP", localStationsCountry("jp", 3))
+        assertEquals("US", localStationsCountry("jp", 0))
+        assertEquals("US", localStationsCountry("us", 0))
+    }
+
+    @Test
     fun chartsAreDedupedToTwoHundred() {
         val first = (1..100).map { PodcastShow(id = it.toString(), name = "Show $it", author = "A") }
         val overlap = (80..220).map { PodcastShow(id = it.toString(), name = "Extra $it", author = "B") }

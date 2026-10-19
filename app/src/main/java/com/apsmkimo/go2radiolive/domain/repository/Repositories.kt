@@ -1,13 +1,14 @@
 package com.apsmkimo.go2radiolive.domain.repository
 
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
+import com.apsmkimo.go2radiolive.domain.model.PodcastChart
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
 import kotlinx.coroutines.flow.Flow
 
 interface StationRepository {
-    suspend fun getLocalStations(limit: Int = 100): List<RadioStation>
+    suspend fun getLocalStations(countryHint: String? = null, limit: Int = 100): List<RadioStation>
     suspend fun getCountries(): List<CountryOption>
     suspend fun getStationsByCountry(countryCode: String, limit: Int = 100): List<RadioStation>
     suspend fun getCategories(): List<StationCategory>
@@ -16,7 +17,7 @@ interface StationRepository {
 }
 
 interface PodcastRepository {
-    suspend fun topShows(region: String?): List<PodcastShow>
+    suspend fun topShows(region: String?): PodcastChart
     suspend fun episodes(show: PodcastShow, region: String?): List<RadioStation>
 }
 
