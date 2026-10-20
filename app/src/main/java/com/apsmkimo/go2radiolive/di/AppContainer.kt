@@ -6,6 +6,7 @@ import com.apsmkimo.go2radiolive.alarm.WakeAlarmRepository
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
+import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
@@ -25,10 +26,12 @@ import com.apsmkimo.go2radiolive.domain.usecase.ToggleFavoriteUseCase
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlaybackService
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlayerController
 import com.google.gson.Gson
+import okhttp3.Cache
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.Locale
 import java.util.concurrent.TimeUnit
 
@@ -77,10 +80,18 @@ class AppContainer(context: Context) {
         .build()
         .create(RadioBrowserApi::class.java)
 
+    // SMCPKG_SUPPORT>>>Cursor103
+    // private val podcastClient: OkHttpClient = OkHttpClient.Builder()
+    //     .connectTimeout(20, TimeUnit.SECONDS)
+    //     .readTimeout(25, TimeUnit.SECONDS)
+    //     .callTimeout(40, TimeUnit.SECONDS)
     private val podcastClient: OkHttpClient = OkHttpClient.Builder()
-        .connectTimeout(20, TimeUnit.SECONDS)
-        .readTimeout(25, TimeUnit.SECONDS)
-        .callTimeout(40, TimeUnit.SECONDS)
+        .cache(Cache(File(appContext.cacheDir, "podcast_http"), 20L * 1024L * 1024L))
+        .connectTimeout(8, TimeUnit.SECONDS)
+        .readTimeout(12, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .callTimeout(20, TimeUnit.SECONDS)
+        // SMCPKG_SUPPORT<<<Cursor103
         .addInterceptor { chain ->
             val request = chain.request().newBuilder()
                 .header("User-Agent", RadioPlaybackService.USER_AGENT)
@@ -93,8 +104,15 @@ class AppContainer(context: Context) {
     val podcastRegionRepository = PodcastRegionRepository(appContext)
     // SMCPKG_SUPPORT<<<Cursor092
 
+    // SMCPKG_SUPPORT>>>Cursor103
+    val podcastCatalogStore = PodcastCatalogStore(
+        File(appContext.filesDir, "podcast_catalog.json"),
+        gson,
+    )
+    // SMCPKG_SUPPORT<<<Cursor103
+
     val stationRepository: StationRepository = StationRepositoryImpl(radioBrowserApi)
-    val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson)
+    val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson, podcastCatalogStore)
     val favoriteRepository: FavoriteRepository = FavoriteRepositoryImpl(
         FavoriteLocalDataSource(appContext, gson),
     )

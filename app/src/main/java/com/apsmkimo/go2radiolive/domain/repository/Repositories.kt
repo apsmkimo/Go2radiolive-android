@@ -36,7 +36,11 @@ interface StationRepository {
 }
 
 interface PodcastRepository {
-    suspend fun topShows(region: String?, bypassCache: Boolean = false): PodcastChart
+    // SMCPKG_SUPPORT>>>Cursor103
+    // suspend fun topShows(region: String?, bypassCache: Boolean = false): PodcastChart
+    /** Emits the top chart first, then the same list with genre shows merged in. */
+    fun topShows(region: String?, bypassCache: Boolean = false): Flow<PodcastChart>
+    // SMCPKG_SUPPORT<<<Cursor103
     suspend fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): List<RadioStation>
 }
 

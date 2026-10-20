@@ -80,6 +80,8 @@
     <string name="close_audio_panel">Close audio panel</string>
     <string name="load_failed">Could not load. Try again later.</string>
     <string name="refresh_updated">Updated</string>
+    <string name="podcast_cached_error">Couldn\'t update podcasts. Showing the saved list.</string>
+    <string name="retry_action">Retry</string>
     <string name="sleep_timer">Sleep timer</string>
     <string name="alarm_clock">Alarm</string>
     <string name="alarm_sheet">Sleep timer and alarm</string>

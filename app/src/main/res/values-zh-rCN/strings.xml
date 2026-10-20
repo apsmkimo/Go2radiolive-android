@@ -77,6 +77,8 @@
     <string name="close_audio_panel">关闭音效面板</string>
     <string name="load_failed">加载失败，请稍后再试</string>
     <string name="refresh_updated">已更新</string>
+    <string name="podcast_cached_error">无法更新播客，先显示已保存的列表。</string>
+    <string name="retry_action">重试</string>
     <string name="sleep_timer">睡眠定时</string>
     <string name="alarm_clock">闹钟</string>
     <string name="alarm_sheet">睡眠定时与闹钟</string>

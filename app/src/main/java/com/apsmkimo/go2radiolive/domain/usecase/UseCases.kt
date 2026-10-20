@@ -9,6 +9,7 @@ import com.apsmkimo.go2radiolive.domain.model.StationCategory
 import com.apsmkimo.go2radiolive.domain.repository.FavoriteRepository
 import com.apsmkimo.go2radiolive.domain.repository.PodcastRepository
 import com.apsmkimo.go2radiolive.domain.repository.StationRepository
+import kotlinx.coroutines.flow.Flow
 
 
 class GetStationsUseCase(
@@ -49,8 +50,12 @@ class GetCountriesUseCase(
 class GetPodcastShowsUseCase(
     private val podcastRepository: PodcastRepository,
 ) {
-    suspend operator fun invoke(region: String?, bypassCache: Boolean = false): PodcastChart =
+    // SMCPKG_SUPPORT>>>Cursor103
+    // suspend operator fun invoke(region: String?, bypassCache: Boolean = false): PodcastChart =
+    //     podcastRepository.topShows(region, bypassCache)
+    operator fun invoke(region: String?, bypassCache: Boolean = false): Flow<PodcastChart> =
         podcastRepository.topShows(region, bypassCache)
+    // SMCPKG_SUPPORT<<<Cursor103
 }
 
 class GetPodcastEpisodesUseCase(

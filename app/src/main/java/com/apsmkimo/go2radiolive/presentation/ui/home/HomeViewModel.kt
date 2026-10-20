@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
+import com.apsmkimo.go2radiolive.data.remote.isPodcastCacheStale
+import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
 import com.apsmkimo.go2radiolive.di.AppContainer
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
@@ -24,8 +27,10 @@ import com.apsmkimo.go2radiolive.domain.usecase.ResolveStreamUrlUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ToggleFavoriteUseCase
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlayerController
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -53,6 +58,8 @@ data class HomeUiState(
     val isLoading: Boolean = false,
     val userRefreshEvent: Int = 0,
     val userRefreshOk: Boolean = true,
+    /** Bumped when a podcast refresh fails but a saved list is still on screen. */
+    val podcastStaleEvent: Int = 0,
     val scrollToken: Int = 0,
     @StringRes val errorResId: Int? = null,
     val errorDetail: String? = null,
@@ -129,6 +136,7 @@ class HomeViewModel(
     private val playerController: RadioPlayerController,
     private val deviceRegion: () -> String,
     private val podcastRegion: PodcastRegionRepository,
+    private val podcastCache: PodcastCatalogStore,
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(HomeUiState())
@@ -229,17 +237,23 @@ class HomeViewModel(
     fun onPodcastRegionSelected(code: String) {
         viewModelScope.launch {
             podcastRegion.setSelection(code)
+            val saved = podcastRegion.selection.value
+            val device = deviceRegion()
+            val region = saved.ifBlank { device }
+            val cached = withContext(Dispatchers.IO) {
+                podcastCache.read(podcastStorefront(region))
+            }
             internalState.update {
                 it.copy(
-                    podcastRegionCode = podcastRegion.selection.value,
-                    deviceRegionCode = deviceRegion(),
+                    podcastRegionCode = saved,
+                    deviceRegionCode = device,
                     selectedPodcast = null,
-                    podcasts = emptyList(),
+                    podcasts = cached?.shows.orEmpty(),
                     stations = emptyList(),
                     searchQuery = "",
                     errorResId = null,
                     errorDetail = null,
-                    podcastUsFallback = false,
+                    podcastUsFallback = cached?.usedUsFallback == true,
                 )
             }
             refresh()
@@ -268,7 +282,10 @@ class HomeViewModel(
         }
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
-            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+            val podcastList = snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null
+            if (!podcastList) {
+                internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+            }
             runCatching {
                 when {
                     snapshot.selectedTab == BrowseTab.CATEGORIES && snapshot.selectedCategory == null -> {
@@ -285,29 +302,23 @@ class HomeViewModel(
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null -> {
                         // SMCPKG_SUPPORT>>>Cursor092
-                        podcastRegion.awaitLoaded()
-                        val saved = podcastRegion.selection.value
-                        val region = saved.ifBlank { deviceRegion() }
-                        val chart: PodcastChart = getPodcastShows(region, bypassCache = userInitiated)
-                        finishLoad(userInitiated, ok = true) {
-                            it.copy(
-                                podcasts = chart.shows,
-                                podcastUsFallback = chart.usedUsFallback,
-                                podcastRegionCode = saved,
-                                deviceRegionCode = deviceRegion(),
-                                stations = emptyList(),
-                            )
-                        }
-                        // val chart: PodcastChart = getPodcastShows(deviceRegion())
-                        // internalState.update {
+                        // podcastRegion.awaitLoaded()
+                        // val saved = podcastRegion.selection.value
+                        // val region = saved.ifBlank { deviceRegion() }
+                        // val chart: PodcastChart = getPodcastShows(region, bypassCache = userInitiated)
+                        // finishLoad(userInitiated, ok = true) {
                         //     it.copy(
-                        //         isLoading = false,
                         //         podcasts = chart.shows,
                         //         podcastUsFallback = chart.usedUsFallback,
+                        //         podcastRegionCode = saved,
+                        //         deviceRegionCode = deviceRegion(),
                         //         stations = emptyList(),
                         //     )
                         // }
                         // SMCPKG_SUPPORT<<<Cursor092
+                        // SMCPKG_SUPPORT>>>Cursor103
+                        loadPodcastList(userInitiated)
+                        // SMCPKG_SUPPORT<<<Cursor103
                     }
                     snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast != null -> {
                         // SMCPKG_SUPPORT>>>Cursor092
@@ -346,6 +357,121 @@ class HomeViewModel(
             }
         }
     }
+
+    // SMCPKG_SUPPORT>>>Cursor103
+    private suspend fun loadPodcastList(userInitiated: Boolean) {
+        podcastRegion.awaitLoaded()
+        val saved = podcastRegion.selection.value
+        val device = deviceRegion()
+        val region = saved.ifBlank { device }
+        val regionKey = podcastStorefront(region)
+        val cached = withContext(Dispatchers.IO) { podcastCache.read(regionKey) }
+        val cachedShows = cached?.shows.orEmpty()
+        val refreshNetwork = userInitiated ||
+            cached == null ||
+            cachedShows.isEmpty() ||
+            isPodcastCacheStale(cached.savedAtMs, System.currentTimeMillis())
+        if (cachedShows.isNotEmpty()) {
+            internalState.update {
+                it.copy(
+                    podcasts = cachedShows,
+                    podcastUsFallback = cached?.usedUsFallback == true,
+                    podcastRegionCode = saved,
+                    deviceRegionCode = device,
+                    stations = emptyList(),
+                    errorResId = null,
+                    errorDetail = null,
+                    isLoading = refreshNetwork,
+                )
+            }
+        } else {
+            internalState.update {
+                it.copy(
+                    isLoading = true,
+                    errorResId = null,
+                    errorDetail = null,
+                    podcastRegionCode = saved,
+                    deviceRegionCode = device,
+                    podcasts = emptyList(),
+                    podcastUsFallback = false,
+                    stations = emptyList(),
+                )
+            }
+        }
+        if (!refreshNetwork) {
+            finishLoad(userInitiated = false, ok = true) { it }
+            return
+        }
+        var last: PodcastChart? = null
+        try {
+            getPodcastShows(region, bypassCache = userInitiated).collect { chart ->
+                if (chart.shows.isEmpty()) return@collect
+                last = chart
+                val current = internalState.value.podcasts
+                val samePrefix = chart.shows.size >= current.size &&
+                    current.indices.all { index -> chart.shows[index].id == current[index].id }
+                if (current.isEmpty() || chart.complete || samePrefix) {
+                    internalState.update {
+                        it.copy(
+                            podcasts = chart.shows,
+                            podcastUsFallback = chart.usedUsFallback,
+                            podcastRegionCode = saved,
+                            deviceRegionCode = device,
+                            stations = emptyList(),
+                            errorResId = null,
+                            errorDetail = null,
+                        )
+                    }
+                }
+            }
+        } catch (error: Exception) {
+            if (error is CancellationException) throw error
+            if (internalState.value.podcasts.isNotEmpty()) {
+                notePodcastStale()
+                return
+            }
+            throw error
+        }
+        val finalChart = last
+        if (finalChart == null || finalChart.shows.isEmpty()) {
+            if (internalState.value.podcasts.isNotEmpty()) {
+                notePodcastStale()
+                return
+            }
+            finishLoad(userInitiated, ok = false) {
+                it.copy(errorResId = R.string.load_failed, errorDetail = null)
+            }
+            return
+        }
+        finishLoad(userInitiated, ok = true) {
+            it.copy(
+                podcasts = finalChart.shows,
+                podcastUsFallback = finalChart.usedUsFallback,
+                podcastRegionCode = saved,
+                deviceRegionCode = device,
+                stations = emptyList(),
+            )
+        }
+        if (finalChart.complete) {
+            withContext(Dispatchers.IO) {
+                podcastCache.save(regionKey, finalChart)
+                if (finalChart.usedUsFallback) {
+                    podcastCache.save("us", finalChart.copy(usedUsFallback = false))
+                }
+            }
+        }
+    }
+
+    private fun notePodcastStale() {
+        finishLoad(userInitiated = false, ok = true) {
+            it.copy(
+                errorResId = R.string.podcast_cached_error,
+                errorDetail = null,
+                podcastStaleEvent = it.podcastStaleEvent + 1,
+            )
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor103
 
     private fun finishLoad(
         userInitiated: Boolean,
@@ -404,6 +530,7 @@ class HomeViewModelFactory(
             playerController = container.playerController,
             deviceRegion = container::deviceRegion,
             podcastRegion = container.podcastRegionRepository,
+            podcastCache = container.podcastCatalogStore,
         ) as T
     }
 }

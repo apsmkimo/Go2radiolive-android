@@ -77,6 +77,8 @@
     <string name="close_audio_panel">オーディオパネルを閉じる</string>
     <string name="load_failed">読み込めませんでした。しばらくしてからもう一度お試しください</string>
     <string name="refresh_updated">更新しました</string>
+    <string name="podcast_cached_error">ポッドキャストを更新できませんでした。保存したリストを表示しています。</string>
+    <string name="retry_action">再試行</string>
     <string name="sleep_timer">スリープタイマー</string>
     <string name="alarm_clock">アラーム</string>
     <string name="alarm_sheet">スリープタイマーとアラーム</string>

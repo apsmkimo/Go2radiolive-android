@@ -35,6 +35,10 @@ data class PodcastShow(
 data class PodcastChart(
     val shows: List<PodcastShow>,
     val usedUsFallback: Boolean = false,
+    // SMCPKG_SUPPORT>>>Cursor103
+    /** False while genre feeds are still being merged after the top chart. */
+    val complete: Boolean = true,
+    // SMCPKG_SUPPORT<<<Cursor103
 )
 
 data class PlaybackState(

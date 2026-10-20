@@ -80,6 +80,8 @@
     <string name="close_audio_panel">關閉音效面板</string>
     <string name="load_failed">載入失敗，請稍後再試</string>
     <string name="refresh_updated">已更新</string>
+    <string name="podcast_cached_error">無法更新 Podcast，先顯示已儲存的列表。</string>
+    <string name="retry_action">重試</string>
     <string name="sleep_timer">睡眠計時</string>
     <string name="alarm_clock">鬧鐘</string>
     <string name="alarm_sheet">睡眠計時與鬧鐘</string>

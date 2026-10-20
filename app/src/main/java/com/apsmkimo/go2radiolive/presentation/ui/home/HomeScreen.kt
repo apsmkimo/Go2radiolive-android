@@ -22,8 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -99,6 +101,8 @@ fun HomeScreen(
     }
     val updatedText = stringResource(R.string.refresh_updated)
     val failedText = stringResource(R.string.load_failed)
+    val cachedPodcastText = stringResource(R.string.podcast_cached_error)
+    val retryText = stringResource(R.string.retry_action)
     LaunchedEffect(state.userRefreshEvent) {
         if (state.userRefreshEvent == 0) return@LaunchedEffect
         val message = if (state.userRefreshOk) {
@@ -110,6 +114,19 @@ fun HomeScreen(
         }
         snackbarHostState.showSnackbar(message)
     }
+    // SMCPKG_SUPPORT>>>Cursor103
+    LaunchedEffect(state.podcastStaleEvent) {
+        if (state.podcastStaleEvent == 0) return@LaunchedEffect
+        val result = snackbarHostState.showSnackbar(
+            message = cachedPodcastText,
+            actionLabel = retryText,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            viewModel.onRefreshClick()
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor103
     // SMCPKG_SUPPORT>>>Cursor021
     val audioSettings by AudioSettingsRepository.settings.collectAsStateWithLifecycle()
     var audioPanelExpanded by rememberSaveable { mutableStateOf(false) }
