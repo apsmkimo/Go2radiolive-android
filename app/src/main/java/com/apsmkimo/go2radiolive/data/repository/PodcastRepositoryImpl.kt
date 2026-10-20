@@ -1,10 +1,11 @@
 package com.apsmkimo.go2radiolive.data.repository
 
+import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.remote.AppleStorefronts
+import com.apsmkimo.go2radiolive.data.remote.PodcastRssParser
 import com.apsmkimo.go2radiolive.data.remote.dedupePodcasts
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
-import com.apsmkimo.go2radiolive.data.remote.usesUsPodcastFallback
-import com.apsmkimo.go2radiolive.data.remote.PodcastRssParser
+import com.apsmkimo.go2radiolive.data.remote.retryIo
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
@@ -12,7 +13,15 @@ import com.apsmkimo.go2radiolive.domain.repository.PodcastRepository
 import com.google.gson.Gson
 import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -25,74 +34,140 @@ import java.io.IOException
  * `https://rss.marketingtools.apple.com/api/v2/{country}/podcasts/top/100/podcasts.json`
  * returns at most 100 shows (a limit of 200 responds with HTTP 500). Extra shows
  * come from iTunes genre RSS feeds, also capped at 100, then deduped to 200.
- * Episode audio comes from the iTunes Lookup `feedUrl` and that show's RSS.
- * A missing or unknown storefront code uses `us`. A known region with an empty
- * chart is replaced by the full US chart. A failed request is reported as an error.
+ * The top chart and genre feeds run together, and the chart is emitted before
+ * genres are merged. Episode audio comes from the iTunes Lookup `feedUrl` and
+ * that show's RSS. A missing or unknown storefront code uses `us`. A known
+ * region with an empty chart is replaced by the full US chart. A failed request
+ * is reported as an error when nothing could be loaded.
  */
 class PodcastRepositoryImpl(
     private val client: OkHttpClient,
     private val gson: Gson,
+    private val catalogStore: PodcastCatalogStore,
 ) : PodcastRepository {
 
-    override suspend fun topShows(region: String?, bypassCache: Boolean): PodcastChart = withContext(Dispatchers.IO) {
+    override fun topShows(region: String?, bypassCache: Boolean): Flow<PodcastChart> = flow {
         val country = podcastStorefront(region)
-        if (country == "us") {
-            return@withContext PodcastChart(loadCatalog("us", bypassCache), usedUsFallback = false)
+        if (country == "us" || !AppleStorefronts.supports(country)) {
+            catalogFlow("us", bypassCache, usedUsFallback = country != "us").collect { emit(it) }
+            return@flow
         }
-        // SMCPKG_SUPPORT>>>Cursor073
-        // val local = runCatching { loadCatalog(country) }.getOrNull()
-        // if (!usesUsPodcastFallback(country, chartFailed = local == null, catalogEmpty = local.isNullOrEmpty())) {
-        //     return@withContext PodcastChart(local.orEmpty(), usedUsFallback = false)
-        // }
-        // PodcastChart(loadCatalog("us"), usedUsFallback = true)
-        // SMCPKG_SUPPORT<<<Cursor073
-        // SMCPKG_SUPPORT>>>Cursor090
-        val local = if (AppleStorefronts.supports(country)) loadCatalog(country, bypassCache) else emptyList()
-        if (!usesUsPodcastFallback(country, chartFailed = false, catalogEmpty = local.isEmpty())) {
-            return@withContext PodcastChart(local, usedUsFallback = false)
+        var emitted = false
+        try {
+            catalogFlow(country, bypassCache, usedUsFallback = false).collect { chart ->
+                if (chart.shows.isEmpty()) return@collect
+                emitted = true
+                emit(chart)
+            }
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (error: Exception) {
+            if (!emitted) throw error
+            return@flow
         }
-        PodcastChart(loadCatalog("us", bypassCache), usedUsFallback = true)
-        // SMCPKG_SUPPORT<<<Cursor090
+        if (!emitted) {
+            catalogFlow("us", bypassCache, usedUsFallback = true).collect { emit(it) }
+        }
     }
 
     override suspend fun episodes(
         show: PodcastShow,
         region: String?,
         bypassCache: Boolean,
-    ): List<RadioStation> =
-        withContext(Dispatchers.IO) {
-            val country = podcastStorefront(region)
-            val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
-                ?: throw IOException("missing feed")
-            val request = Request.Builder().url(feedUrl).build()
-            client.newCall(bust(request, bypassCache)).execute().use { response ->
-                if (!response.isSuccessful) throw IOException("rss ${response.code}")
-                val body = response.body ?: throw IOException("empty rss")
-                body.byteStream().use { stream ->
-                    PodcastRssParser.parse(stream, show.name, show.artworkUrl)
-                }
+    ): List<RadioStation> = withContext(Dispatchers.IO) {
+        val country = podcastStorefront(region)
+        if (!bypassCache) {
+            val cachedFeed = catalogStore.feedUrl(show.id)
+            if (!cachedFeed.isNullOrBlank()) {
+                val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
+                if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
             }
         }
-
-    private fun loadCatalog(country: String, bypassCache: Boolean): List<PodcastShow> {
-        val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
-        groups.add(loadChart(country, bypassCache))
-        for (genre in GENRES) {
-            if (dedupePodcasts(groups, TARGET).size >= TARGET) break
-            val extra = runCatching { loadGenre(country, genre, bypassCache) }.getOrDefault(emptyList())
-            groups.add(extra)
-        }
-        return dedupePodcasts(groups, TARGET)
+        val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
+            ?: throw IOException("missing feed")
+        readRss(feedUrl, show, bypassCache)
     }
 
-    private fun loadChart(country: String, bypassCache: Boolean): List<PodcastShow> {
+    // SMCPKG_SUPPORT>>>Cursor103
+    // private fun loadCatalog(country: String, bypassCache: Boolean): List<PodcastShow> {
+    //     val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
+    //     groups.add(loadChart(country, bypassCache))
+    //     for (genre in GENRES) {
+    //         if (dedupePodcasts(groups, TARGET).size >= TARGET) break
+    //         val extra = runCatching { loadGenre(country, genre, bypassCache) }.getOrDefault(emptyList())
+    //         groups.add(extra)
+    //     }
+    //     return dedupePodcasts(groups, TARGET)
+    // }
+    // SMCPKG_SUPPORT<<<Cursor103
+
+    private fun catalogFlow(
+        country: String,
+        bypassCache: Boolean,
+        usedUsFallback: Boolean,
+    ): Flow<PodcastChart> = flow {
+        var last = emptyList<PodcastShow>()
+        loadCatalogProgressive(country, bypassCache).collect { shows ->
+            last = shows
+            if (shows.isNotEmpty()) {
+                emit(PodcastChart(shows, usedUsFallback = usedUsFallback, complete = false))
+            }
+        }
+        emit(PodcastChart(last, usedUsFallback = usedUsFallback, complete = true))
+    }
+
+    private fun loadCatalogProgressive(country: String, bypassCache: Boolean): Flow<List<PodcastShow>> = flow {
+        val downstream = this
+        coroutineScope {
+            val gate = Semaphore(PARALLEL_FEEDS)
+            val chartDeferred = async {
+                guarded { gate.withPermit { loadChart(country, bypassCache) } }
+            }
+            val genreDeferred = GENRES.map { genre ->
+                async {
+                    guarded { gate.withPermit { loadGenre(country, genre, bypassCache) } }
+                }
+            }
+            val chartResult = chartDeferred.await()
+            val groups = ArrayList<List<PodcastShow>>(1 + GENRES.size)
+            groups.add(chartResult.getOrDefault(emptyList()))
+            var emittedIds = emptyList<String>()
+            suspend fun publish() {
+                val merged = dedupePodcasts(groups, TARGET)
+                if (merged.isEmpty()) return
+                val ids = merged.map { it.id }
+                if (ids == emittedIds) return
+                emittedIds = ids
+                downstream.emit(merged)
+            }
+            if (groups[0].isNotEmpty()) publish()
+            var anyGenre = false
+            for ((index, deferred) in genreDeferred.withIndex()) {
+                if (dedupePodcasts(groups, TARGET).size >= TARGET) {
+                    genreDeferred.drop(index).forEach { it.cancel() }
+                    break
+                }
+                val extra = deferred.await().getOrDefault(emptyList())
+                if (extra.isNotEmpty()) anyGenre = true
+                groups.add(extra)
+                publish()
+            }
+            val nothing = groups[0].isEmpty() && !anyGenre
+            if (nothing && chartResult.isFailure) {
+                throw chartResult.exceptionOrNull() ?: IOException("podcast catalog failed")
+            }
+            if (nothing && chartResult.isSuccess) downstream.emit(emptyList())
+        }
+    }.flowOn(Dispatchers.IO)
+
+    private suspend fun loadChart(country: String, bypassCache: Boolean): List<PodcastShow> {
         val url = "$CHART_ROOT/$country/podcasts/top/100/podcasts.json"
         val body = getString(url, bypassCache)
         val parsed = gson.fromJson(body, ChartResponse::class.java)
         return parsed.feed?.results.orEmpty().mapNotNull { it.toShow() }
     }
 
-    private fun loadGenre(country: String, genre: Int, bypassCache: Boolean): List<PodcastShow> {
+    private suspend fun loadGenre(country: String, genre: Int, bypassCache: Boolean): List<PodcastShow> {
         val url = "https://itunes.apple.com/$country/rss/toppodcasts/limit=100/genre=$genre/json"
         val body = getString(url, bypassCache)
         val feed = JsonParser.parseString(body).asJsonObject.getAsJsonObject("feed") ?: return emptyList()
@@ -125,11 +200,26 @@ class PodcastRepositoryImpl(
         return shows
     }
 
-    private fun lookupFeedUrl(id: String, country: String, bypassCache: Boolean): String? {
+    private suspend fun lookupFeedUrl(id: String, country: String, bypassCache: Boolean): String? {
         val body = getString("https://itunes.apple.com/lookup?id=$id&country=$country", bypassCache)
         val parsed = gson.fromJson(body, LookupResponse::class.java)
-        return parsed.results.orEmpty().firstNotNullOfOrNull { result ->
+        val url = parsed.results.orEmpty().firstNotNullOfOrNull { result ->
             result.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
+        }
+        if (!url.isNullOrBlank()) catalogStore.saveFeedUrl(id, url)
+        return url
+    }
+
+    private suspend fun readRss(feedUrl: String, show: PodcastShow, bypassCache: Boolean): List<RadioStation> {
+        return retryIo {
+            val request = Request.Builder().url(feedUrl).build()
+            client.newCall(bust(request, bypassCache)).execute().use { response ->
+                if (!response.isSuccessful) throw IOException("rss ${response.code}")
+                val body = response.body ?: throw IOException("empty rss")
+                body.byteStream().use { stream ->
+                    PodcastRssParser.parse(stream, show.name, show.artworkUrl)
+                }
+            }
         }
     }
 
@@ -143,14 +233,14 @@ class PodcastRepositoryImpl(
             .build()
     }
 
-    private fun getString(url: String, bypassCache: Boolean): String {
+    private suspend fun getString(url: String, bypassCache: Boolean): String = retryIo {
         val request = bust(
             Request.Builder().url(url).header("Accept", "application/json").build(),
             bypassCache,
         )
         client.newCall(request).execute().use { response ->
             if (!response.isSuccessful) throw IOException("http ${response.code}")
-            return response.body?.string().orEmpty()
+            response.body?.string().orEmpty()
         }
     }
 
@@ -182,6 +272,7 @@ class PodcastRepositoryImpl(
     companion object {
         private const val CHART_ROOT = "https://rss.marketingtools.apple.com/api/v2"
         private const val TARGET = 200
+        private const val PARALLEL_FEEDS = 4
 
         /** Extra charts after the top-100 cap. Podcast genre ids from Apple. */
         private val GENRES = intArrayOf(
@@ -194,5 +285,15 @@ class PodcastRepositoryImpl(
             1318,
             1309,
         )
+    }
+}
+
+private suspend fun <T> guarded(block: suspend () -> T): Result<T> {
+    return try {
+        Result.success(block())
+    } catch (cancelled: CancellationException) {
+        throw cancelled
+    } catch (error: Exception) {
+        Result.failure(error)
     }
 }

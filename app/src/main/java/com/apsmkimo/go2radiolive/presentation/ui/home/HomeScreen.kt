@@ -22,8 +22,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -46,18 +48,19 @@ import com.apsmkimo.go2radiolive.Go2RadioApp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
+import com.apsmkimo.go2radiolive.domain.model.CatalogLevel
 import com.apsmkimo.go2radiolive.alarm.PlaybackSignals
 import com.apsmkimo.go2radiolive.alarm.SleepTimerState
 import com.apsmkimo.go2radiolive.alarm.WakeAlarmScheduler
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlaybackService
 import com.apsmkimo.go2radiolive.presentation.ui.components.AdMobBanner
+import com.apsmkimo.go2radiolive.presentation.ui.components.CatalogTab
 import com.apsmkimo.go2radiolive.presentation.ui.components.AlarmSheet
 import com.apsmkimo.go2radiolive.presentation.ui.components.sleepBadgeMinutes
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
-import com.apsmkimo.go2radiolive.presentation.ui.components.CategoryList
 import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.PodcastRegionDialog
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
@@ -99,6 +102,9 @@ fun HomeScreen(
     }
     val updatedText = stringResource(R.string.refresh_updated)
     val failedText = stringResource(R.string.load_failed)
+    val cachedPodcastText = stringResource(R.string.podcast_cached_error)
+    val cachedCatalogText = stringResource(R.string.catalog_cached_error)
+    val retryText = stringResource(R.string.retry_action)
     LaunchedEffect(state.userRefreshEvent) {
         if (state.userRefreshEvent == 0) return@LaunchedEffect
         val message = if (state.userRefreshOk) {
@@ -110,6 +116,30 @@ fun HomeScreen(
         }
         snackbarHostState.showSnackbar(message)
     }
+    // SMCPKG_SUPPORT>>>Cursor103
+    LaunchedEffect(state.podcastStaleEvent) {
+        if (state.podcastStaleEvent == 0) return@LaunchedEffect
+        val result = snackbarHostState.showSnackbar(
+            message = cachedPodcastText,
+            actionLabel = retryText,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            viewModel.onRefreshClick()
+        }
+    }
+    LaunchedEffect(state.catalogStaleEvent) {
+        if (state.catalogStaleEvent == 0) return@LaunchedEffect
+        val result = snackbarHostState.showSnackbar(
+            message = cachedCatalogText,
+            actionLabel = retryText,
+            duration = SnackbarDuration.Long,
+        )
+        if (result == SnackbarResult.ActionPerformed) {
+            viewModel.onRefreshClick()
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor103
     // SMCPKG_SUPPORT>>>Cursor021
     val audioSettings by AudioSettingsRepository.settings.collectAsStateWithLifecycle()
     var audioPanelExpanded by rememberSaveable { mutableStateOf(false) }
@@ -137,8 +167,8 @@ fun HomeScreen(
             TopAppBar(
                 title = {
                     val title = when {
-                        state.selectedTab == BrowseTab.CATEGORIES && state.selectedCategory != null ->
-                            state.selectedCategory?.name
+                        state.selectedTab == BrowseTab.CATEGORIES && state.catalogTitle.isNotBlank() ->
+                            state.catalogTitle
                         state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null ->
                             state.selectedCountry?.name
                         state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null ->
@@ -149,8 +179,8 @@ fun HomeScreen(
                 },
                 navigationIcon = {
                     val onBack: (() -> Unit)? = when {
-                        state.selectedTab == BrowseTab.CATEGORIES && state.selectedCategory != null ->
-                            viewModel::onClearCategory
+                        state.selectedTab == BrowseTab.CATEGORIES && state.catalogLevel != CatalogLevel.HUB ->
+                            viewModel::onCatalogBack
                         state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null ->
                             viewModel::onClearCountry
                         state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null ->
@@ -318,7 +348,9 @@ fun HomeScreen(
                 else -> state.playback.errorMessage
             }
             val hasItems = when {
-                state.showingCategories -> state.visibleCategories.isNotEmpty()
+                state.selectedTab == BrowseTab.CATEGORIES && state.catalogLevel == CatalogLevel.LIST ->
+                    state.stations.isNotEmpty() || state.catalogOthers.isNotEmpty()
+                state.selectedTab == BrowseTab.CATEGORIES -> state.catalogHub != null
                 state.showingCountries -> state.visibleCountries.isNotEmpty()
                 state.showingPodcasts -> state.visiblePodcasts.isNotEmpty()
                 else -> state.visibleStations.isNotEmpty()
@@ -329,14 +361,39 @@ fun HomeScreen(
                 }
             }
             when {
-                state.showingCategories -> {
-                    CategoryList(
-                        categories = state.visibleCategories,
+                state.selectedTab == BrowseTab.CATEGORIES -> {
+                    CatalogTab(
+                        scope = state.catalogScope,
+                        level = state.catalogLevel,
+                        groupId = state.catalogGroup,
+                        listKind = state.catalogListKind,
+                        hub = state.catalogHub,
+                        stations = state.visibleStations,
+                        others = state.catalogOthers.filter { station ->
+                            val q = state.searchQuery.trim()
+                            q.isEmpty() || station.name.contains(q, true) ||
+                                station.tags.contains(q, true) || station.country.contains(q, true)
+                        },
+                        countries = state.countries,
+                        sort = state.catalogSort,
+                        languageFilter = state.catalogLanguageFilter,
+                        highBitrate = state.catalogHighBitrate,
+                        query = state.searchQuery,
                         isLoading = state.isLoading,
-                        errorMessage = errorText,
-                        onCategoryClick = viewModel::onCategorySelected,
-                        onRetry = viewModel::onRefreshClick,
+                        errorMessage = if (state.errorResId != null) errorText else null,
+                        favoriteIds = state.favoriteIds,
                         scrollToken = state.scrollToken,
+                        onScope = viewModel::onCatalogScopeSelected,
+                        onOpenGroup = viewModel::onCatalogGroup,
+                        onOpenTopic = viewModel::onCatalogTopic,
+                        onOpenLanguage = viewModel::onCatalogLanguage,
+                        onOpenRank = viewModel::onCatalogRank,
+                        onSort = viewModel::onCatalogSort,
+                        onLanguageFilter = viewModel::onCatalogLanguageFilter,
+                        onHighBitrate = viewModel::onCatalogHighBitrate,
+                        onStation = viewModel::onStationClick,
+                        onFavorite = viewModel::onToggleFavorite,
+                        onRetry = viewModel::onRefreshClick,
                     )
                 }
                 state.showingCountries -> {

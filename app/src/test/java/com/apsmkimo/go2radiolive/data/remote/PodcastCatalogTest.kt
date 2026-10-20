@@ -54,6 +54,13 @@ class PodcastCatalogTest {
     }
 
     @Test
+    fun anEmptyGenreFeedDoesNotDropTheChart() {
+        val chart = listOf(PodcastShow(id = "a", name = "Chart", author = "A"))
+        val merged = dedupePodcasts(listOf(chart, emptyList(), listOf(PodcastShow(id = "b", name = "Genre", author = "B"))))
+        assertEquals(listOf("a", "b"), merged.map { it.id })
+    }
+
+    @Test
     fun chartsAreDedupedToTwoHundred() {
         val first = (1..100).map { PodcastShow(id = it.toString(), name = "Show $it", author = "A") }
         val overlap = (80..220).map { PodcastShow(id = it.toString(), name = "Extra $it", author = "B") }

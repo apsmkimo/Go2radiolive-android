@@ -11,6 +11,12 @@ data class RadioStation(
     val countryCode: String = "",
     /** Podcast enclosures already point at the media file and skip Radio-Browser. */
     val directStream: Boolean = false,
+    // SMCPKG_SUPPORT>>>Cursor106
+    val language: String = "",
+    val bitrate: Int = 0,
+    val votes: Int = 0,
+    val clickCount: Int = 0,
+    // SMCPKG_SUPPORT<<<Cursor106
 )
 
 data class StationCategory(
@@ -35,6 +41,10 @@ data class PodcastShow(
 data class PodcastChart(
     val shows: List<PodcastShow>,
     val usedUsFallback: Boolean = false,
+    // SMCPKG_SUPPORT>>>Cursor103
+    /** False while genre feeds are still being merged after the top chart. */
+    val complete: Boolean = true,
+    // SMCPKG_SUPPORT<<<Cursor103
 )
 
 data class PlaybackState(
