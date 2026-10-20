@@ -5,12 +5,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.data.local.CategoryCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
+import com.apsmkimo.go2radiolive.data.remote.CatalogTopics
 import com.apsmkimo.go2radiolive.data.remote.isPodcastCacheStale
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
+import com.apsmkimo.go2radiolive.data.repository.CategoryCatalogRepository
 import com.apsmkimo.go2radiolive.di.AppContainer
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
+import com.apsmkimo.go2radiolive.domain.model.CatalogLevel
+import com.apsmkimo.go2radiolive.domain.model.CatalogPage
+import com.apsmkimo.go2radiolive.domain.model.CatalogSort
+import com.apsmkimo.go2radiolive.domain.model.CategoryHub
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
@@ -29,6 +36,8 @@ import com.apsmkimo.go2radiolive.presentation.player.RadioPlayerController
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -60,6 +69,21 @@ data class HomeUiState(
     val userRefreshOk: Boolean = true,
     /** Bumped when a podcast refresh fails but a saved list is still on screen. */
     val podcastStaleEvent: Int = 0,
+    // SMCPKG_SUPPORT>>>Cursor106
+    val catalogScope: String = "",
+    val catalogLevel: CatalogLevel = CatalogLevel.HUB,
+    val catalogGroup: String? = null,
+    val catalogGroupTitle: String = "",
+    val catalogListKind: String? = null,
+    val catalogTitle: String = "",
+    val catalogOpenedFromGroup: Boolean = false,
+    val catalogHub: CategoryHub? = null,
+    val catalogOthers: List<RadioStation> = emptyList(),
+    val catalogSort: CatalogSort = CatalogSort.CLICKS,
+    val catalogLanguageFilter: String = "",
+    val catalogHighBitrate: Boolean = false,
+    val catalogStaleEvent: Int = 0,
+    // SMCPKG_SUPPORT<<<Cursor106
     val scrollToken: Int = 0,
     @StringRes val errorResId: Int? = null,
     val errorDetail: String? = null,
@@ -137,6 +161,8 @@ class HomeViewModel(
     private val deviceRegion: () -> String,
     private val podcastRegion: PodcastRegionRepository,
     private val podcastCache: PodcastCatalogStore,
+    private val categoryCatalog: CategoryCatalogRepository,
+    private val categoryCache: CategoryCatalogStore,
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(HomeUiState())
@@ -204,6 +230,139 @@ class HomeViewModel(
         }
         refresh()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor106
+    fun onCatalogScopeSelected(code: String) {
+        internalState.update {
+            it.copy(
+                catalogScope = code,
+                catalogLevel = CatalogLevel.HUB,
+                catalogGroup = null,
+                catalogGroupTitle = "",
+                catalogListKind = null,
+                catalogTitle = "",
+                catalogOpenedFromGroup = false,
+                catalogHub = null,
+                stations = emptyList(),
+                catalogOthers = emptyList(),
+                searchQuery = "",
+                errorResId = null,
+                errorDetail = null,
+            )
+        }
+        refresh()
+    }
+
+    fun onCatalogGroup(id: String, title: String) {
+        internalState.update {
+            it.copy(
+                catalogLevel = CatalogLevel.GROUP,
+                catalogGroup = id,
+                catalogGroupTitle = title,
+                catalogTitle = title,
+                catalogListKind = null,
+                searchQuery = "",
+                errorResId = null,
+                errorDetail = null,
+            )
+        }
+    }
+
+    fun onCatalogTopic(id: String, title: String) {
+        openCatalogList("topic:$id", title, fromGroup = internalState.value.catalogLevel == CatalogLevel.GROUP)
+    }
+
+    fun onCatalogLanguage(name: String) {
+        openCatalogList(
+            "lang:$name",
+            name,
+            fromGroup = internalState.value.catalogLevel == CatalogLevel.GROUP,
+        )
+    }
+
+    fun onCatalogRank(kind: String, title: String) {
+        openCatalogList(kind, title, fromGroup = false)
+    }
+
+    fun onCatalogBack() {
+        internalState.update {
+            when (it.catalogLevel) {
+                CatalogLevel.LIST -> if (it.catalogOpenedFromGroup) {
+                    it.copy(
+                        catalogLevel = CatalogLevel.GROUP,
+                        catalogTitle = it.catalogGroupTitle,
+                        catalogListKind = null,
+                        stations = emptyList(),
+                        catalogOthers = emptyList(),
+                        searchQuery = "",
+                        errorResId = null,
+                        errorDetail = null,
+                    )
+                } else {
+                    it.copy(
+                        catalogLevel = CatalogLevel.HUB,
+                        catalogTitle = "",
+                        catalogListKind = null,
+                        catalogOpenedFromGroup = false,
+                        stations = emptyList(),
+                        catalogOthers = emptyList(),
+                        searchQuery = "",
+                        errorResId = null,
+                        errorDetail = null,
+                    )
+                }
+                CatalogLevel.GROUP -> it.copy(
+                    catalogLevel = CatalogLevel.HUB,
+                    catalogGroup = null,
+                    catalogGroupTitle = "",
+                    catalogTitle = "",
+                    searchQuery = "",
+                    errorResId = null,
+                    errorDetail = null,
+                )
+                CatalogLevel.HUB -> it
+            }
+        }
+    }
+
+    fun onCatalogSort(sort: CatalogSort) {
+        if (sort == internalState.value.catalogSort) return
+        internalState.update { it.copy(catalogSort = sort) }
+        refresh()
+    }
+
+    fun onCatalogLanguageFilter(language: String) {
+        if (language == internalState.value.catalogLanguageFilter) return
+        internalState.update { it.copy(catalogLanguageFilter = language) }
+        refresh()
+    }
+
+    fun onCatalogHighBitrate(enabled: Boolean) {
+        if (enabled == internalState.value.catalogHighBitrate) return
+        internalState.update { it.copy(catalogHighBitrate = enabled) }
+        refresh()
+    }
+
+    private fun openCatalogList(kind: String, title: String, fromGroup: Boolean) {
+        internalState.update {
+            it.copy(
+                catalogLevel = CatalogLevel.LIST,
+                catalogListKind = kind,
+                catalogTitle = title,
+                catalogOpenedFromGroup = fromGroup,
+                catalogSort = CatalogSort.CLICKS,
+                catalogLanguageFilter = "",
+                catalogHighBitrate = false,
+                stations = emptyList(),
+                catalogOthers = emptyList(),
+                searchQuery = "",
+                errorResId = null,
+                errorDetail = null,
+            )
+        }
+        refresh()
+    }
+    // SMCPKG_SUPPORT<<<Cursor106
 
     fun onCountrySelected(country: CountryOption) {
         internalState.update {
@@ -283,16 +442,20 @@ class HomeViewModel(
         loadJob?.cancel()
         loadJob = viewModelScope.launch {
             val podcastList = snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null
-            if (!podcastList) {
+            val catalog = snapshot.selectedTab == BrowseTab.CATEGORIES
+            if (!podcastList && !catalog) {
                 internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
             }
             runCatching {
                 when {
-                    snapshot.selectedTab == BrowseTab.CATEGORIES && snapshot.selectedCategory == null -> {
-                        val categories = getCategories(bypassCache = userInitiated)
-                        finishLoad(userInitiated, ok = true) {
-                            it.copy(categories = categories, stations = emptyList())
-                        }
+                    snapshot.selectedTab == BrowseTab.CATEGORIES -> {
+                        // SMCPKG_SUPPORT>>>Cursor106
+                        // val categories = getCategories(bypassCache = userInitiated)
+                        // finishLoad(userInitiated, ok = true) {
+                        //     it.copy(categories = categories, stations = emptyList())
+                        // }
+                        loadCatalog(userInitiated)
+                        // SMCPKG_SUPPORT<<<Cursor106
                     }
                     snapshot.selectedTab == BrowseTab.WORLD && snapshot.selectedCountry == null -> {
                         val countries = getCountries(bypassCache = userInitiated)
@@ -473,6 +636,208 @@ class HomeViewModel(
     }
     // SMCPKG_SUPPORT<<<Cursor103
 
+    // SMCPKG_SUPPORT>>>Cursor106
+    private suspend fun loadCatalog(userInitiated: Boolean) {
+        val snapshot = internalState.value
+        val scope = resolveCatalogScope(snapshot.catalogScope)
+        if (snapshot.catalogScope != scope) {
+            internalState.update { it.copy(catalogScope = scope) }
+        }
+        if (snapshot.catalogLevel == CatalogLevel.LIST && !snapshot.catalogListKind.isNullOrBlank()) {
+            loadCatalogList(userInitiated, scope, snapshot)
+        } else {
+            loadCatalogHub(userInitiated, scope)
+        }
+    }
+
+    private fun resolveCatalogScope(explicit: String): String {
+        if (explicit == CatalogTopics.GLOBAL) return CatalogTopics.GLOBAL
+        if (explicit.length == 2) return explicit.uppercase()
+        val device = deviceRegion().trim().uppercase()
+        return if (device.length == 2) device else "US"
+    }
+
+    private suspend fun loadCatalogHub(userInitiated: Boolean, scope: String) {
+        val cached = withContext(Dispatchers.IO) { categoryCache.readHub(scope) }
+        val stale = cached == null || isPodcastCacheStale(cached.savedAtMs, System.currentTimeMillis())
+        if (cached != null) {
+            internalState.update {
+                it.copy(
+                    catalogScope = scope,
+                    catalogHub = cached.toHub(),
+                    isLoading = userInitiated || stale,
+                    errorResId = null,
+                    errorDetail = null,
+                )
+            }
+            if (!userInitiated && !stale) {
+                ensureCountries(false)
+                finishLoad(false, ok = true) { it }
+                return
+            }
+        } else {
+            internalState.update {
+                it.copy(catalogScope = scope, isLoading = true, errorResId = null, errorDetail = null)
+            }
+        }
+        val hadHub = cached != null
+        var latest: CategoryHub? = null
+        try {
+            coroutineScope {
+                val countriesJob = async { ensureCountries(userInitiated) }
+                categoryCatalog.hub(scopeCode(scope), bypassCache = userInitiated).collect { hub ->
+                    latest = hub
+                    val reveal = !hadHub || hub.complete
+                    if (reveal) {
+                        internalState.update {
+                            it.copy(catalogScope = scope, catalogHub = hub, errorResId = null, errorDetail = null)
+                        }
+                    }
+                }
+                countriesJob.await()
+            }
+        } catch (error: Exception) {
+            if (error is CancellationException) throw error
+            if (internalState.value.catalogHub?.hasContent() == true) {
+                noteCatalogStale()
+                return
+            }
+            throw error
+        }
+        val finalHub = latest
+        if (finalHub == null || !finalHub.hasContent()) {
+            if (internalState.value.catalogHub?.hasContent() == true) {
+                noteCatalogStale()
+                return
+            }
+            finishLoad(userInitiated, ok = false) { it.copy(errorResId = R.string.load_failed) }
+            return
+        }
+        finishLoad(userInitiated, ok = true) { it.copy(catalogScope = scope, catalogHub = finalHub) }
+        if (finalHub.complete) {
+            withContext(Dispatchers.IO) { categoryCache.saveHub(scope, finalHub) }
+        }
+    }
+
+    private suspend fun loadCatalogList(userInitiated: Boolean, scope: String, snapshot: HomeUiState) {
+        val kind = snapshot.catalogListKind.orEmpty()
+        val sort = snapshot.catalogSort
+        val language = snapshot.catalogLanguageFilter
+        val high = snapshot.catalogHighBitrate
+        val key = CatalogTopics.listKey(scope, kind, sort, language, high)
+        val cached = withContext(Dispatchers.IO) { categoryCache.readList(key) }
+        val stale = cached == null || isPodcastCacheStale(cached.savedAtMs, System.currentTimeMillis())
+        if (cached != null) {
+            internalState.update {
+                it.copy(
+                    stations = cached.stations.orEmpty(),
+                    catalogOthers = cached.others.orEmpty(),
+                    isLoading = userInitiated || stale,
+                    errorResId = null,
+                    errorDetail = null,
+                )
+            }
+            if (!userInitiated && !stale) {
+                finishLoad(false, ok = true) { it }
+                return
+            }
+        } else if (internalState.value.stations.isEmpty() && internalState.value.catalogOthers.isEmpty()) {
+            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+        } else {
+            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+        }
+        val hadList = cached != null || internalState.value.stations.isNotEmpty()
+        var latest: CatalogPage? = null
+        try {
+            categoryCatalog.page(
+                countryCode = scopeCode(scope),
+                kind = kind,
+                sort = sort,
+                language = language,
+                highBitrate = high,
+                bypassCache = userInitiated,
+            ).collect { page ->
+                latest = page
+                val current = internalState.value.stations
+                val reveal = current.isEmpty() || page.complete || page.stations.size >= current.size
+                if (!hadList || reveal) {
+                    if (current.isEmpty() || page.complete || page.stations.size >= current.size) {
+                        internalState.update {
+                            it.copy(
+                                stations = page.stations,
+                                catalogOthers = if (page.complete) page.others else it.catalogOthers,
+                                errorResId = null,
+                                errorDetail = null,
+                            )
+                        }
+                    }
+                }
+            }
+        } catch (error: Exception) {
+            if (error is CancellationException) throw error
+            if (internalState.value.stations.isNotEmpty() || internalState.value.catalogOthers.isNotEmpty()) {
+                noteCatalogStale()
+                return
+            }
+            throw error
+        }
+        val finalPage = latest
+        if (finalPage == null) {
+            if (internalState.value.stations.isNotEmpty() || internalState.value.catalogOthers.isNotEmpty()) {
+                noteCatalogStale()
+                return
+            }
+            finishLoad(userInitiated, ok = false) { it.copy(errorResId = R.string.load_failed) }
+            return
+        }
+        finishLoad(userInitiated, ok = true) {
+            it.copy(stations = finalPage.stations, catalogOthers = finalPage.others)
+        }
+        if (finalPage.complete && (finalPage.stations.isNotEmpty() || finalPage.others.isNotEmpty())) {
+            withContext(Dispatchers.IO) { categoryCache.saveList(key, finalPage) }
+        }
+    }
+
+    private suspend fun ensureCountries(bypassCache: Boolean) {
+        if (internalState.value.countries.isNotEmpty()) return
+        val loaded = runCatching { getCountries(bypassCache) }.getOrDefault(emptyList())
+        if (loaded.isNotEmpty()) {
+            internalState.update { current ->
+                if (current.countries.isNotEmpty()) current else current.copy(countries = loaded)
+            }
+        }
+    }
+
+    private fun noteCatalogStale() {
+        finishLoad(userInitiated = false, ok = true) {
+            it.copy(
+                errorResId = R.string.catalog_cached_error,
+                errorDetail = null,
+                catalogStaleEvent = it.catalogStaleEvent + 1,
+            )
+        }
+    }
+
+    private fun scopeCode(scope: String): String? =
+        if (scope == CatalogTopics.GLOBAL) null else scope
+
+    private fun CategoryCatalogStore.HubEntry.toHub(): CategoryHub {
+        return CategoryHub(
+            votes = votes.orEmpty(),
+            clicks = clicks.orEmpty(),
+            trend = trend.orEmpty(),
+            counts = counts.orEmpty(),
+            languages = languages.orEmpty(),
+            complete = true,
+        )
+    }
+
+    private fun CategoryHub.hasContent(): Boolean {
+        return votes.isNotEmpty() || clicks.isNotEmpty() || trend.isNotEmpty() ||
+            counts.isNotEmpty() || languages.isNotEmpty()
+    }
+    // SMCPKG_SUPPORT<<<Cursor106
+
     private fun finishLoad(
         userInitiated: Boolean,
         ok: Boolean,
@@ -531,6 +896,8 @@ class HomeViewModelFactory(
             deviceRegion = container::deviceRegion,
             podcastRegion = container.podcastRegionRepository,
             podcastCache = container.podcastCatalogStore,
+            categoryCatalog = container.categoryCatalogRepository,
+            categoryCache = container.categoryCatalogStore,
         ) as T
     }
 }

@@ -18,7 +18,10 @@ internal fun isPodcastCacheStale(savedAtMs: Long, nowMs: Long): Boolean {
 internal suspend fun <T> retryIo(
     attempts: Int = 3,
     initialDelayMs: Long = 300,
-    block: () -> T,
+    // SMCPKG_SUPPORT>>>Cursor107
+    // block: () -> T,
+    block: suspend () -> T,
+    // SMCPKG_SUPPORT<<<Cursor107
 ): T {
     var delayMs = initialDelayMs
     var last: Exception? = null

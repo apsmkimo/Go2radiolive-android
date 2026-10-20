@@ -12,6 +12,12 @@ data class StationDto(
     @SerializedName("tags") val tags: String? = null,
     @SerializedName("country") val country: String? = null,
     @SerializedName("countrycode") val countryCode: String? = null,
+    // SMCPKG_SUPPORT>>>Cursor106
+    @SerializedName("language") val language: String? = null,
+    @SerializedName("bitrate") val bitrate: Int? = null,
+    @SerializedName("votes") val votes: Int? = null,
+    @SerializedName("clickcount") val clickCount: Int? = null,
+    // SMCPKG_SUPPORT<<<Cursor106
 )
 
 data class TagDto(
@@ -24,6 +30,13 @@ data class CountryDto(
     @SerializedName("iso_3166_1") val isoCode: String? = null,
     @SerializedName("stationcount") val stationCount: Int? = null,
 )
+
+// SMCPKG_SUPPORT>>>Cursor106
+data class LanguageDto(
+    @SerializedName("name") val name: String? = null,
+    @SerializedName("stationcount") val stationCount: Int? = null,
+)
+// SMCPKG_SUPPORT<<<Cursor106
 
 data class ClickResponseDto(
     @SerializedName("ok") val ok: Boolean? = null,

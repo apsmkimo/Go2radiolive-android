@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.data.remote
 
 import com.apsmkimo.go2radiolive.data.remote.dto.ClickResponseDto
 import com.apsmkimo.go2radiolive.data.remote.dto.CountryDto
+import com.apsmkimo.go2radiolive.data.remote.dto.LanguageDto
 import com.apsmkimo.go2radiolive.data.remote.dto.StationDto
 import com.apsmkimo.go2radiolive.data.remote.dto.TagDto
 import retrofit2.http.GET
@@ -44,6 +45,14 @@ interface RadioBrowserApi {
         @Query("hidebroken") hideBroken: Boolean = true,
         @Query("order") order: String = "clickcount",
         @Query("reverse") reverse: Boolean = true,
+        // SMCPKG_SUPPORT>>>Cursor106
+        @Query("countrycode") countryCode: String? = null,
+        @Query("tag") tag: String? = null,
+        @Query("tagExact") tagExact: Boolean? = null,
+        @Query("language") language: String? = null,
+        @Query("languageExact") languageExact: Boolean? = null,
+        @Query("bitrateMin") bitrateMin: Int? = null,
+        // SMCPKG_SUPPORT<<<Cursor106
         @Header("Cache-Control") cacheControl: String? = null,
         @Query("cb") cacheBust: Long? = null,
     ): List<StationDto>
@@ -61,9 +70,25 @@ interface RadioBrowserApi {
 
     @GET("json/tags")
     suspend fun getTags(
+        // SMCPKG_SUPPORT>>>Cursor106
+        @Query("order") order: String? = null,
+        @Query("reverse") reverse: Boolean? = null,
+        @Query("limit") limit: Int? = null,
+        // SMCPKG_SUPPORT<<<Cursor106
         @Header("Cache-Control") cacheControl: String? = null,
         @Query("cb") cacheBust: Long? = null,
     ): List<TagDto>
+
+    // SMCPKG_SUPPORT>>>Cursor106
+    @GET("json/languages")
+    suspend fun getLanguages(
+        @Query("order") order: String? = null,
+        @Query("reverse") reverse: Boolean? = null,
+        @Query("limit") limit: Int? = null,
+        @Header("Cache-Control") cacheControl: String? = null,
+        @Query("cb") cacheBust: Long? = null,
+    ): List<LanguageDto>
+    // SMCPKG_SUPPORT<<<Cursor106
 
     @GET("json/url/{stationUuid}")
     suspend fun resolveStationUrl(
