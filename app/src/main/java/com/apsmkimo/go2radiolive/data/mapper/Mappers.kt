@@ -23,6 +23,12 @@ fun StationDto.toDomain(): RadioStation? {
         tags = tags.orEmpty(),
         country = country.orEmpty(),
         countryCode = countryCode.orEmpty(),
+        // SMCPKG_SUPPORT>>>Cursor106
+        language = language.orEmpty(),
+        bitrate = bitrate ?: 0,
+        votes = votes ?: 0,
+        clickCount = clickCount ?: 0,
+        // SMCPKG_SUPPORT<<<Cursor106
     )
 }
 

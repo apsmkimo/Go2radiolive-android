@@ -32,7 +32,10 @@ SMCPKG_SUPPORT<<<Cursor100 -->
 <!-- SMCPKG_SUPPORT>>>Cursor102
 - `versionName`: `1.5.0` / `versionCode`: `8`
 SMCPKG_SUPPORT<<<Cursor102 -->
+<!-- SMCPKG_SUPPORT>>>Cursor106
 - `versionName`: `1.5.1` / `versionCode`: `9`
+SMCPKG_SUPPORT<<<Cursor106 -->
+- `versionName`: `1.6.0` / `versionCode`: `10`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
@@ -58,7 +61,7 @@ SMCPKG_SUPPORT<<<Cursor102 -->
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.5.1`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.6.0`。
 
 重新整理會帶 `Cache-Control: no-cache` 與 `cb` 查詢參數，按鈕在載入時停用並顯示進度，完成後出現 Snackbar，失敗時列表仍在也會顯示錯誤。
 
@@ -69,7 +72,7 @@ Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `U
 | 在地（預設） | `GET /json/stations/bycountrycodeexact/{cc}?limit=500&hidebroken=true&order=clickcount` | 裝置地區：網路國碼、SIM 國碼，其次系統語系國家。無法判斷，或該區沒有電台時改查 US。偵測為 TW 時仍查 TW。2026-10-19 健康的 TW 列表有 193 個；`Radio ICRT` 點擊排序第 102、`ICRT` 第 159（皆 lastcheckok=1）。limit 100 會把兩者裁掉，所以改為 500 |
 | 世界 | `GET /json/countries` → `GET /json/stations/bycountrycodeexact/{code}?limit=500` | 國家分類（名稱依系統語言），點選後列出該國最多 500 個點擊最高的電台 |
 | Podcast | Apple Marketing Tools 排行榜（每次最多 100）＋ iTunes 類型 RSS，去重後約 200 個；單集來自 iTunes Lookup 的 `feedUrl` RSS | 預設用與在地相同的裝置地區。使用者選定的 storefront 存在 DataStore。進入分頁先顯示該區上次成功的列表（超過約 12 小時或手動重新整理才在背景更新）。總榜與類型榜同時抓取，總榜先出現，類型再併入。單一類型失敗不會清空列表；全部失敗且沒有快取才顯示全頁錯誤，有快取則保留列表並提示重試。只有該區沒有排行榜（空結果，或不是 Apple storefront）才改顯示美國排行榜並附一行說明。請求失敗不會偷偷換成美國榜。單集以既有 ExoPlayer 播放 |
-| 分類 | `GET /json/tags` → `GET /json/stations/bytagexact/{tag}?limit=100` | 熱門 tag 列表，點選後載入該分類電台 |
+| 分類 | 排行榜（votes / clickcount / clicktrend）與固定分類的 tag 查詢 | 上方選擇國家（預設與在地相同，或全球）。分類以卡片顯示電台數。點進列表可依熱門、投票、名稱排序，並篩選語言與 128 kbps 以上。該國結果少於 10 個時，後面加上其他國家。上次成功的內容會先顯示，超過約 12 小時或手動重新整理才在背景更新 |
 | 播放解析 | `GET /json/url/{stationuuid}` | 增加 click 並取得可播放 URL，失敗則退回 `url_resolved` |
 
 搜尋列只過濾**目前已載入**的列表，不會再打 API。

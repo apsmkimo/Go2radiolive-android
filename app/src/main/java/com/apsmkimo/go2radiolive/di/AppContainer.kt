@@ -9,6 +9,8 @@ import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
+import com.apsmkimo.go2radiolive.data.local.CategoryCatalogStore
+import com.apsmkimo.go2radiolive.data.repository.CategoryCatalogRepository
 import com.apsmkimo.go2radiolive.data.repository.FavoriteRepositoryImpl
 import com.apsmkimo.go2radiolive.data.repository.PodcastRepositoryImpl
 import com.apsmkimo.go2radiolive.data.repository.StationRepositoryImpl
@@ -122,6 +124,36 @@ class AppContainer(context: Context) {
     val getCountriesUseCase = GetCountriesUseCase(stationRepository)
     val getPodcastShowsUseCase = GetPodcastShowsUseCase(podcastRepository)
     val getPodcastEpisodesUseCase = GetPodcastEpisodesUseCase(podcastRepository)
+
+    // SMCPKG_SUPPORT>>>Cursor106
+    private val catalogClient: OkHttpClient = OkHttpClient.Builder()
+        .cache(Cache(File(appContext.cacheDir, "catalog_http"), 20L * 1024L * 1024L))
+        .connectTimeout(8, TimeUnit.SECONDS)
+        .readTimeout(12, TimeUnit.SECONDS)
+        .writeTimeout(10, TimeUnit.SECONDS)
+        .callTimeout(20, TimeUnit.SECONDS)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .header("User-Agent", RadioPlaybackService.USER_AGENT)
+                .header("Accept", "application/json")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    private val catalogApi: RadioBrowserApi = Retrofit.Builder()
+        .baseUrl(RADIO_BROWSER_BASE_URL)
+        .client(catalogClient)
+        .addConverterFactory(GsonConverterFactory.create(gson))
+        .build()
+        .create(RadioBrowserApi::class.java)
+
+    val categoryCatalogStore = CategoryCatalogStore(
+        File(appContext.filesDir, "category_catalog.json"),
+        gson,
+    )
+    val categoryCatalogRepository = CategoryCatalogRepository(catalogApi)
+    // SMCPKG_SUPPORT<<<Cursor106
 
     fun deviceRegion(): String {
         // SMCPKG_SUPPORT>>>Cursor075
