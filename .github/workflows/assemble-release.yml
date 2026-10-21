@@ -31,38 +31,120 @@ jobs:
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
-          if [ -n "$KEYSTORE_BASE64" ] && [ -n "$KEYSTORE_PASSWORD" ] && [ -n "$KEY_ALIAS" ] && [ -n "$KEY_PASSWORD" ]; then
-            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.keystore"
-            echo "mode=release" >> "$GITHUB_OUTPUT"
-            echo "KEYSTORE_FILE=$RUNNER_TEMP/release.keystore" >> "$GITHUB_ENV"
+          missing=""
+          note_missing() {
+            if [ -n "$missing" ]; then
+              missing="$missing $1"
+            else
+              missing="$1"
+            fi
+            echo "$1=missing"
+          }
+          if [ -n "${KEYSTORE_BASE64:-}" ]; then
+            echo "KEYSTORE_BASE64=present"
           else
-            echo "Release signing secrets are missing. Building a release variant signed with the debug keystore."
-            echo "This artifact is NOT for Play upload. Add KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, and KEY_PASSWORD."
+            note_missing KEYSTORE_BASE64
+          fi
+          if [ -n "${KEYSTORE_PASSWORD:-}" ]; then
+            echo "KEYSTORE_PASSWORD=present"
+          else
+            note_missing KEYSTORE_PASSWORD
+          fi
+          if [ -n "${KEY_ALIAS:-}" ]; then
+            echo "KEY_ALIAS=present"
+          else
+            note_missing KEY_ALIAS
+          fi
+          if [ -n "${KEY_PASSWORD:-}" ]; then
+            echo "KEY_PASSWORD=present"
+          else
+            note_missing KEY_PASSWORD
+          fi
+          if [ -z "$missing" ]; then
+            umask 077
+            keystore_path="$RUNNER_TEMP/release.keystore"
+            printf '%s' "$KEYSTORE_BASE64" | base64 -d > "$keystore_path"
+            if [ ! -s "$keystore_path" ]; then
+              echo "::error::KEYSTORE_BASE64 decoded to an empty keystore."
+              exit 1
+            fi
+            echo "mode=release" >> "$GITHUB_OUTPUT"
+            echo "KEYSTORE_FILE=$keystore_path" >> "$GITHUB_ENV"
+            echo "Play upload key is configured. Building a signed release APK and AAB."
+          else
+            echo "::warning::Play upload signing secrets are missing: $missing. Building a debug-keystore-signed release APK that is NOT for Play upload, and skipping the Play AAB."
             echo "mode=debug-keystore" >> "$GITHUB_OUTPUT"
             echo "SIGN_RELEASE_WITH_DEBUG=1" >> "$GITHUB_ENV"
           fi
 
-      - name: Assemble release APK
+      - name: Assemble signed release APK and AAB
+        if: steps.sign.outputs.mode == 'release'
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew assembleRelease bundleRelease --stacktrace
+
+      - name: Assemble debug-keystore release APK
+        if: steps.sign.outputs.mode == 'debug-keystore'
         run: ./gradlew assembleRelease --stacktrace
+
+      - name: Stage Play App Bundle
+        if: steps.sign.outputs.mode == 'release'
+        run: |
+          stage="$RUNNER_TEMP/play-aab"
+          mkdir -p "$stage"
+          cp app/build/outputs/bundle/release/app-release.aab "$stage/app-release.aab"
+          if [ -f app/build/outputs/mapping/release/mapping.txt ]; then
+            cp app/build/outputs/mapping/release/mapping.txt "$stage/mapping.txt"
+          else
+            echo "mapping.txt is absent because R8 minify is disabled."
+          fi
 
       - name: Upload Play-signed release APK
         if: steps.sign.outputs.mode == 'release'
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
+          name: app-release-apk
           path: app/build/outputs/apk/release/*.apk
           if-no-files-found: error
           retention-days: 14
 
-      - name: Upload debug-keystore-signed release APK
+      - name: Upload Play-signed release AAB
+        if: steps.sign.outputs.mode == 'release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: ${{ runner.temp }}/play-aab/*
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Upload debug-keystore release APK (NOT for Play)
         if: steps.sign.outputs.mode == 'debug-keystore'
         uses: actions/upload-artifact@v4
         with:
-          name: app-release-test-signed
+          name: app-release-apk-NOT-FOR-PLAY
           path: app/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Write skipped AAB notice
+        if: steps.sign.outputs.mode == 'debug-keystore'
+        run: |
+          notice="$RUNNER_TEMP/aab-notice"
+          mkdir -p "$notice"
+          printf '%s\n' \
+            "Play App Bundle was not produced." \
+            "GitHub Actions secrets KEYSTORE_BASE64, KEYSTORE_PASSWORD, KEY_ALIAS, and KEY_PASSWORD were not all set." \
+            "The APK artifact app-release-apk-NOT-FOR-PLAY is signed with the debug keystore." \
+            "Do not upload that APK or this notice to Google Play." \
+            > "$notice/NOT-FOR-PLAY.txt"
+
+      - name: Upload skipped AAB notice (NOT for Play)
+        if: steps.sign.outputs.mode == 'debug-keystore'
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab-NOT-FOR-PLAY
+          path: ${{ runner.temp }}/aab-notice/NOT-FOR-PLAY.txt
           if-no-files-found: error
           retention-days: 14
