@@ -21,6 +21,8 @@ import com.apsmkimo.go2radiolive.alarm.PlaybackSignals
 import com.apsmkimo.go2radiolive.alarm.SleepTimerState
 import com.apsmkimo.go2radiolive.alarm.WakeAlarmScheduler
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
+import com.apsmkimo.go2radiolive.locale.ALARM_CHANNEL_ID
+import com.apsmkimo.go2radiolive.locale.withAppLocale
 import com.google.gson.Gson
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -49,6 +51,13 @@ internal class AlarmPlayback(
     private var primary: RadioStation? = null
     private var backup: RadioStation? = null
     private val notificationId = 2002
+    private var lastNotificationText: String? = null
+
+    fun refreshLocale() {
+        ensureChannel()
+        val text = lastNotificationText ?: return
+        if (alarmSession) showNotification(text)
+    }
 
     fun attach() {
         ensureChannel()
@@ -237,7 +246,10 @@ internal class AlarmPlayback(
             WakeAlarmScheduler.scheduleSnooze(service, station, gson)
         }
         val manager = service.getSystemService(NotificationManager::class.java)
-        manager.notify(notificationId, buildNotification(service.getString(R.string.alarm_snoozed), ongoing = false))
+        manager.notify(
+            notificationId,
+            buildNotification(service.withAppLocale().getString(R.string.alarm_snoozed), ongoing = false),
+        )
     }
 
     private fun playFallbackSound() {
@@ -250,7 +262,7 @@ internal class AlarmPlayback(
         ringtone?.stop()
         ringtone = uri?.let { RingtoneManager.getRingtone(service, it) }
         ringtone?.play()
-        showNotification(service.getString(R.string.alarm_failed))
+        showNotification(service.withAppLocale().getString(R.string.alarm_failed))
         soundJob = scope.launch {
             delay(30_000)
             ringtone?.stop()
@@ -265,6 +277,7 @@ internal class AlarmPlayback(
     }
 
     private fun showNotification(text: String) {
+        lastNotificationText = text
         val notification = buildNotification(text, ongoing = true)
         if (Build.VERSION.SDK_INT >= 29) {
             service.startForeground(
@@ -284,14 +297,15 @@ internal class AlarmPlayback(
     private fun buildNotification(text: String, ongoing: Boolean): Notification {
         val stop = serviceIntent(RadioPlaybackService.ACTION_ALARM_STOP, 1)
         val snooze = serviceIntent(RadioPlaybackService.ACTION_ALARM_SNOOZE, 2)
-        return NotificationCompat.Builder(service, CHANNEL)
+        val localized = service.withAppLocale()
+        return NotificationCompat.Builder(service, ALARM_CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_notification)
-            .setContentTitle(service.getString(R.string.alarm_playing))
+            .setContentTitle(localized.getString(R.string.alarm_playing))
             .setContentText(text)
             .setOngoing(ongoing)
             .setOnlyAlertOnce(true)
-            .addAction(0, service.getString(R.string.alarm_stop), stop)
-            .addAction(0, service.getString(R.string.alarm_snooze), snooze)
+            .addAction(0, localized.getString(R.string.alarm_stop), stop)
+            .addAction(0, localized.getString(R.string.alarm_snooze), snooze)
             .build()
     }
 
@@ -309,14 +323,11 @@ internal class AlarmPlayback(
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
         val manager = service.getSystemService(NotificationManager::class.java)
         val channel = NotificationChannel(
-            CHANNEL,
-            service.getString(R.string.alarm_channel),
+            ALARM_CHANNEL_ID,
+            service.withAppLocale().getString(R.string.alarm_channel),
             NotificationManager.IMPORTANCE_HIGH,
         )
         manager.createNotificationChannel(channel)
     }
 
-    private companion object {
-        const val CHANNEL = "go2_wake_alarm"
-    }
 }

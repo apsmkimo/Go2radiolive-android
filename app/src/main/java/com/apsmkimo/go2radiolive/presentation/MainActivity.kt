@@ -2,19 +2,20 @@ package com.apsmkimo.go2radiolive.presentation
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import com.apsmkimo.go2radiolive.ads.AdsConsent
 import com.apsmkimo.go2radiolive.presentation.ui.Go2RadioRoot
 import com.apsmkimo.go2radiolive.presentation.ui.theme.Go2RadioTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : AppCompatActivity() {
 
     private val notificationPermissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { }
@@ -23,6 +24,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        volumeControlStream = AudioManager.STREAM_MUSIC
         requestNotificationPermissionIfNeeded()
         AdsConsent.request(this)
         setContent {

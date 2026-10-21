@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Go2Radio Live</string>
+    <string name="app_name">Radio Live FM AM</string>
     <string name="search_hint">Search this list</string>
     <string name="refresh">Refresh</string>
     <string name="alarm">Alarm</string>
@@ -98,7 +98,7 @@
     <string name="alarm_enable">Alarm on</string>
     <string name="alarm_save">Save alarm</string>
     <string name="alarm_saved">Alarm saved</string>
-    <string name="alarm_permission">Exact alarms are off, so this alarm may be late. Allow alarms and reminders for Go2Radio Live.</string>
+    <string name="alarm_permission">Exact alarms are off, so this alarm may be late. Allow alarms and reminders for Radio Live FM AM.</string>
     <string name="alarm_permission_action">Allow exact alarms</string>
     <string name="alarm_stop">Stop</string>
     <string name="alarm_snooze">Snooze</string>
@@ -147,4 +147,9 @@
     <string name="catalog_other_countries">Other countries</string>
     <string name="catalog_count_plus">%d+ stations</string>
     <string name="catalog_cached_error">Couldn\'t update categories. Showing the saved list.</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_system">Follow system</string>
+    <string name="media_volume">Volume</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Playback</string>
 </resources>

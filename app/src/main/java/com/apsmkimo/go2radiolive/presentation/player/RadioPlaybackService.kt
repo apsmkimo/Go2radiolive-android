@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.presentation.player
 
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
 import androidx.annotation.OptIn
 import androidx.media3.common.AudioAttributes
@@ -10,9 +11,14 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
+import androidx.media3.session.DefaultMediaNotificationProvider
 import androidx.media3.session.MediaSession
 import androidx.media3.session.MediaSessionService
+import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.locale.AppLocale
+import com.apsmkimo.go2radiolive.locale.refreshLocalizedChannels
+import com.apsmkimo.go2radiolive.locale.withAppLocale
 import com.apsmkimo.go2radiolive.audio.dsp.Go2RenderersFactory
 import com.apsmkimo.go2radiolive.audio.spatial.SpatialRoute
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
@@ -32,9 +38,23 @@ class RadioPlaybackService : MediaSessionService() {
     private val spatialRouteScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var spatialRouteJob: Job? = null
     private var alarmPlayback: AlarmPlayback? = null
+    private val onLocaleChanged: () -> Unit = {
+        setMediaNotificationProvider(notificationProvider())
+        refreshLocalizedChannels()
+        mediaSession?.let { session -> onUpdateNotification(session, true) }
+        alarmPlayback?.refreshLocale()
+        Unit
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        AppLocale.warm()
+        super.attachBaseContext(newBase.withAppLocale())
+    }
 
     override fun onCreate() {
         super.onCreate()
+        setMediaNotificationProvider(notificationProvider())
+        AppLocale.addListener(onLocaleChanged)
         // SMCPKG_SUPPORT>>>Cursor011
         AudioSettingsRepository.start(this)
         // SMCPKG_SUPPORT<<<Cursor011
@@ -145,6 +165,7 @@ class RadioPlaybackService : MediaSessionService() {
     }
 
     override fun onDestroy() {
+        AppLocale.removeListener(onLocaleChanged)
         alarmPlayback?.release()
         spatialRouteJob?.cancel()
         spatialRouteScope.cancel()
@@ -154,6 +175,17 @@ class RadioPlaybackService : MediaSessionService() {
         }
         mediaSession = null
         super.onDestroy()
+    }
+
+    private fun notificationProvider(): DefaultMediaNotificationProvider {
+        return DefaultMediaNotificationProvider(
+            withAppLocale(),
+            DefaultMediaNotificationProvider.NotificationIdProvider {
+                DefaultMediaNotificationProvider.DEFAULT_NOTIFICATION_ID
+            },
+            DefaultMediaNotificationProvider.DEFAULT_CHANNEL_ID,
+            R.string.playback_channel,
+        )
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.apsmkimo.go2radiolive
 import android.app.Application
 import com.apsmkimo.go2radiolive.ads.AppOpenAds
 import com.apsmkimo.go2radiolive.di.AppContainer
+import com.apsmkimo.go2radiolive.locale.AppLocale
 
 class Go2RadioApp : Application() {
 
@@ -11,6 +12,7 @@ class Go2RadioApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        AppLocale.warm()
         container = AppContainer(this)
         container.playerController.initialize()
         // SMCPKG_SUPPORT>>>Cursor091
