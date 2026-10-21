@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.presentation.player
 
 import android.content.ComponentName
 import android.content.Context
+import android.util.Log
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -55,12 +56,12 @@ class RadioPlayerController(
         }
 
         override fun onPlayerError(error: PlaybackException) {
+            Log.w(TAG, "playback failed", error)
             _playbackState.update {
                 it.copy(
                     isPlaying = false,
                     isBuffering = false,
-                    errorMessage = error.localizedMessage
-                        ?: context.getString(R.string.playback_failed),
+                    errorMessage = context.getString(R.string.playback_failed),
                 )
             }
         }
@@ -146,6 +147,7 @@ class RadioPlayerController(
     }
 
     companion object {
+        private const val TAG = "RadioPlayer"
         private const val EXTRA_STATION_JSON = "extra_station_json"
     }
 }

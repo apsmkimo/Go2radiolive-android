@@ -17,13 +17,17 @@ data class CatalogLanguage(
     val stationCount: Int = 0,
 )
 
-/** Rankings, topic counts, and languages for one country scope. */
+/**
+ * Rankings, topic counts, and languages for one country scope.
+ * A null ranking or language list means that request failed, so the card shows no count.
+ * A missing [counts] key means the same for that topic.
+ */
 data class CategoryHub(
-    val votes: List<RadioStation> = emptyList(),
-    val clicks: List<RadioStation> = emptyList(),
-    val trend: List<RadioStation> = emptyList(),
+    val votes: List<RadioStation>? = null,
+    val clicks: List<RadioStation>? = null,
+    val trend: List<RadioStation>? = null,
     val counts: Map<String, CountResult> = emptyMap(),
-    val languages: List<CatalogLanguage> = emptyList(),
+    val languages: List<CatalogLanguage>? = null,
     val complete: Boolean = true,
 )
 

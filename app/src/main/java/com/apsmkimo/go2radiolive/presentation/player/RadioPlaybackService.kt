@@ -175,8 +175,11 @@ class RadioPlaybackService : MediaSessionService() {
         // const val USER_AGENT = "Go2RadioLive/1.5.1"
         // SMCPKG_SUPPORT<<<Cursor102
         // SMCPKG_SUPPORT>>>Cursor106
-        const val USER_AGENT = "Go2RadioLive/1.6.0"
+        // const val USER_AGENT = "Go2RadioLive/1.6.0"
         // SMCPKG_SUPPORT<<<Cursor106
+        // SMCPKG_SUPPORT>>>Cursor108
+        const val USER_AGENT = "Go2RadioLive/1.6.1"
+        // SMCPKG_SUPPORT<<<Cursor108
         const val ACTION_SLEEP_MINUTES = "com.apsmkimo.go2radiolive.SLEEP_MINUTES"
         const val ACTION_SLEEP_EPISODE = "com.apsmkimo.go2radiolive.SLEEP_EPISODE"
         const val ACTION_SLEEP_CANCEL = "com.apsmkimo.go2radiolive.SLEEP_CANCEL"

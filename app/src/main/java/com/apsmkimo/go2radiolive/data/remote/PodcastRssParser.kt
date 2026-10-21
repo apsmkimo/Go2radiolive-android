@@ -19,7 +19,7 @@ internal object PodcastRssParser {
         val parser = Xml.newPullParser()
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false)
         parser.setInput(stream, null)
-        val episodes = ArrayList<RadioStation>(limit.coerceAtMost(100))
+        val episodes = ArrayList<RadioStation>()
         var inItem = false
         var title = ""
         var guid = ""

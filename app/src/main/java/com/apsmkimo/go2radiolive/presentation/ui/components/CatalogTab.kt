@@ -218,14 +218,14 @@ private fun CatalogHubBody(
         if (ranks.isNotEmpty()) {
             item(key = "rank-title") { SectionTitle(stringResource(R.string.catalog_rankings)) }
             items(ranks, key = { it.first }) { (kind, label) ->
-                val count = when (kind) {
-                    CatalogTopics.RANK_VOTES -> hub?.votes?.size ?: 0
-                    CatalogTopics.RANK_TREND -> hub?.trend?.size ?: 0
-                    else -> hub?.clicks?.size ?: 0
+                val stations = when (kind) {
+                    CatalogTopics.RANK_VOTES -> hub?.votes
+                    CatalogTopics.RANK_TREND -> hub?.trend
+                    else -> hub?.clicks
                 }
                 CatalogCard(
                     title = label,
-                    subtitle = stringResource(R.string.station_count, count),
+                    subtitle = if (stations == null) "" else stringResource(R.string.station_count, stations.size),
                     onClick = { onOpenRank(kind, label) },
                 )
             }
@@ -236,7 +236,7 @@ private fun CatalogHubBody(
         items(cards.chunked(2), key = { row -> row.joinToString { it.first } }) { row ->
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 row.forEach { (id, label) ->
-                    val count = cardCount(id, counts, hub?.languages.orEmpty())
+                    val count = cardCount(id, counts, hub?.languages)
                     CatalogCard(
                         title = label,
                         subtitle = countLabel(count),
@@ -286,7 +286,7 @@ private fun TopicGrid(
                 row.forEach { (id, label) ->
                     CatalogCard(
                         title = label,
-                        subtitle = countLabel(counts[id] ?: CountResult()),
+                        subtitle = countLabel(counts[id]),
                         onClick = { onOpen(id, label) },
                         modifier = Modifier.weight(1f),
                     )
@@ -604,7 +604,8 @@ private fun catalogLabels(): Map<String, String> = mapOf(
 )
 
 @Composable
-private fun countLabel(result: CountResult): String {
+private fun countLabel(result: CountResult?): String {
+    if (result == null) return ""
     return if (result.capped) {
         stringResource(R.string.catalog_count_plus, result.count)
     } else {
@@ -615,16 +616,19 @@ private fun countLabel(result: CountResult): String {
 private fun cardCount(
     id: String,
     counts: Map<String, CountResult>,
-    languages: List<CatalogLanguage>,
-): CountResult {
+    languages: List<CatalogLanguage>?,
+): CountResult? {
     return when (id) {
-        CatalogTopics.LANGUAGE -> CountResult(
-            count = languages.sumOf { it.stationCount },
-            capped = languages.size >= 40,
-        )
+        CatalogTopics.LANGUAGE -> {
+            val known = languages ?: return null
+            CountResult(
+                count = known.sumOf { it.stationCount },
+                capped = known.size >= 40,
+            )
+        }
         CatalogTopics.NEWS_TALK, CatalogTopics.MUSIC, CatalogTopics.DECADE ->
             CatalogTopics.parentCount(id, counts)
-        else -> counts[id] ?: CountResult()
+        else -> counts[id]
     }
 }
 
@@ -641,6 +645,6 @@ private sealed interface CatalogRow {
 }
 
 private fun CategoryHub.hasContent(): Boolean {
-    return votes.isNotEmpty() || clicks.isNotEmpty() || trend.isNotEmpty() ||
-        counts.isNotEmpty() || languages.isNotEmpty()
+    return !votes.isNullOrEmpty() || !clicks.isNullOrEmpty() || !trend.isNullOrEmpty() ||
+        counts.isNotEmpty() || !languages.isNullOrEmpty()
 }

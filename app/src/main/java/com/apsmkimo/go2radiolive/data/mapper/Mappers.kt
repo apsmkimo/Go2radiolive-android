@@ -50,12 +50,20 @@ fun CountryDto.toDomain(locale: Locale = Locale.getDefault()): CountryOption? {
     if (code.length != 2) return null
     val count = stationCount ?: 0
     if (count <= 0) return null
+    if (!recognizedCountryCode(code)) return null
     val fallback = name?.trim().orEmpty().ifBlank { code }
     return CountryOption(
         code = code,
         name = localizedCountryName(code, fallback, locale),
         stationCount = count,
     )
+}
+
+/** Radio-Browser uses codes such as XX for unknown stations. Locale then returns the code itself. */
+internal fun recognizedCountryCode(code: String): Boolean {
+    if (code.length != 2) return false
+    val english = Locale("", code).getDisplayCountry(Locale.ENGLISH)
+    return english.isNotBlank() && !english.equals(code, ignoreCase = true)
 }
 
 fun localizedCountryName(code: String, fallback: String, locale: Locale = Locale.getDefault()): String {

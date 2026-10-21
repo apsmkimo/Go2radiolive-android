@@ -25,7 +25,8 @@ internal fun usesUsPodcastFallback(storefront: String, chartFailed: Boolean, cat
 
 internal fun dedupePodcasts(groups: List<List<PodcastShow>>, limit: Int = 200): List<PodcastShow> {
     val seen = HashSet<String>()
-    val out = ArrayList<PodcastShow>(limit.coerceAtMost(200))
+    val capacity = if (limit <= 0) 0 else groups.sumOf { it.size }.coerceAtMost(limit).coerceAtMost(200)
+    val out = ArrayList<PodcastShow>(capacity)
     for (group in groups) {
         for (show in group) {
             if (show.id.isBlank() || show.name.isBlank()) continue
