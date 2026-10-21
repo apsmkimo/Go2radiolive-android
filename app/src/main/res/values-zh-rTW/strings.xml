@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Go2Radio Live</string>
+    <string name="app_name">Radio Live FM AM</string>
     <string name="search_hint">搜尋目前列表</string>
     <string name="refresh">重新整理</string>
     <string name="alarm">鬧鐘</string>
@@ -98,7 +98,7 @@
     <string name="alarm_enable">開啟鬧鐘</string>
     <string name="alarm_save">儲存鬧鐘</string>
     <string name="alarm_saved">已儲存鬧鐘</string>
-    <string name="alarm_permission">尚未允許精確鬧鐘，響鈴可能會延遲。請允許 Go2Radio Live 的鬧鐘與提醒。</string>
+    <string name="alarm_permission">尚未允許精確鬧鐘，響鈴可能會延遲。請允許 Radio Live FM AM 的鬧鐘與提醒。</string>
     <string name="alarm_permission_action">允許精確鬧鐘</string>
     <string name="alarm_stop">停止</string>
     <string name="alarm_snooze">稍後提醒</string>
@@ -147,4 +147,9 @@
     <string name="catalog_other_countries">其他國家</string>
     <string name="catalog_count_plus">%d+ 個電台</string>
     <string name="catalog_cached_error">無法更新分類，先顯示已儲存的內容。</string>
+    <string name="settings_language">語言</string>
+    <string name="settings_language_system">跟隨系統</string>
+    <string name="media_volume">音量</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">播放</string>
 </resources>

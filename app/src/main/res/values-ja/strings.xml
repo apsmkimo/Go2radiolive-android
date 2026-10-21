@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Go2Radio Live</string>
+    <string name="app_name">Radio Live FM AM</string>
     <string name="search_hint">この一覧を検索</string>
     <string name="refresh">更新</string>
     <string name="alarm">アラーム</string>
@@ -95,7 +95,7 @@
     <string name="alarm_enable">アラームをオン</string>
     <string name="alarm_save">アラームを保存</string>
     <string name="alarm_saved">アラームを保存しました</string>
-    <string name="alarm_permission">正確なアラームがオフのため、開始が遅れることがあります。Go2Radio Live のアラームとリマインダーを許可してください。</string>
+    <string name="alarm_permission">正確なアラームがオフのため、開始が遅れることがあります。Radio Live FM AM のアラームとリマインダーを許可してください。</string>
     <string name="alarm_permission_action">正確なアラームを許可</string>
     <string name="alarm_stop">停止</string>
     <string name="alarm_snooze">スヌーズ</string>
@@ -144,4 +144,9 @@
     <string name="catalog_other_countries">その他の国</string>
     <string name="catalog_count_plus">%d+ 局</string>
     <string name="catalog_cached_error">カテゴリを更新できませんでした。保存した内容を表示しています。</string>
+    <string name="settings_language">言語</string>
+    <string name="settings_language_system">システムの言語に合わせる</string>
+    <string name="media_volume">音量</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">再生</string>
 </resources>

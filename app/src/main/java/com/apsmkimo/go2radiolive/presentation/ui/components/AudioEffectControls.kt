@@ -29,6 +29,7 @@ fun AudioEffectControls(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
+        MediaVolumeSlider()
         LevelSlider(
             label = stringResource(R.string.eq_bass),
             valueLabel = stringResource(R.string.db_value, settings.bassDb),

@@ -51,9 +51,13 @@ android {
         // versionName = "1.6.0"
         // SMCPKG_SUPPORT<<<Cursor106
         // SMCPKG_SUPPORT>>>Cursor108
-        versionCode = 11
-        versionName = "1.6.1"
+        // versionCode = 11
+        // versionName = "1.6.1"
         // SMCPKG_SUPPORT<<<Cursor108
+        // SMCPKG_SUPPORT>>>Cursor109
+        versionCode = 12
+        versionName = "1.0.0"
+        // SMCPKG_SUPPORT<<<Cursor109
 
         vectorDrawables {
             useSupportLibrary = true
@@ -165,6 +169,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     // SMCPKG_SUPPORT<<<Cursor088
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
     // SMCPKG_SUPPORT>>>Cursor101
     // play-services-basement brings androidx.fragment:fragment:1.1.0.
     // registerForActivityResult then fails lintVitalRelease

@@ -270,7 +270,7 @@ private fun AudioEffectPanel(
     Column(
         modifier = Modifier
             .widthIn(min = 260.dp, max = 340.dp)
-            .heightIn(max = 320.dp)
+            .heightIn(max = 440.dp)
             .shadow(8.dp, RoundedCornerShape(16.dp))
             .background(
                 color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),

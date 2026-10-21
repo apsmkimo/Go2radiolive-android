@@ -26,6 +26,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +44,8 @@ import com.apsmkimo.go2radiolive.ads.AdsConsent
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
+import com.apsmkimo.go2radiolive.locale.AppLanguage
+import com.apsmkimo.go2radiolive.locale.AppLocale
 import com.apsmkimo.go2radiolive.presentation.ui.components.AudioEffectControls
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,8 +155,45 @@ fun SettingsScreen(onBack: () -> Unit) {
                 onReset = AudioSettingsRepository::resetTone,
                 modifier = Modifier.padding(horizontal = 16.dp),
             )
+
+            HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+            LanguageSection()
         }
     }
+}
+
+@Composable
+private fun LanguageSection() {
+    var selected by remember { mutableStateOf(AppLocale.selectedTag()) }
+    Text(
+        text = stringResource(R.string.settings_language),
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+    )
+    AppLanguage.tags.forEach { tag ->
+        val title = if (tag == AppLanguage.SYSTEM) {
+            stringResource(R.string.settings_language_system)
+        } else {
+            languageName(tag)
+        }
+        SpatialModeRow(
+            title = title,
+            summary = "",
+            selected = selected == tag,
+            onSelect = {
+                selected = tag
+                AppLocale.apply(tag)
+            },
+        )
+    }
+}
+
+private fun languageName(tag: String): String = when (tag) {
+    AppLanguage.ENGLISH -> "English"
+    AppLanguage.TRADITIONAL -> "繁體中文"
+    AppLanguage.SIMPLIFIED -> "简体中文"
+    AppLanguage.JAPANESE -> "日本語"
+    else -> tag
 }
 
 @Composable
@@ -207,11 +249,13 @@ private fun SpatialModeRow(
         RadioButton(selected = selected, onClick = onSelect)
         Column(modifier = Modifier.weight(1f)) {
             Text(text = title, style = MaterialTheme.typography.bodyLarge)
-            Text(
-                text = summary,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            if (summary.isNotBlank()) {
+                Text(
+                    text = summary,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
         }
     }
 }
