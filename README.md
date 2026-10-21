@@ -36,6 +36,7 @@ SMCPKG_SUPPORT<<<Cursor102 -->
 - `versionName`: `1.5.1` / `versionCode`: `9`
 SMCPKG_SUPPORT<<<Cursor106 -->
 - `versionName`: `1.6.0` / `versionCode`: `10`
+- `versionName`: `1.6.1` / `versionCode`: `11`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能
@@ -61,7 +62,7 @@ SMCPKG_SUPPORT<<<Cursor106 -->
 
 ## Radio-Browser API
 
-Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.6.0`。
+Base URL 使用官方鏡像 `https://de1.api.radio-browser.info/`，並送出 `User-Agent: Go2RadioLive/1.6.1`。
 
 重新整理會帶 `Cache-Control: no-cache` 與 `cb` 查詢參數，按鈕在載入時停用並顯示進度，完成後出現 Snackbar，失敗時列表仍在也會顯示錯誤。
 

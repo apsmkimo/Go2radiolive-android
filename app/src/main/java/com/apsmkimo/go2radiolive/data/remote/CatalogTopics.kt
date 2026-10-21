@@ -92,8 +92,9 @@ internal object CatalogTopics {
         return CountResult(count = total, capped = false)
     }
 
-    fun parentCount(group: String, counts: Map<String, CountResult>): CountResult {
-        val kids = children(group).map { counts[it] ?: CountResult() }
+    fun parentCount(group: String, counts: Map<String, CountResult>): CountResult? {
+        val kids = children(group).map { counts[it] ?: return null }
+        if (kids.isEmpty()) return null
         return CountResult(
             count = kids.sumOf { it.count },
             capped = kids.any { it.capped },
@@ -108,7 +109,14 @@ internal object CatalogTopics {
         limit: Int = LIST_LIMIT,
     ): List<RadioStation> {
         val seen = HashSet<String>()
-        val out = ArrayList<RadioStation>(limit)
+        // Capacity follows the stations actually in hand. `limit` only stops the loop,
+        // so a caller cannot ask for an Int.MAX_VALUE array.
+        val capacity = if (limit <= 0) {
+            0
+        } else {
+            groups.sumOf { it.size }.coerceAtMost(limit)
+        }
+        val out = ArrayList<RadioStation>(capacity)
         for (station in sortStations(groups.flatten(), sort)) {
             if (station.stationUuid.isBlank() || !seen.add(station.stationUuid)) continue
             out.add(station)

@@ -1,5 +1,6 @@
 package com.apsmkimo.go2radiolive.presentation.ui.home
 
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -86,7 +87,6 @@ data class HomeUiState(
     // SMCPKG_SUPPORT<<<Cursor106
     val scrollToken: Int = 0,
     @StringRes val errorResId: Int? = null,
-    val errorDetail: String? = null,
     val playback: PlaybackState = PlaybackState(),
 ) {
     val visibleStations: List<RadioStation>
@@ -207,7 +207,6 @@ class HomeViewModel(
                 stations = emptyList(),
                 searchQuery = "",
                 errorResId = null,
-                errorDetail = null,
             )
         }
         refresh()
@@ -219,7 +218,7 @@ class HomeViewModel(
 
     fun onCategorySelected(category: StationCategory) {
         internalState.update {
-            it.copy(selectedCategory = category, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
+            it.copy(selectedCategory = category, stations = emptyList(), searchQuery = "", errorResId = null)
         }
         refresh()
     }
@@ -247,7 +246,6 @@ class HomeViewModel(
                 catalogOthers = emptyList(),
                 searchQuery = "",
                 errorResId = null,
-                errorDetail = null,
             )
         }
         refresh()
@@ -263,7 +261,6 @@ class HomeViewModel(
                 catalogListKind = null,
                 searchQuery = "",
                 errorResId = null,
-                errorDetail = null,
             )
         }
     }
@@ -296,7 +293,6 @@ class HomeViewModel(
                         catalogOthers = emptyList(),
                         searchQuery = "",
                         errorResId = null,
-                        errorDetail = null,
                     )
                 } else {
                     it.copy(
@@ -308,7 +304,6 @@ class HomeViewModel(
                         catalogOthers = emptyList(),
                         searchQuery = "",
                         errorResId = null,
-                        errorDetail = null,
                     )
                 }
                 CatalogLevel.GROUP -> it.copy(
@@ -318,7 +313,6 @@ class HomeViewModel(
                     catalogTitle = "",
                     searchQuery = "",
                     errorResId = null,
-                    errorDetail = null,
                 )
                 CatalogLevel.HUB -> it
             }
@@ -357,7 +351,6 @@ class HomeViewModel(
                 catalogOthers = emptyList(),
                 searchQuery = "",
                 errorResId = null,
-                errorDetail = null,
             )
         }
         refresh()
@@ -366,7 +359,7 @@ class HomeViewModel(
 
     fun onCountrySelected(country: CountryOption) {
         internalState.update {
-            it.copy(selectedCountry = country, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
+            it.copy(selectedCountry = country, stations = emptyList(), searchQuery = "", errorResId = null)
         }
         refresh()
     }
@@ -380,7 +373,7 @@ class HomeViewModel(
 
     fun onPodcastSelected(show: PodcastShow) {
         internalState.update {
-            it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null, errorDetail = null)
+            it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null)
         }
         refresh()
     }
@@ -411,7 +404,6 @@ class HomeViewModel(
                     stations = emptyList(),
                     searchQuery = "",
                     errorResId = null,
-                    errorDetail = null,
                     podcastUsFallback = cached?.usedUsFallback == true,
                 )
             }
@@ -428,12 +420,12 @@ class HomeViewModel(
         val snapshot = internalState.value
         if (snapshot.selectedTab == BrowseTab.FAVORITES) {
             if (!userInitiated) {
-                internalState.update { it.copy(isLoading = false, errorResId = null, errorDetail = null) }
+                internalState.update { it.copy(isLoading = false, errorResId = null) }
                 return
             }
             loadJob?.cancel()
             loadJob = viewModelScope.launch {
-                internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+                internalState.update { it.copy(isLoading = true, errorResId = null) }
                 delay(300)
                 finishLoad(userInitiated = true, ok = true) { it }
             }
@@ -444,7 +436,7 @@ class HomeViewModel(
             val podcastList = snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null
             val catalog = snapshot.selectedTab == BrowseTab.CATEGORIES
             if (!podcastList && !catalog) {
-                internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+                internalState.update { it.copy(isLoading = true, errorResId = null) }
             }
             runCatching {
                 when {
@@ -510,10 +502,10 @@ class HomeViewModel(
                 }
             }.onFailure { error ->
                 if (error is CancellationException) throw error
+                Log.w(TAG, "load failed", error)
                 finishLoad(userInitiated, ok = false) {
                     it.copy(
                         errorResId = R.string.load_failed,
-                        errorDetail = error.message?.takeIf { message -> message.isNotBlank() },
                         podcastUsFallback = false,
                     )
                 }
@@ -543,7 +535,6 @@ class HomeViewModel(
                     deviceRegionCode = device,
                     stations = emptyList(),
                     errorResId = null,
-                    errorDetail = null,
                     isLoading = refreshNetwork,
                 )
             }
@@ -552,7 +543,6 @@ class HomeViewModel(
                 it.copy(
                     isLoading = true,
                     errorResId = null,
-                    errorDetail = null,
                     podcastRegionCode = saved,
                     deviceRegionCode = device,
                     podcasts = emptyList(),
@@ -582,7 +572,6 @@ class HomeViewModel(
                             deviceRegionCode = device,
                             stations = emptyList(),
                             errorResId = null,
-                            errorDetail = null,
                         )
                     }
                 }
@@ -602,7 +591,7 @@ class HomeViewModel(
                 return
             }
             finishLoad(userInitiated, ok = false) {
-                it.copy(errorResId = R.string.load_failed, errorDetail = null)
+                it.copy(errorResId = R.string.load_failed)
             }
             return
         }
@@ -629,7 +618,6 @@ class HomeViewModel(
         finishLoad(userInitiated = false, ok = true) {
             it.copy(
                 errorResId = R.string.podcast_cached_error,
-                errorDetail = null,
                 podcastStaleEvent = it.podcastStaleEvent + 1,
             )
         }
@@ -667,7 +655,6 @@ class HomeViewModel(
                     catalogHub = cached.toHub(),
                     isLoading = userInitiated || stale,
                     errorResId = null,
-                    errorDetail = null,
                 )
             }
             if (!userInitiated && !stale) {
@@ -677,7 +664,7 @@ class HomeViewModel(
             }
         } else {
             internalState.update {
-                it.copy(catalogScope = scope, isLoading = true, errorResId = null, errorDetail = null)
+                it.copy(catalogScope = scope, isLoading = true, errorResId = null)
             }
         }
         val hadHub = cached != null
@@ -690,7 +677,7 @@ class HomeViewModel(
                     val reveal = !hadHub || hub.complete
                     if (reveal) {
                         internalState.update {
-                            it.copy(catalogScope = scope, catalogHub = hub, errorResId = null, errorDetail = null)
+                            it.copy(catalogScope = scope, catalogHub = hub, errorResId = null)
                         }
                     }
                 }
@@ -714,7 +701,7 @@ class HomeViewModel(
             return
         }
         finishLoad(userInitiated, ok = true) { it.copy(catalogScope = scope, catalogHub = finalHub) }
-        if (finalHub.complete) {
+        if (finalHub.complete && finalHub.canCache()) {
             withContext(Dispatchers.IO) { categoryCache.saveHub(scope, finalHub) }
         }
     }
@@ -734,7 +721,6 @@ class HomeViewModel(
                     catalogOthers = cached.others.orEmpty(),
                     isLoading = userInitiated || stale,
                     errorResId = null,
-                    errorDetail = null,
                 )
             }
             if (!userInitiated && !stale) {
@@ -742,9 +728,9 @@ class HomeViewModel(
                 return
             }
         } else if (internalState.value.stations.isEmpty() && internalState.value.catalogOthers.isEmpty()) {
-            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+            internalState.update { it.copy(isLoading = true, errorResId = null) }
         } else {
-            internalState.update { it.copy(isLoading = true, errorResId = null, errorDetail = null) }
+            internalState.update { it.copy(isLoading = true, errorResId = null) }
         }
         val hadList = cached != null || internalState.value.stations.isNotEmpty()
         var latest: CatalogPage? = null
@@ -767,7 +753,6 @@ class HomeViewModel(
                                 stations = page.stations,
                                 catalogOthers = if (page.complete) page.others else it.catalogOthers,
                                 errorResId = null,
-                                errorDetail = null,
                             )
                         }
                     }
@@ -812,7 +797,6 @@ class HomeViewModel(
         finishLoad(userInitiated = false, ok = true) {
             it.copy(
                 errorResId = R.string.catalog_cached_error,
-                errorDetail = null,
                 catalogStaleEvent = it.catalogStaleEvent + 1,
             )
         }
@@ -823,18 +807,24 @@ class HomeViewModel(
 
     private fun CategoryCatalogStore.HubEntry.toHub(): CategoryHub {
         return CategoryHub(
-            votes = votes.orEmpty(),
-            clicks = clicks.orEmpty(),
-            trend = trend.orEmpty(),
+            votes = votes,
+            clicks = clicks,
+            trend = trend,
             counts = counts.orEmpty(),
-            languages = languages.orEmpty(),
+            languages = languages,
             complete = true,
         )
     }
 
     private fun CategoryHub.hasContent(): Boolean {
-        return votes.isNotEmpty() || clicks.isNotEmpty() || trend.isNotEmpty() ||
-            counts.isNotEmpty() || languages.isNotEmpty()
+        return !votes.isNullOrEmpty() || !clicks.isNullOrEmpty() || !trend.isNullOrEmpty() ||
+            counts.isNotEmpty() || !languages.isNullOrEmpty()
+    }
+
+    /** A failed ranking, topic, or language list is omitted. Don't freeze that gap for 12 hours. */
+    private fun CategoryHub.canCache(): Boolean {
+        if (votes == null || clicks == null || trend == null || languages == null) return false
+        return CatalogTopics.topicIds().all { it in counts }
     }
     // SMCPKG_SUPPORT<<<Cursor106
 
@@ -856,7 +846,7 @@ class HomeViewModel(
 
     fun onStationClick(station: RadioStation) {
         viewModelScope.launch {
-            internalState.update { it.copy(errorResId = null, errorDetail = null) }
+            internalState.update { it.copy(errorResId = null) }
             val streamUrl = if (station.directStream) {
                 station.streamUrl
             } else {
@@ -877,6 +867,8 @@ class HomeViewModel(
         playerController.togglePlayPause()
     }
 }
+
+private const val TAG = "HomeViewModel"
 
 class HomeViewModelFactory(
     private val container: AppContainer,

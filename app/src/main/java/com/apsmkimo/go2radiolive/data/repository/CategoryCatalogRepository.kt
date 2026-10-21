@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
+import android.util.Log
 import java.io.IOException
 
 /**
@@ -44,9 +45,9 @@ class CategoryCatalogRepository(
             val trendList = trend.await()
             emit(
                 CategoryHub(
-                    votes = voteList.getOrDefault(emptyList()),
-                    clicks = clickList.getOrDefault(emptyList()),
-                    trend = trendList.getOrDefault(emptyList()),
+                    votes = voteList.getOrNull(),
+                    clicks = clickList.getOrNull(),
+                    trend = trendList.getOrNull(),
                     complete = false,
                 ),
             )
@@ -54,17 +55,18 @@ class CategoryCatalogRepository(
             val languageList = languages.await()
             val anySuccess = listOf(voteList, clickList, trendList, countMap, languageList).any { it.isSuccess }
             if (!anySuccess) {
-                throw voteList.exceptionOrNull()
-                    ?: clickList.exceptionOrNull()
-                    ?: IOException("catalog")
+                val cause = listOf(voteList, clickList, trendList, countMap, languageList)
+                    .firstNotNullOfOrNull { it.exceptionOrNull() }
+                if (cause is Exception && cause !is CancellationException) throw cause
+                throw IOException("catalog")
             }
             emit(
                 CategoryHub(
-                    votes = voteList.getOrDefault(emptyList()),
-                    clicks = clickList.getOrDefault(emptyList()),
-                    trend = trendList.getOrDefault(emptyList()),
+                    votes = voteList.getOrNull(),
+                    clicks = clickList.getOrNull(),
+                    trend = trendList.getOrNull(),
                     counts = countMap.getOrDefault(emptyMap()),
-                    languages = languageList.getOrDefault(emptyList()),
+                    languages = languageList.getOrNull(),
                     complete = true,
                 ),
             )
@@ -195,12 +197,13 @@ class CategoryCatalogRepository(
                             bypassCache = bypassCache,
                             gate = gate,
                         )
-                        val merged = CatalogTopics.mergeStations(
-                            fetched.groups,
-                            CatalogSort.CLICKS,
-                            limit = Int.MAX_VALUE,
-                        )
-                        CountResult(count = merged.size, capped = fetched.capped)
+                        val ids = HashSet<String>()
+                        for (group in fetched.groups) {
+                            for (station in group) {
+                                if (station.stationUuid.isNotBlank()) ids.add(station.stationUuid)
+                            }
+                        }
+                        CountResult(count = ids.size, capped = fetched.capped)
                     }
                 }
             }.awaitAll()
@@ -363,7 +366,10 @@ private suspend fun <T> catchIo(block: suspend () -> T): Result<T> {
         Result.success(block())
     } catch (cancelled: CancellationException) {
         throw cancelled
-    } catch (error: Exception) {
+    } catch (error: Throwable) {
+        Log.w(TAG, "catalog request failed", error)
         Result.failure(error)
     }
 }
+
+private const val TAG = "CategoryCatalog"

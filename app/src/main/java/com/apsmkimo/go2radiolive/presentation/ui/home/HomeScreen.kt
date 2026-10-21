@@ -107,13 +107,7 @@ fun HomeScreen(
     val retryText = stringResource(R.string.retry_action)
     LaunchedEffect(state.userRefreshEvent) {
         if (state.userRefreshEvent == 0) return@LaunchedEffect
-        val message = if (state.userRefreshOk) {
-            updatedText
-        } else if (state.errorDetail.isNullOrBlank()) {
-            failedText
-        } else {
-            failedText + "\n" + state.errorDetail
-        }
+        val message = if (state.userRefreshOk) updatedText else failedText
         snackbarHostState.showSnackbar(message)
     }
     // SMCPKG_SUPPORT>>>Cursor103
@@ -341,10 +335,7 @@ fun HomeScreen(
                 )
             }
             val errorText = when {
-                state.errorResId != null -> {
-                    val base = stringResource(state.errorResId!!)
-                    if (state.errorDetail.isNullOrBlank()) base else base + "\n" + state.errorDetail
-                }
+                state.errorResId != null -> stringResource(state.errorResId!!)
                 else -> state.playback.errorMessage
             }
             val hasItems = when {

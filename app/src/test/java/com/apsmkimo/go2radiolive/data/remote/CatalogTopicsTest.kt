@@ -57,10 +57,23 @@ class CatalogTopicsTest {
         val counts = mapOf(
             CatalogTopics.NEWS to CountResult(4, capped = false),
             CatalogTopics.TALK to CountResult(6, capped = true),
+            CatalogTopics.SPORTS to CountResult(0, capped = false),
+            CatalogTopics.RELIGIOUS to CountResult(0, capped = false),
         )
         val parent = CatalogTopics.parentCount(CatalogTopics.NEWS_TALK, counts)
-        assertEquals(10, parent.count)
-        assertTrue(parent.capped)
+        assertEquals(10, parent?.count)
+        assertTrue(parent?.capped == true)
+        assertEquals(null, CatalogTopics.parentCount(CatalogTopics.NEWS_TALK, counts - CatalogTopics.NEWS))
+    }
+
+    @Test
+    fun mergeWithHugeLimitDoesNotPreallocate() {
+        val merged = CatalogTopics.mergeStations(
+            listOf(listOf(station("a", "Alpha")), listOf(station("b", "Beta"))),
+            CatalogSort.NAME,
+            limit = Int.MAX_VALUE,
+        )
+        assertEquals(listOf("a", "b"), merged.map { it.stationUuid })
     }
 
     @Test
