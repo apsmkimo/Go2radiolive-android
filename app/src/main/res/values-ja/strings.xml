@@ -149,4 +149,16 @@
     <string name="media_volume">音量</string>
     <string name="volume_percent">%1$d%%</string>
     <string name="playback_channel">再生</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">広告を削除</string>
+    <string name="remove_ads_summary">1回限りの購入で、バナー、一覧、アプリ起動時の広告をオフにします。</string>
+    <string name="remove_ads_buy">購入</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">購入を復元</string>
+    <string name="remove_ads_unavailable">一時的に利用できません</string>
+    <string name="remove_ads_pending">購入は保留中です。お支払いが完了するまで広告は表示されます。</string>
+    <string name="remove_ads_thanks">広告を削除しました — ご支援ありがとうございます</string>
+    <string name="remove_ads_debug">デバッグ: 広告削除をシミュレート</string>
+    <string name="remove_ads_debug_summary">デバッグビルド専用。広告削除を購入済みとして扱います。</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
 </resources>

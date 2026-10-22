@@ -59,6 +59,19 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
         AdsConsent.setAdsReadyListener { onAdsReady() }
     }
 
+    // SMCPKG_SUPPORT>>>Cursor113
+    fun onAdsRemoved() {
+        val drop = Runnable {
+            appOpenAd = null
+            loadedAtMs = 0L
+            isLoading = false
+        }
+        if (Looper.myLooper() == Looper.getMainLooper()) drop.run() else main.post(drop)
+    }
+
+    private fun adsRemoved(): Boolean = AdsEntitlement.removed.value
+    // SMCPKG_SUPPORT<<<Cursor113
+
     fun onAdsReady() {
         if (Looper.myLooper() == Looper.getMainLooper()) {
             handleAdsReady()
@@ -68,7 +81,10 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     }
 
     private fun handleAdsReady() {
-        if (!AdsConsent.canRequestAds.value || AdsConsent.consentFormVisible.value) return
+        // SMCPKG_SUPPORT>>>Cursor113
+        // if (!AdsConsent.canRequestAds.value || AdsConsent.consentFormVisible.value) return
+        if (adsRemoved() || !AdsConsent.canRequestAds.value || AdsConsent.consentFormVisible.value) return
+        // SMCPKG_SUPPORT<<<Cursor113
         if (!coldStartStarted) {
             startColdStart()
         } else if (appOpenAd == null && !isLoading) {
@@ -92,6 +108,9 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     }
 
     override fun onStart(owner: LifecycleOwner) {
+        // SMCPKG_SUPPORT>>>Cursor113
+        if (adsRemoved()) return
+        // SMCPKG_SUPPORT<<<Cursor113
         if (!coldStartResolved) return
         if (!AdsConsent.canRequestAds.value || AdsConsent.consentFormVisible.value) return
         discardIfExpired()
@@ -104,7 +123,10 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
 
     private fun loadAd() {
         if (!installed || isLoading || appOpenAd != null || isShowing) return
-        if (!AdsConsent.canRequestAds.value) return
+        // SMCPKG_SUPPORT>>>Cursor113
+        // if (!AdsConsent.canRequestAds.value) return
+        if (adsRemoved() || !AdsConsent.canRequestAds.value) return
+        // SMCPKG_SUPPORT<<<Cursor113
         isLoading = true
         AppOpenAd.load(
             app,
@@ -123,6 +145,12 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     }
 
     private fun handleLoaded(ad: AppOpenAd) {
+        // SMCPKG_SUPPORT>>>Cursor113
+        if (adsRemoved()) {
+            isLoading = false
+            return
+        }
+        // SMCPKG_SUPPORT<<<Cursor113
         isLoading = false
         appOpenAd = ad
         loadedAtMs = System.currentTimeMillis()
@@ -142,6 +170,9 @@ object AppOpenAds : Application.ActivityLifecycleCallbacks, DefaultLifecycleObse
     }
 
     private fun maybeShow() {
+        // SMCPKG_SUPPORT>>>Cursor113
+        if (adsRemoved()) return
+        // SMCPKG_SUPPORT<<<Cursor113
         if (suppressNext) {
             suppressNext = false
             return

@@ -83,9 +83,13 @@ android {
         // versionName = "1.0.0"
         // SMCPKG_SUPPORT<<<Cursor109
         // SMCPKG_SUPPORT>>>Cursor111
-        versionCode = 13
-        versionName = "1.0.1"
+        // versionCode = 13
+        // versionName = "1.0.1"
         // SMCPKG_SUPPORT<<<Cursor111
+        // SMCPKG_SUPPORT>>>Cursor113
+        versionCode = 14
+        versionName = "1.0.2"
+        // SMCPKG_SUPPORT<<<Cursor113
 
         vectorDrawables {
             useSupportLibrary = true
@@ -246,6 +250,9 @@ dependencies {
     implementation(libs.media3.datasource)
 
     implementation(libs.datastore.preferences)
+    // SMCPKG_SUPPORT>>>Cursor113
+    implementation(libs.billing.ktx)
+    // SMCPKG_SUPPORT<<<Cursor113
     implementation(libs.play.services.ads)
     implementation(libs.user.messaging.platform)
     implementation(libs.kotlinx.coroutines.android)

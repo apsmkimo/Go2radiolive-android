@@ -2,8 +2,10 @@ package com.apsmkimo.go2radiolive.di
 
 import android.content.Context
 import android.telephony.TelephonyManager
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.apsmkimo.go2radiolive.alarm.WakeAlarmRepository
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.data.billing.BillingManager
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
@@ -45,9 +47,22 @@ class AppContainer(context: Context) {
 
     private val appContext = context.applicationContext
 
+    // SMCPKG_SUPPORT>>>Cursor113
+    val billingManager = BillingManager(
+        appContext,
+        onEntitlement = AdsEntitlement::publish,
+    )
+    // SMCPKG_SUPPORT<<<Cursor113
+
     // SMCPKG_SUPPORT>>>Cursor017
+    // init {
+    //     AudioSettingsRepository.start(appContext)
+    // }
     init {
         AudioSettingsRepository.start(appContext)
+        // SMCPKG_SUPPORT>>>Cursor113
+        billingManager.start()
+        // SMCPKG_SUPPORT<<<Cursor113
     }
     // SMCPKG_SUPPORT<<<Cursor017
 

@@ -3,7 +3,10 @@
 # agp = "8.7.3"
 agp = "8.9.1"
 # SMCPKG_SUPPORT<<<Cursor111
-kotlin = "2.0.21"
+# SMCPKG_SUPPORT>>>Cursor114
+# kotlin = "2.0.21"
+kotlin = "2.2.21"
+# SMCPKG_SUPPORT<<<Cursor114
 coreKtx = "1.15.0"
 lifecycle = "2.8.7"
 activityCompose = "1.9.3"
@@ -16,6 +19,12 @@ gson = "2.11.0"
 coil = "2.7.0"
 media3 = "1.4.1"
 datastore = "1.1.1"
+# SMCPKG_SUPPORT>>>Cursor113
+# billing = "7.1.1"
+# SMCPKG_SUPPORT<<<Cursor113
+# SMCPKG_SUPPORT>>>Cursor114
+billing = "8.3.0"
+# SMCPKG_SUPPORT<<<Cursor114
 playServicesAds = "23.5.0"
 userMessagingPlatform = "4.0.0"
 coroutines = "1.9.0"
@@ -52,6 +61,9 @@ media3-session = { group = "androidx.media3", name = "media3-session", version.r
 media3-datasource = { group = "androidx.media3", name = "media3-datasource", version.ref = "media3" }
 
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
+# SMCPKG_SUPPORT>>>Cursor113
+billing-ktx = { group = "com.android.billingclient", name = "billing-ktx", version.ref = "billing" }
+# SMCPKG_SUPPORT<<<Cursor113
 play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 user-messaging-platform = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "userMessagingPlatform" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }

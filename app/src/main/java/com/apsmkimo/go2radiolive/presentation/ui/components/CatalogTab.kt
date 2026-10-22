@@ -27,6 +27,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -39,6 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.presentation.ui.safeDrawingPadding
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.apsmkimo.go2radiolive.ads.nativeAdInsertAfterIndex
 import com.apsmkimo.go2radiolive.data.remote.CatalogTopics
 import com.apsmkimo.go2radiolive.domain.model.CatalogLanguage
@@ -343,6 +345,9 @@ private fun CatalogStationPage(
     onStation: (RadioStation) -> Unit,
     onFavorite: (RadioStation) -> Unit,
 ) {
+    // SMCPKG_SUPPORT>>>Cursor113
+    val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT<<<Cursor113
     val ranking = kind.startsWith("rank:")
     val languagePage = kind.startsWith("lang:")
     val visible = stations.filter { matchesQuery(it, query) }
@@ -439,7 +444,10 @@ private fun CatalogStationPage(
                             onClick = { onStation(row.station) },
                             onToggleFavorite = { onFavorite(row.station) },
                         )
-                        if (nativeAdInsertAfterIndex(row.index)) NativeAdSlot()
+                        // SMCPKG_SUPPORT>>>Cursor113
+                        // if (nativeAdInsertAfterIndex(row.index)) NativeAdSlot()
+                        if (!adsRemoved && nativeAdInsertAfterIndex(row.index)) NativeAdSlot()
+                        // SMCPKG_SUPPORT<<<Cursor113
                     }
                 }
             }
