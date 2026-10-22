@@ -110,6 +110,20 @@ class RemoveAdsPolicyTest {
     }
 
     @Test
+    fun selectsTheFirstPricedOfferThatHasAToken() {
+        val selected = RemoveAdsPolicy.selectOffer(
+            listOf(
+                RemoveAdsPolicy.PricedOffer(formattedPrice = "", offerToken = "blank-price"),
+                RemoveAdsPolicy.PricedOffer(formattedPrice = "US$0.99", offerToken = ""),
+                RemoveAdsPolicy.PricedOffer(formattedPrice = "US$1.99", offerToken = "token"),
+            ),
+        )
+        assertEquals("US$1.99", selected?.formattedPrice)
+        assertEquals("token", selected?.offerToken)
+        assertNull(RemoveAdsPolicy.selectOffer(emptyList()))
+    }
+
+    @Test
     fun blankPriceIsNotShown() {
         assertEquals("US$1.99", RemoveAdsPolicy.displayPrice(" US$1.99 "))
         assertNull(RemoveAdsPolicy.displayPrice(null))

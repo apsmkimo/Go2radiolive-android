@@ -42,11 +42,11 @@ data class RemoveAdsUiState(
 )
 
 /**
- * Play Billing for the non-consumable [RemoveAdsPolicy.PRODUCT_ID] product.
- * Connects with capped exponential backoff, queries INAPP purchases on each
- * connection (app start and reconnect), acknowledges unacknowledged
- * PURCHASED items, and does not grant entitlement while a purchase is PENDING.
- * No server. Billing failures stay off the UI.
+ * Play Billing 8 for the non-consumable [RemoveAdsPolicy.PRODUCT_ID] product.
+ * The client auto-reconnects after a service drop. A failed setup still retries
+ * with capped backoff. Each successful connection queries INAPP purchases,
+ * acknowledges unacknowledged PURCHASED items, and does not grant entitlement
+ * while a purchase is PENDING. No server. Billing failures stay off the UI.
  */
 class BillingManager(
     context: Context,
@@ -58,12 +58,21 @@ class BillingManager(
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private val purchaseMutex = Mutex()
 
+    // SMCPKG_SUPPORT>>>Cursor114
+    // private val client: BillingClient = BillingClient.newBuilder(appContext)
+    //     .setListener(this)
+    //     .enablePendingPurchases(
+    //         PendingPurchasesParams.newBuilder().enableOneTimeProducts().build(),
+    //     )
+    //     .build()
     private val client: BillingClient = BillingClient.newBuilder(appContext)
         .setListener(this)
         .enablePendingPurchases(
             PendingPurchasesParams.newBuilder().enableOneTimeProducts().build(),
         )
+        .enableAutoServiceReconnection()
         .build()
+    // SMCPKG_SUPPORT<<<Cursor114
 
     private val _state = MutableStateFlow(RemoveAdsUiState())
     val state: StateFlow<RemoveAdsUiState> = _state.asStateFlow()
@@ -82,6 +91,7 @@ class BillingManager(
     private var billingReady = false
     private var purchaseInProgress = false
     private var productDetails: ProductDetails? = null
+    private var offerToken: String? = null
 
     fun start() {
         if (started) return
@@ -146,9 +156,17 @@ class BillingManager(
             refreshPurchases()
             return
         }
+        val token = offerToken
+        if (token.isNullOrBlank()) return
+        // SMCPKG_SUPPORT>>>Cursor114
+        // val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
+        //     .setProductDetails(details)
+        //     .build()
         val productParams = BillingFlowParams.ProductDetailsParams.newBuilder()
             .setProductDetails(details)
+            .setOfferToken(token)
             .build()
+        // SMCPKG_SUPPORT<<<Cursor114
         val flowParams = BillingFlowParams.newBuilder()
             .setProductDetailsParamsList(listOf(productParams))
             .build()
@@ -191,6 +209,7 @@ class BillingManager(
                             detailsSettled = true
                             formattedPrice = null
                             productDetails = null
+                            offerToken = null
                         }
                         publish()
                         scheduleReconnect()
@@ -203,7 +222,11 @@ class BillingManager(
                     connecting = false
                     billingReady = false
                     publish()
-                    scheduleReconnect()
+                    // SMCPKG_SUPPORT>>>Cursor114
+                    // scheduleReconnect()
+                    // enableAutoServiceReconnection() calls startConnection again.
+                    // Failed setup still uses scheduleReconnect().
+                    // SMCPKG_SUPPORT<<<Cursor114
                 }
             }
         }
@@ -246,6 +269,7 @@ class BillingManager(
         if (!ok) {
             if (!productAvailable) {
                 productDetails = null
+                offerToken = null
                 formattedPrice = null
                 productAvailable = false
                 detailsSettled = true
@@ -255,9 +279,14 @@ class BillingManager(
         }
         val details = result.productDetailsList.orEmpty()
             .firstOrNull { it.productId == RemoveAdsPolicy.PRODUCT_ID }
-        val price = RemoveAdsPolicy.displayPrice(details?.oneTimePurchaseOfferDetails?.formattedPrice)
-        if (details == null || price == null) {
+        // SMCPKG_SUPPORT>>>Cursor114
+        // val price = RemoveAdsPolicy.displayPrice(details?.oneTimePurchaseOfferDetails?.formattedPrice)
+        val offer = details?.let { RemoveAdsPolicy.selectOffer(offersOf(it)) }
+        val price = RemoveAdsPolicy.displayPrice(offer?.formattedPrice)
+        // SMCPKG_SUPPORT<<<Cursor114
+        if (details == null || offer == null || price == null) {
             productDetails = null
+            offerToken = null
             formattedPrice = null
             productAvailable = false
             detailsSettled = true
@@ -265,10 +294,28 @@ class BillingManager(
             return
         }
         productDetails = details
+        offerToken = offer.offerToken
         formattedPrice = price
         productAvailable = true
         detailsSettled = true
         publish()
+    }
+
+    private fun offersOf(details: ProductDetails): List<RemoveAdsPolicy.PricedOffer> {
+        val listed = details.oneTimePurchaseOfferDetailsList.orEmpty().map { offer ->
+            RemoveAdsPolicy.PricedOffer(
+                formattedPrice = offer.formattedPrice,
+                offerToken = offer.offerToken.orEmpty(),
+            )
+        }
+        if (listed.isNotEmpty()) return listed
+        val single = details.oneTimePurchaseOfferDetails ?: return emptyList()
+        return listOf(
+            RemoveAdsPolicy.PricedOffer(
+                formattedPrice = single.formattedPrice,
+                offerToken = single.offerToken.orEmpty(),
+            ),
+        )
     }
 
     private suspend fun queryPurchases() {

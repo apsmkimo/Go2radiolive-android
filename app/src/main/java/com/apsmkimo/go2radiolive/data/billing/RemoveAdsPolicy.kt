@@ -54,6 +54,21 @@ internal object RemoveAdsPolicy {
         )
     }
 
+    data class PricedOffer(
+        val formattedPrice: String,
+        val offerToken: String,
+    )
+
+    /**
+     * Play Billing 8 one-time products can expose several offers. The buy flow
+     * needs a non-blank offer token, and the card shows Play's formatted price.
+     */
+    fun selectOffer(offers: List<PricedOffer>): PricedOffer? {
+        return offers.firstOrNull { offer ->
+            offer.formattedPrice.isNotBlank() && offer.offerToken.isNotBlank()
+        }
+    }
+
     /** Play formats this string for the user's currency. Blank means unusable. */
     fun displayPrice(formattedPrice: String?): String? {
         val price = formattedPrice?.trim().orEmpty()
