@@ -3,7 +3,7 @@ package com.apsmkimo.go2radiolive.presentation.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
+import com.apsmkimo.go2radiolive.presentation.ui.safeDrawingPadding
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
@@ -65,11 +66,15 @@ fun PodcastRegionDialog(
             .sortedWith { left, right -> collator.compare(left.second, right.second) }
     }
     val selected = selectedCode.trim().lowercase()
+    val listHeight = (LocalConfiguration.current.screenHeightDp * 0.45f).dp.coerceAtMost(420.dp)
     AlertDialog(
         onDismissRequest = onDismiss,
+        // SMCPKG_SUPPORT>>>Cursor112
+        modifier = Modifier.padding(safeDrawingPadding()),
+        // SMCPKG_SUPPORT<<<Cursor112
         title = { Text(stringResource(R.string.podcast_region)) },
         text = {
-            Column(modifier = Modifier.height(420.dp).fillMaxWidth()) {
+            Column(modifier = Modifier.heightIn(max = listHeight).fillMaxWidth()) {
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },

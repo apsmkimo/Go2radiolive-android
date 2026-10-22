@@ -38,6 +38,7 @@ SMCPKG_SUPPORT<<<Cursor106 -->
 - `versionName`: `1.6.0` / `versionCode`: `10`
 - `versionName`: `1.6.1` / `versionCode`: `11`
 - `versionName`: `1.0.0` / `versionCode`: `12`
+- `versionName`: `1.0.1` / `versionCode`: `13`
 - 最低 SDK：26，目標 SDK：35
 
 ## 功能

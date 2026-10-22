@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -31,11 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.presentation.ui.safeDrawingPadding
 import com.apsmkimo.go2radiolive.ads.nativeAdInsertAfterIndex
 import com.apsmkimo.go2radiolive.data.remote.CatalogTopics
 import com.apsmkimo.go2radiolive.domain.model.CatalogLanguage
@@ -505,11 +508,15 @@ private fun CatalogScopeDialog(
             it.name.contains(trimmed, ignoreCase = true) ||
             it.code.contains(trimmed, ignoreCase = true)
     }.sortedBy { it.name.lowercase() }
+    val listHeight = (LocalConfiguration.current.screenHeightDp * 0.45f).dp.coerceAtMost(420.dp)
     AlertDialog(
         onDismissRequest = onDismiss,
+        // SMCPKG_SUPPORT>>>Cursor112
+        modifier = Modifier.padding(safeDrawingPadding()),
+        // SMCPKG_SUPPORT<<<Cursor112
         title = { Text(stringResource(R.string.catalog_scope)) },
         text = {
-            Column(Modifier.height(420.dp).fillMaxWidth()) {
+            Column(Modifier.heightIn(max = listHeight).fillMaxWidth()) {
                 androidx.compose.material3.OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
@@ -552,11 +559,15 @@ private fun CatalogLanguageDialog(
     onDismiss: () -> Unit,
     onSelect: (String) -> Unit,
 ) {
+    val listHeight = (LocalConfiguration.current.screenHeightDp * 0.4f).dp.coerceAtMost(360.dp)
     AlertDialog(
         onDismissRequest = onDismiss,
+        // SMCPKG_SUPPORT>>>Cursor112
+        modifier = Modifier.padding(safeDrawingPadding()),
+        // SMCPKG_SUPPORT<<<Cursor112
         title = { Text(stringResource(R.string.catalog_languages)) },
         text = {
-            LazyColumn(Modifier.height(360.dp)) {
+            LazyColumn(Modifier.heightIn(max = listHeight)) {
                 item(key = "all") {
                     TextButton(onClick = { onSelect("") }, modifier = Modifier.fillMaxWidth()) {
                         Text(stringResource(R.string.catalog_language_all))

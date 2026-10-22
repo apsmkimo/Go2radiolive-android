@@ -1,6 +1,8 @@
 package com.apsmkimo.go2radiolive.presentation.ui.home
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -65,6 +67,9 @@ import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.PodcastRegionDialog
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.StationList
+import com.apsmkimo.go2radiolive.presentation.ui.bottomSafePadding
+import com.apsmkimo.go2radiolive.presentation.ui.screenContentInsets
+import com.apsmkimo.go2radiolive.presentation.ui.topSafePadding
 import androidx.compose.ui.platform.LocalContext
 
 private data class TabSpec(
@@ -144,6 +149,21 @@ fun HomeScreen(
     }
     // SMCPKG_SUPPORT<<<Cursor021
 
+    // SMCPKG_SUPPORT>>>Cursor112
+    val nestedBack: (() -> Unit)? = when {
+        state.selectedTab == BrowseTab.CATEGORIES && state.catalogLevel != CatalogLevel.HUB ->
+            viewModel::onCatalogBack
+        state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null ->
+            viewModel::onClearCountry
+        state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null ->
+            viewModel::onClearPodcast
+        else -> null
+    }
+    BackHandler(enabled = nestedBack != null) {
+        nestedBack?.invoke()
+    }
+    // SMCPKG_SUPPORT<<<Cursor112
+
     val tabs = listOf(
         TabSpec(BrowseTab.LOCAL, R.string.tab_local, Icons.Outlined.Home),
         TabSpec(BrowseTab.WORLD, R.string.tab_world, Icons.Outlined.Public),
@@ -156,9 +176,16 @@ fun HomeScreen(
     )
 
     Scaffold(
+        // SMCPKG_SUPPORT>>>Cursor112
+        contentWindowInsets = screenContentInsets(),
+        // SMCPKG_SUPPORT<<<Cursor112
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             TopAppBar(
+                // SMCPKG_SUPPORT>>>Cursor112
+                modifier = Modifier.padding(topSafePadding()),
+                windowInsets = WindowInsets(0, 0, 0, 0),
+                // SMCPKG_SUPPORT<<<Cursor112
                 title = {
                     val title = when {
                         state.selectedTab == BrowseTab.CATEGORIES && state.catalogTitle.isNotBlank() ->
@@ -200,7 +227,9 @@ fun HomeScreen(
             )
         },
         bottomBar = {
-            Column {
+            // SMCPKG_SUPPORT>>>Cursor112
+            Column(modifier = Modifier.padding(bottomSafePadding())) {
+            // SMCPKG_SUPPORT<<<Cursor112
                 // SMCPKG_SUPPORT>>>Cursor023
                 // MiniPlayer(
                 //     playback = state.playback,
@@ -220,7 +249,9 @@ fun HomeScreen(
                     onResetTone = AudioSettingsRepository::resetTone,
                 )
                 // SMCPKG_SUPPORT<<<Cursor023
-                NavigationBar {
+                // SMCPKG_SUPPORT>>>Cursor112
+                NavigationBar(windowInsets = WindowInsets(0, 0, 0, 0)) {
+                // SMCPKG_SUPPORT<<<Cursor112
                     tabs.forEach { spec ->
                         NavigationBarItem(
                             selected = state.selectedTab == spec.tab,
