@@ -24,12 +24,18 @@ val releaseSigningReady =
 
 android {
     namespace = "com.apsmkimo.go2radiolive"
-    compileSdk = 35
+    // SMCPKG_SUPPORT>>>Cursor111
+    // compileSdk = 35
+    compileSdk = 36
+    // SMCPKG_SUPPORT<<<Cursor111
 
     defaultConfig {
         applicationId = "com.apsmkimo.go2radiolive"
         minSdk = 26
-        targetSdk = 35
+        // SMCPKG_SUPPORT>>>Cursor111
+        // targetSdk = 35
+        targetSdk = 36
+        // SMCPKG_SUPPORT<<<Cursor111
         // SMCPKG_SUPPORT>>>Cursor010
         // versionCode = 1
         // versionName = "1.0.0"
@@ -73,9 +79,13 @@ android {
         // versionName = "1.6.1"
         // SMCPKG_SUPPORT<<<Cursor108
         // SMCPKG_SUPPORT>>>Cursor109
-        versionCode = 12
-        versionName = "1.0.0"
+        // versionCode = 12
+        // versionName = "1.0.0"
         // SMCPKG_SUPPORT<<<Cursor109
+        // SMCPKG_SUPPORT>>>Cursor111
+        versionCode = 13
+        versionName = "1.0.1"
+        // SMCPKG_SUPPORT<<<Cursor111
 
         vectorDrawables {
             useSupportLibrary = true

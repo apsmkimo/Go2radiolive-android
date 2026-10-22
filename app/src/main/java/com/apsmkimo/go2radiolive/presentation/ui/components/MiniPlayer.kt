@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.rememberScrollState
@@ -30,7 +32,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
@@ -217,8 +221,22 @@ private fun AudioPanelButton(
     onBalanceChange: (Float) -> Unit,
     onResetTone: () -> Unit,
 ) {
-    val marginPx = with(LocalDensity.current) { 8.dp.roundToPx() }
-    val positionProvider = remember(marginPx) { AboveAnchorPositionProvider(marginPx) }
+    val density = LocalDensity.current
+    val layoutDirection = LocalLayoutDirection.current
+    val configuration = LocalConfiguration.current
+    val safe = WindowInsets.safeDrawing
+    val marginPx = with(density) { 8.dp.roundToPx() }
+    val topInsetPx = safe.getTop(density)
+    val bottomInsetPx = safe.getBottom(density)
+    val startInsetPx = safe.getLeft(density, layoutDirection)
+    val endInsetPx = safe.getRight(density, layoutDirection)
+    val positionProvider = remember(marginPx, topInsetPx, startInsetPx, endInsetPx) {
+        AboveAnchorPositionProvider(marginPx, topInsetPx, startInsetPx, endInsetPx)
+    }
+    val maxPanelHeight = with(density) {
+        val screenPx = configuration.screenHeightDp.dp.toPx()
+        (screenPx - topInsetPx - bottomInsetPx - 160.dp.toPx()).toDp().coerceIn(180.dp, 440.dp)
+    }
     Box(modifier = Modifier.padding(start = 4.dp)) {
         if (expanded) {
             FilledIconButton(onClick = { onExpandedChange(false) }) {
@@ -237,6 +255,7 @@ private fun AudioPanelButton(
                 ),
             ) {
                 AudioEffectPanel(
+                    maxHeight = maxPanelHeight,
                     settings = settings,
                     onBassChange = onBassChange,
                     onLowChange = onLowChange,
@@ -259,6 +278,7 @@ private fun AudioPanelButton(
 
 @Composable
 private fun AudioEffectPanel(
+    maxHeight: androidx.compose.ui.unit.Dp,
     settings: AudioSettings,
     onBassChange: (Float) -> Unit,
     onLowChange: (Float) -> Unit,
@@ -270,7 +290,12 @@ private fun AudioEffectPanel(
     Column(
         modifier = Modifier
             .widthIn(min = 260.dp, max = 340.dp)
-            .heightIn(max = 440.dp)
+            // SMCPKG_SUPPORT>>>Cursor109
+            // .heightIn(max = 440.dp)
+            // SMCPKG_SUPPORT<<<Cursor109
+            // SMCPKG_SUPPORT>>>Cursor112
+            .heightIn(max = maxHeight)
+            // SMCPKG_SUPPORT<<<Cursor112
             .shadow(8.dp, RoundedCornerShape(16.dp))
             .background(
                 color = MaterialTheme.colorScheme.surface.copy(alpha = 0.9f),
@@ -298,6 +323,9 @@ private fun AudioEffectPanel(
 
 private class AboveAnchorPositionProvider(
     private val marginPx: Int,
+    private val topInsetPx: Int,
+    private val startInsetPx: Int,
+    private val endInsetPx: Int,
 ) : PopupPositionProvider {
     override fun calculatePosition(
         anchorBounds: IntRect,
@@ -305,9 +333,16 @@ private class AboveAnchorPositionProvider(
         layoutDirection: LayoutDirection,
         popupContentSize: IntSize,
     ): IntOffset {
-        val x = (anchorBounds.right - popupContentSize.width)
-            .coerceIn(marginPx, (windowSize.width - popupContentSize.width - marginPx).coerceAtLeast(marginPx))
-        val y = (anchorBounds.top - popupContentSize.height - marginPx).coerceAtLeast(marginPx)
+        val minX = startInsetPx + marginPx
+        val maxX = (windowSize.width - endInsetPx - popupContentSize.width - marginPx).coerceAtLeast(minX)
+        val preferredX = if (layoutDirection == LayoutDirection.Rtl) {
+            anchorBounds.left
+        } else {
+            anchorBounds.right - popupContentSize.width
+        }
+        val x = preferredX.coerceIn(minX, maxX)
+        val minY = topInsetPx + marginPx
+        val y = (anchorBounds.top - popupContentSize.height - marginPx).coerceAtLeast(minY)
         return IntOffset(x, y)
     }
 }

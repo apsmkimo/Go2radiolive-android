@@ -8,7 +8,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
@@ -38,6 +43,7 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.presentation.ui.sheetContentInsets
 import com.apsmkimo.go2radiolive.alarm.SleepTimerState
 import com.apsmkimo.go2radiolive.alarm.WakeAlarm
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
@@ -67,7 +73,19 @@ fun AlarmSheet(
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var page by remember { mutableIntStateOf(0) }
-    ModalBottomSheet(onDismissRequest = onDismiss, sheetState = sheetState) {
+    // SMCPKG_SUPPORT>>>Cursor112
+    val sheetTopPadding = WindowInsets.safeDrawing
+        .only(WindowInsetsSides.Top)
+        .asPaddingValues()
+    // SMCPKG_SUPPORT<<<Cursor112
+    ModalBottomSheet(
+        onDismissRequest = onDismiss,
+        sheetState = sheetState,
+        // SMCPKG_SUPPORT>>>Cursor112
+        modifier = Modifier.padding(sheetTopPadding),
+        contentWindowInsets = { sheetContentInsets() },
+        // SMCPKG_SUPPORT<<<Cursor112
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

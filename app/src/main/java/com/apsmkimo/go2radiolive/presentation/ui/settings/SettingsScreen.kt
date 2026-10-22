@@ -4,6 +4,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -47,6 +48,8 @@ import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
 import com.apsmkimo.go2radiolive.locale.AppLanguage
 import com.apsmkimo.go2radiolive.locale.AppLocale
 import com.apsmkimo.go2radiolive.presentation.ui.components.AudioEffectControls
+import com.apsmkimo.go2radiolive.presentation.ui.screenContentInsets
+import com.apsmkimo.go2radiolive.presentation.ui.topSafePadding
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,8 +60,15 @@ fun SettingsScreen(onBack: () -> Unit) {
     val activity = LocalContext.current.findActivity()
 
     Scaffold(
+        // SMCPKG_SUPPORT>>>Cursor112
+        contentWindowInsets = screenContentInsets(),
+        // SMCPKG_SUPPORT<<<Cursor112
         topBar = {
             TopAppBar(
+                // SMCPKG_SUPPORT>>>Cursor112
+                modifier = Modifier.padding(topSafePadding()),
+                windowInsets = WindowInsets(0, 0, 0, 0),
+                // SMCPKG_SUPPORT<<<Cursor112
                 title = { Text(stringResource(R.string.settings)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
