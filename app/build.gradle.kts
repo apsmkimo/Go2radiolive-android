@@ -4,6 +4,24 @@ plugins {
     alias(libs.plugins.kotlin.compose)
 }
 
+// SMCPKG_SUPPORT>>>Cursor110
+fun signingValue(name: String): String? {
+    val fromProperty = (findProperty(name) as? String)?.trim()?.takeIf { it.isNotEmpty() }
+    if (fromProperty != null) return fromProperty
+    return System.getenv(name)?.trim()?.takeIf { it.isNotEmpty() }
+}
+
+val releaseKeystore = signingValue("KEYSTORE_FILE")
+val releaseStorePassword = signingValue("KEYSTORE_PASSWORD")
+val releaseKeyAlias = signingValue("KEY_ALIAS")
+val releaseKeyPassword = signingValue("KEY_PASSWORD")
+val releaseSigningReady =
+    releaseKeystore != null &&
+        releaseStorePassword != null &&
+        releaseKeyAlias != null &&
+        releaseKeyPassword != null
+// SMCPKG_SUPPORT<<<Cursor110
+
 android {
     namespace = "com.apsmkimo.go2radiolive"
     compileSdk = 35
@@ -64,17 +82,31 @@ android {
         }
     }
 
-    val releaseKeystore = System.getenv("KEYSTORE_FILE")
+    // SMCPKG_SUPPORT>>>Cursor099
+    // val releaseKeystore = System.getenv("KEYSTORE_FILE")
+    // signingConfigs {
+    //     if (!releaseKeystore.isNullOrBlank()) {
+    //         create("release") {
+    //             storeFile = file(releaseKeystore)
+    //             storePassword = System.getenv("KEYSTORE_PASSWORD")
+    //             keyAlias = System.getenv("KEY_ALIAS")
+    //             keyPassword = System.getenv("KEY_PASSWORD")
+    //         }
+    //     }
+    // }
+    // SMCPKG_SUPPORT<<<Cursor099
+    // SMCPKG_SUPPORT>>>Cursor110
     signingConfigs {
-        if (!releaseKeystore.isNullOrBlank()) {
+        if (releaseSigningReady) {
             create("release") {
-                storeFile = file(releaseKeystore)
-                storePassword = System.getenv("KEYSTORE_PASSWORD")
-                keyAlias = System.getenv("KEY_ALIAS")
-                keyPassword = System.getenv("KEY_PASSWORD")
+                storeFile = file(releaseKeystore!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
             }
         }
     }
+    // SMCPKG_SUPPORT<<<Cursor110
 
     buildTypes {
         release {
@@ -84,12 +116,19 @@ android {
                 "proguard-rules.pro",
             )
             // SMCPKG_SUPPORT>>>Cursor099
+            // signingConfig = when {
+            //     !releaseKeystore.isNullOrBlank() -> signingConfigs.getByName("release")
+            //     System.getenv("SIGN_RELEASE_WITH_DEBUG") == "1" -> signingConfigs.getByName("debug")
+            //     else -> null
+            // }
+            // SMCPKG_SUPPORT<<<Cursor099
+            // SMCPKG_SUPPORT>>>Cursor110
             signingConfig = when {
-                !releaseKeystore.isNullOrBlank() -> signingConfigs.getByName("release")
-                System.getenv("SIGN_RELEASE_WITH_DEBUG") == "1" -> signingConfigs.getByName("debug")
+                releaseSigningReady -> signingConfigs.getByName("release")
+                signingValue("SIGN_RELEASE_WITH_DEBUG") == "1" -> signingConfigs.getByName("debug")
                 else -> null
             }
-            // SMCPKG_SUPPORT<<<Cursor099
+            // SMCPKG_SUPPORT<<<Cursor110
             // SMCPKG_SUPPORT>>>Cursor078
             manifestPlaceholders["admobAppId"] = "ca-app-pub-6138247296137119~5720425997"
             buildConfigField(
