@@ -24,6 +24,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.ads.AdsConsent
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.apsmkimo.go2radiolive.ads.NativeAdPool
 import com.google.android.gms.ads.nativead.NativeAd
 import com.google.android.gms.ads.nativead.NativeAdView
@@ -35,7 +36,12 @@ import com.google.android.gms.ads.nativead.NativeAdView
  */
 @Composable
 fun NativeAdSlot(modifier: Modifier = Modifier) {
-    val allowed by AdsConsent.canRequestAds.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT>>>Cursor113
+    // val allowed by AdsConsent.canRequestAds.collectAsStateWithLifecycle()
+    val consentAllowed by AdsConsent.canRequestAds.collectAsStateWithLifecycle()
+    val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
+    val allowed = consentAllowed && !adsRemoved
+    // SMCPKG_SUPPORT<<<Cursor113
     val available by NativeAdPool.available.collectAsStateWithLifecycle()
     val held = remember { mutableStateOf<NativeAd?>(null) }
     DisposableEffect(Unit) {

@@ -16,6 +16,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.BuildConfig
 import com.apsmkimo.go2radiolive.ads.AdsConsent
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
@@ -23,7 +24,11 @@ import com.google.android.gms.ads.AdView
 @Composable
 fun AdMobBanner(modifier: Modifier = Modifier) {
     val canRequestAds by AdsConsent.canRequestAds.collectAsStateWithLifecycle()
-    if (!canRequestAds) return
+    // SMCPKG_SUPPORT>>>Cursor113
+    // if (!canRequestAds) return
+    val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
+    if (!canRequestAds || adsRemoved) return
+    // SMCPKG_SUPPORT<<<Cursor113
     BoxWithConstraints(
         modifier = modifier
             .fillMaxWidth()

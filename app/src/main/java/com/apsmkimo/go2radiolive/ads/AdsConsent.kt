@@ -44,8 +44,34 @@ object AdsConsent {
     private var mobileAdsStarted = false
 
     fun request(activity: Activity) {
+        // SMCPKG_SUPPORT>>>Cursor113
+        // runCatching { requestConsent(activity) }
+        if (AdsEntitlement.removed.value) {
+            suppressForEntitlement()
+            return
+        }
         runCatching { requestConsent(activity) }
+        // SMCPKG_SUPPORT<<<Cursor113
     }
+
+    // SMCPKG_SUPPORT>>>Cursor113
+    fun onEntitlementChanged(removed: Boolean, activity: Activity) {
+        if (activity.isFinishing || activity.isDestroyed) return
+        if (removed) {
+            suppressForEntitlement()
+        } else {
+            request(activity)
+        }
+    }
+
+    fun suppressForEntitlement() {
+        _canRequestAds.value = false
+        _privacyOptionsRequired.value = false
+        _consentFormVisible.value = false
+        NativeAdPool.clear()
+        AppOpenAds.onAdsRemoved()
+    }
+    // SMCPKG_SUPPORT<<<Cursor113
 
     private fun requestConsent(activity: Activity) {
         val params = ConsentRequestParameters.Builder()
@@ -57,6 +83,12 @@ object AdsConsent {
             activity,
             params,
             {
+                // SMCPKG_SUPPORT>>>Cursor113
+                if (AdsEntitlement.removed.value) {
+                    suppressForEntitlement()
+                    return@requestConsentInfoUpdate
+                }
+                // SMCPKG_SUPPORT<<<Cursor113
                 // SMCPKG_SUPPORT>>>Cursor091
                 _consentFormVisible.value = true
                 UserMessagingPlatform.loadAndShowConsentFormIfRequired(activity) {
@@ -101,6 +133,12 @@ object AdsConsent {
     }
 
     private fun publish(context: Context) {
+        // SMCPKG_SUPPORT>>>Cursor113
+        if (AdsEntitlement.removed.value) {
+            suppressForEntitlement()
+            return
+        }
+        // SMCPKG_SUPPORT<<<Cursor113
         val info = UserMessagingPlatform.getConsentInformation(context)
         val allowed = info.canRequestAds()
         _privacyOptionsRequired.value =
@@ -114,6 +152,12 @@ object AdsConsent {
     }
 
     private fun startMobileAds(context: Context) {
+        // SMCPKG_SUPPORT>>>Cursor113
+        if (AdsEntitlement.removed.value) {
+            suppressForEntitlement()
+            return
+        }
+        // SMCPKG_SUPPORT<<<Cursor113
         val alreadyStarted = synchronized(initLock) {
             if (mobileAdsStarted) {
                 true

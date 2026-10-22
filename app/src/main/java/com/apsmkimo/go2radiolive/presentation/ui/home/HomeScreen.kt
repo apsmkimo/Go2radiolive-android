@@ -48,6 +48,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.apsmkimo.go2radiolive.Go2RadioApp
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CatalogLevel
@@ -87,6 +88,9 @@ fun HomeScreen(
     val app = context.applicationContext as Go2RadioApp
     val viewModel: HomeViewModel = viewModel(factory = HomeViewModelFactory(app.container))
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT>>>Cursor113
+    val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT<<<Cursor113
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     val alarmStore = app.container.wakeAlarmRepository
@@ -275,7 +279,12 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding),
         ) {
-            AdMobBanner()
+            // SMCPKG_SUPPORT>>>Cursor113
+            // AdMobBanner()
+            if (!adsRemoved) {
+                AdMobBanner()
+            }
+            // SMCPKG_SUPPORT<<<Cursor113
             if (state.isLoading) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
@@ -459,7 +468,10 @@ fun HomeScreen(
                         } else {
                             null
                         },
-                        showNativeAds = true,
+                        // SMCPKG_SUPPORT>>>Cursor113
+                        // showNativeAds = true,
+                        showNativeAds = !adsRemoved,
+                        // SMCPKG_SUPPORT<<<Cursor113
                     )
                 }
                 else -> {
@@ -468,8 +480,14 @@ fun HomeScreen(
                         state.selectedTab == BrowseTab.PODCAST -> stringResource(R.string.empty_episodes)
                         else -> stringResource(R.string.empty_stations)
                     }
-                    val nativeAds = state.selectedTab == BrowseTab.LOCAL ||
-                        (state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null)
+                    // SMCPKG_SUPPORT>>>Cursor113
+                    // val nativeAds = state.selectedTab == BrowseTab.LOCAL ||
+                    //     (state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null)
+                    val nativeAds = !adsRemoved && (
+                        state.selectedTab == BrowseTab.LOCAL ||
+                            (state.selectedTab == BrowseTab.WORLD && state.selectedCountry != null)
+                        )
+                    // SMCPKG_SUPPORT<<<Cursor113
                     StationList(
                         stations = state.visibleStations,
                         favoriteIds = state.favoriteIds,

@@ -152,4 +152,16 @@
     <string name="media_volume">音量</string>
     <string name="volume_percent">%1$d%%</string>
     <string name="playback_channel">播放</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">移除廣告</string>
+    <string name="remove_ads_summary">一次性購買，關閉橫幅、列表與開啟應用程式廣告。</string>
+    <string name="remove_ads_buy">購買</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">還原購買</string>
+    <string name="remove_ads_unavailable">暫時無法使用</string>
+    <string name="remove_ads_pending">購買處理中。付款完成前仍會顯示廣告。</string>
+    <string name="remove_ads_thanks">已移除廣告 — 多謝你的支持</string>
+    <string name="remove_ads_debug">除錯：模擬已移除廣告</string>
+    <string name="remove_ads_debug_summary">僅除錯版本。假裝已擁有移除廣告的購買項目。</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
 </resources>

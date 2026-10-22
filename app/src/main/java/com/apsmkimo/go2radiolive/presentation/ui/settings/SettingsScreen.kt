@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.presentation.ui.settings
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,8 +14,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -40,8 +43,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.BuildConfig
+import com.apsmkimo.go2radiolive.Go2RadioApp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.ads.AdsConsent
+import com.apsmkimo.go2radiolive.ads.AdsEntitlement
+import com.apsmkimo.go2radiolive.data.billing.RemoveAdsUiState
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
@@ -57,6 +63,11 @@ fun SettingsScreen(onBack: () -> Unit) {
     BackHandler(onBack = onBack)
     val settings by AudioSettingsRepository.settings.collectAsStateWithLifecycle()
     val privacyOptionsRequired by AdsConsent.privacyOptionsRequired.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT>>>Cursor113
+    val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
+    val billingManager = (LocalContext.current.applicationContext as Go2RadioApp).container.billingManager
+    val removeAds by billingManager.state.collectAsStateWithLifecycle()
+    // SMCPKG_SUPPORT<<<Cursor113
     val activity = LocalContext.current.findActivity()
 
     Scaffold(
@@ -88,6 +99,13 @@ fun SettingsScreen(onBack: () -> Unit) {
                 .verticalScroll(rememberScrollState())
                 .padding(bottom = 24.dp),
         ) {
+            // SMCPKG_SUPPORT>>>Cursor113
+            RemoveAdsCard(
+                state = removeAds,
+                onBuy = { activity?.let(billingManager::buy) },
+                onRestore = billingManager::restore,
+            )
+            // SMCPKG_SUPPORT<<<Cursor113
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -112,7 +130,10 @@ fun SettingsScreen(onBack: () -> Unit) {
                 }
             }
 
-            if (privacyOptionsRequired) {
+            // SMCPKG_SUPPORT>>>Cursor113
+            // if (privacyOptionsRequired) {
+            if (privacyOptionsRequired && !adsRemoved) {
+            // SMCPKG_SUPPORT<<<Cursor113
                 SettingsClickRow(
                     title = stringResource(R.string.privacy_options),
                     summary = stringResource(R.string.privacy_options_summary),
@@ -168,9 +189,94 @@ fun SettingsScreen(onBack: () -> Unit) {
 
             HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
             LanguageSection()
+            // SMCPKG_SUPPORT>>>Cursor113
+            if (BuildConfig.DEBUG) {
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+                SettingsSwitchRow(
+                    title = stringResource(R.string.remove_ads_debug),
+                    summary = stringResource(R.string.remove_ads_debug_summary),
+                    checked = removeAds.debugOverride,
+                    onCheckedChange = billingManager::setDebugOverride,
+                )
+            }
+            // SMCPKG_SUPPORT<<<Cursor113
         }
     }
 }
+
+// SMCPKG_SUPPORT>>>Cursor113
+@Composable
+private fun RemoveAdsCard(
+    state: RemoveAdsUiState,
+    onBuy: () -> Unit,
+    onRestore: () -> Unit,
+) {
+    val price = state.formattedPrice
+    val showPrice = !state.entitled && state.productAvailable && !price.isNullOrBlank()
+    val showUnavailable = !state.entitled && !state.pending && state.detailsSettled && !showPrice
+    val canBuy = showPrice && state.billingReady && !state.pending && !state.purchaseInProgress
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = stringResource(R.string.remove_ads_title),
+                style = MaterialTheme.typography.titleMedium,
+            )
+            Text(
+                text = when {
+                    state.entitled -> stringResource(R.string.remove_ads_thanks)
+                    state.pending -> stringResource(R.string.remove_ads_pending)
+                    showPrice -> stringResource(R.string.remove_ads_price, price.orEmpty())
+                    showUnavailable -> stringResource(R.string.remove_ads_unavailable)
+                    else -> stringResource(R.string.remove_ads_summary)
+                },
+                style = MaterialTheme.typography.bodyLarge,
+                color = when {
+                    state.entitled -> MaterialTheme.colorScheme.primary
+                    showUnavailable -> MaterialTheme.colorScheme.onSurfaceVariant
+                    else -> MaterialTheme.colorScheme.onSurface
+                },
+                modifier = Modifier.padding(top = 4.dp),
+            )
+            if (!state.entitled && (showPrice || state.pending || showUnavailable)) {
+                Text(
+                    text = stringResource(R.string.remove_ads_summary),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp),
+                )
+            }
+            if (!state.entitled) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Button(
+                        onClick = onBuy,
+                        enabled = canBuy,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(stringResource(R.string.remove_ads_buy))
+                    }
+                    OutlinedButton(
+                        onClick = onRestore,
+                        modifier = Modifier.weight(1f),
+                    ) {
+                        Text(stringResource(R.string.remove_ads_restore))
+                    }
+                }
+            }
+        }
+    }
+}
+// SMCPKG_SUPPORT<<<Cursor113
 
 @Composable
 private fun LanguageSection() {

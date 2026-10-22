@@ -152,4 +152,16 @@
     <string name="media_volume">Volume</string>
     <string name="volume_percent">%1$d%%</string>
     <string name="playback_channel">Playback</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Remove ads</string>
+    <string name="remove_ads_summary">A one-time purchase turns off banner, list, and app-open ads.</string>
+    <string name="remove_ads_buy">Buy</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Restore purchase</string>
+    <string name="remove_ads_unavailable">Temporarily unavailable</string>
+    <string name="remove_ads_pending">Purchase pending. Ads stay on until the payment completes.</string>
+    <string name="remove_ads_thanks">Ads removed — thank you for your support</string>
+    <string name="remove_ads_debug">Debug: simulate ads removed</string>
+    <string name="remove_ads_debug_summary">Debug builds only. Pretend the remove-ads purchase is owned.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
 </resources>
