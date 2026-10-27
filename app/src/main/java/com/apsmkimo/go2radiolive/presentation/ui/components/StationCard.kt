@@ -24,8 +24,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.apsmkimo.go2radiolive.data.remote.plainPodcastText
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.apsmkimo.go2radiolive.R
@@ -38,6 +41,9 @@ fun StationCard(
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
+    // SMCPKG_SUPPORT>>>Cursor117
+    episodeNotes: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor117
 ) {
     Card(
         modifier = modifier
@@ -48,7 +54,10 @@ fun StationCard(
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            // SMCPKG_SUPPORT>>>Cursor117
+            // verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = if (episodeNotes) Alignment.Top else Alignment.CenterVertically,
+            // SMCPKG_SUPPORT<<<Cursor117
         ) {
             val context = LocalContext.current
             AsyncImage(
@@ -76,6 +85,30 @@ fun StationCard(
                     .weight(1f)
                     .padding(horizontal = 12.dp),
             ) {
+                // SMCPKG_SUPPORT>>>Cursor117
+                if (episodeNotes) {
+                    Text(
+                        text = plainPodcastText(station.name).ifBlank { station.name },
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 15.sp,
+                            lineHeight = 20.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    )
+                    val notes = plainPodcastText(station.summary.orEmpty())
+                    if (notes.isNotEmpty()) {
+                        Text(
+                            text = notes,
+                            style = MaterialTheme.typography.bodyMedium.copy(
+                                fontSize = 13.sp,
+                                lineHeight = 18.sp,
+                            ),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.padding(top = 4.dp),
+                        )
+                    }
+                } else {
+                // SMCPKG_SUPPORT<<<Cursor117
                 Text(
                     text = station.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -103,6 +136,9 @@ fun StationCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+                // SMCPKG_SUPPORT>>>Cursor117
+                }
+                // SMCPKG_SUPPORT<<<Cursor117
             }
             IconButton(onClick = onToggleFavorite) {
                 Icon(

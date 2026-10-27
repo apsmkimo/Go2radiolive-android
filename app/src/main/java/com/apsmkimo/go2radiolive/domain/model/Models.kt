@@ -17,6 +17,10 @@ data class RadioStation(
     val votes: Int = 0,
     val clickCount: Int = 0,
     // SMCPKG_SUPPORT<<<Cursor106
+    // SMCPKG_SUPPORT>>>Cursor117
+    /** Plain-text podcast show notes. Null on radio stations and older saved rows. */
+    val summary: String? = null,
+    // SMCPKG_SUPPORT<<<Cursor117
 )
 
 data class StationCategory(
