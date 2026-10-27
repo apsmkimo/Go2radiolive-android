@@ -35,6 +35,10 @@ data class PodcastShow(
     val name: String,
     val author: String,
     val artworkUrl: String = "",
+    // SMCPKG_SUPPORT>>>Cursor115
+    /** iTunes Search feed. Chart rows leave this empty and look the feed up by id. */
+    val feedUrl: String? = null,
+    // SMCPKG_SUPPORT<<<Cursor115
 )
 
 /** Chart page plus whether the device region was replaced by the US chart. */

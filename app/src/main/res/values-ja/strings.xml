@@ -18,6 +18,11 @@
     <string name="empty_categories">カテゴリがありません</string>
     <string name="empty_countries">国がありません</string>
     <string name="empty_podcasts">ポッドキャストがありません</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">ポッドキャストを検索</string>
+    <string name="podcast_search_empty">一致するポッドキャストがありません</string>
+    <string name="podcast_search_failed">ポッドキャストを検索できませんでした</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">この地域にはポッドキャストチャートがないため、米国のチャートを表示しています。</string>
     <string name="podcast_region">国・地域</string>
     <string name="podcast_region_automatic">自動（端末の地域）</string>

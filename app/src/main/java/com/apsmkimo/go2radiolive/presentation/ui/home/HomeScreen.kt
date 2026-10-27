@@ -285,16 +285,27 @@ fun HomeScreen(
                 AdMobBanner()
             }
             // SMCPKG_SUPPORT<<<Cursor113
-            if (state.isLoading) {
+            // SMCPKG_SUPPORT>>>Cursor115
+            // if (state.isLoading) {
+            //     LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            // }
+            val podcastQueryActive = state.showingPodcasts && state.searchQuery.trim().isNotEmpty()
+            val screenBusy = if (podcastQueryActive) state.podcastSearchLoading else state.isLoading
+            if (screenBusy) {
                 LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
             }
+            // SMCPKG_SUPPORT<<<Cursor115
             // SMCPKG_SUPPORT>>>Cursor092
             var regionPickerOpen by rememberSaveable { mutableStateOf(false) }
             SearchBarRow(
                 query = state.searchQuery,
                 onQueryChange = viewModel::onSearchQueryChange,
                 onRefresh = viewModel::onRefreshClick,
-                isRefreshing = state.isLoading,
+                // SMCPKG_SUPPORT>>>Cursor115
+                // isRefreshing = state.isLoading,
+                isRefreshing = screenBusy,
+                hintRes = if (state.showingPodcasts) R.string.podcast_search_hint else R.string.search_hint,
+                // SMCPKG_SUPPORT<<<Cursor115
                 onPickPodcastRegion = if (state.selectedTab == BrowseTab.PODCAST) {
                     { regionPickerOpen = true }
                 } else {
@@ -386,7 +397,10 @@ fun HomeScreen(
                 state.showingPodcasts -> state.visiblePodcasts.isNotEmpty()
                 else -> state.visibleStations.isNotEmpty()
             }
-            if (!state.isLoading && state.errorResId != null && hasItems && errorText != null) {
+            // SMCPKG_SUPPORT>>>Cursor115
+            // if (!state.isLoading && state.errorResId != null && hasItems && errorText != null) {
+            if (!podcastQueryActive && !state.isLoading && state.errorResId != null && hasItems && errorText != null) {
+            // SMCPKG_SUPPORT<<<Cursor115
                 TextButton(onClick = viewModel::onRefreshClick, modifier = Modifier.fillMaxWidth()) {
                     Text(errorText)
                 }
@@ -447,6 +461,33 @@ fun HomeScreen(
                     )
                 }
                 state.showingPodcasts -> {
+                    // SMCPKG_SUPPORT>>>Cursor115
+                    // BrowseRowList(
+                    //     rows = state.visiblePodcasts.map { show ->
+                    //         BrowseRow(
+                    //             id = show.id,
+                    //             title = show.name,
+                    //             subtitle = show.author,
+                    //         )
+                    //     },
+                    //     isLoading = state.isLoading,
+                    //     errorMessage = errorText,
+                    //     emptyText = stringResource(R.string.empty_podcasts),
+                    //     onRowClick = { row ->
+                    //         state.podcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
+                    //     },
+                    //     onRetry = viewModel::onRefreshClick,
+                    //     scrollToken = state.scrollToken,
+                    //     header = if (state.podcastUsFallback) {
+                    //         stringResource(R.string.podcast_us_fallback)
+                    //     } else {
+                    //         null
+                    //     },
+                    val podcastError = if (podcastQueryActive) {
+                        state.podcastSearchErrorResId?.let { stringResource(it) }
+                    } else {
+                        errorText
+                    }
                     BrowseRowList(
                         rows = state.visiblePodcasts.map { show ->
                             BrowseRow(
@@ -455,19 +496,22 @@ fun HomeScreen(
                                 subtitle = show.author,
                             )
                         },
-                        isLoading = state.isLoading,
-                        errorMessage = errorText,
-                        emptyText = stringResource(R.string.empty_podcasts),
+                        isLoading = if (podcastQueryActive) state.podcastSearchLoading else state.isLoading,
+                        errorMessage = podcastError,
+                        emptyText = stringResource(
+                            if (podcastQueryActive) R.string.podcast_search_empty else R.string.empty_podcasts,
+                        ),
                         onRowClick = { row ->
-                            state.podcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
+                            state.visiblePodcasts.firstOrNull { it.id == row.id }?.let(viewModel::onPodcastSelected)
                         },
                         onRetry = viewModel::onRefreshClick,
                         scrollToken = state.scrollToken,
-                        header = if (state.podcastUsFallback) {
+                        header = if (!podcastQueryActive && state.podcastUsFallback) {
                             stringResource(R.string.podcast_us_fallback)
                         } else {
                             null
                         },
+                    // SMCPKG_SUPPORT<<<Cursor115
                         // SMCPKG_SUPPORT>>>Cursor113
                         // showNativeAds = true,
                         showNativeAds = !adsRemoved,

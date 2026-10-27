@@ -56,6 +56,11 @@ class GetPodcastShowsUseCase(
     operator fun invoke(region: String?, bypassCache: Boolean = false): Flow<PodcastChart> =
         podcastRepository.topShows(region, bypassCache)
     // SMCPKG_SUPPORT<<<Cursor103
+
+    // SMCPKG_SUPPORT>>>Cursor115
+    suspend fun search(term: String, region: String?, bypassCache: Boolean = false): List<PodcastShow> =
+        podcastRepository.searchShows(term, region, bypassCache)
+    // SMCPKG_SUPPORT<<<Cursor115
 }
 
 class GetPodcastEpisodesUseCase(

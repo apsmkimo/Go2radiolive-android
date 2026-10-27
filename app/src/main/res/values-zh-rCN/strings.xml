@@ -18,6 +18,11 @@
     <string name="empty_categories">目前没有分类</string>
     <string name="empty_countries">目前没有国家</string>
     <string name="empty_podcasts">目前没有播客</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">搜索播客</string>
+    <string name="podcast_search_empty">找不到符合的播客</string>
+    <string name="podcast_search_failed">无法搜索播客</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">此地区没有播客排行榜，因此显示美国排行榜。</string>
     <string name="podcast_region">国家或地区</string>
     <string name="podcast_region_automatic">自动（设备地区）</string>

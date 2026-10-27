@@ -21,6 +21,11 @@
     <string name="empty_categories">目前沒有分類</string>
     <string name="empty_countries">目前沒有國家</string>
     <string name="empty_podcasts">目前沒有 Podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">搜尋 Podcast</string>
+    <string name="podcast_search_empty">找不到符合的 Podcast</string>
+    <string name="podcast_search_failed">無法搜尋 Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">此地區沒有 Podcast 排行榜，因此顯示美國排行榜。</string>
     <string name="podcast_region">國家或地區</string>
     <string name="podcast_region_automatic">自動（裝置地區）</string>

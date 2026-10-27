@@ -21,6 +21,11 @@
     <string name="empty_categories">No categories</string>
     <string name="empty_countries">No countries</string>
     <string name="empty_podcasts">No podcasts</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Search podcasts</string>
+    <string name="podcast_search_empty">No matching podcasts</string>
+    <string name="podcast_search_failed">Couldn\'t search podcasts</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">This region has no podcast chart, so US charts are shown.</string>
     <string name="podcast_region">Country</string>
     <string name="podcast_region_automatic">Automatic (device region)</string>
