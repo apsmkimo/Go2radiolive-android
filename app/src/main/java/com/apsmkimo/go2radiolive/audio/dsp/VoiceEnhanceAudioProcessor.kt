@@ -6,8 +6,8 @@ import androidx.media3.common.audio.BaseAudioProcessor
 import java.nio.ByteBuffer
 
 /**
- * Dialog clarity on the mid (L+R) signal: a gentle low-shelf cut below ~150 Hz
- * and a wide peaking boost around 2 kHz. Mono is treated as the mid signal.
+ * Dialog clarity on the mid (L+R) signal: a low-shelf cut around 180 Hz and a
+ * presence peak around 2.5 kHz. Mono is treated as the mid signal.
  * Extra channels beyond the stereo pair are copied unchanged.
  */
 internal class VoiceEnhanceAudioProcessor : BaseAudioProcessor() {

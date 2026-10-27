@@ -99,16 +99,32 @@ class SpatialAudioModelTest {
 
     @Test
     fun naturalMonoStaysCenteredAndStereoWidthDoesNotJump() {
+        // SMCPKG_SUPPORT>>>Cursor116
+        // Mono used to sit at azimuth 0, which made 3D inaudible on speech.
+        // assertEquals(
+        //     0.0,
+        //     sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = false),
+        //     1e-12,
+        // )
+        // assertEquals(
+        //     0.0,
+        //     sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = true),
+        //     1e-12,
+        // )
+        val monoHalf = naturalHalfRadians(0.5)
         assertEquals(
-            0.0,
-            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = false),
+            -monoHalf,
+            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, monoHalf, right = false),
             1e-12,
         )
         assertEquals(
-            0.0,
-            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, naturalHalfRadians(0.5), right = true),
+            monoHalf,
+            sourceAzimuth(SpatialAudioMode.NATURAL, 1, 0.0, monoHalf, right = true),
             1e-12,
         )
+        assertTrue(Math.toDegrees(naturalHalfRadians(1.0)) >= 45.0)
+        assertTrue(Math.toDegrees(naturalHalfRadians(0.0)) >= 70.0)
+        // SMCPKG_SUPPORT<<<Cursor116
         val below = naturalHalfRadians(0.97)
         val above = naturalHalfRadians(0.99)
         assertTrue(abs(Math.toDegrees(above - below)) < 3.0)

@@ -51,7 +51,10 @@
     <string name="audio_panel_button">Audio panel button</string>
     <string name="audio_panel_button_summary">Show an audio panel button next to play in the player bar</string>
     <string name="voice_enhancement">Voice enhancement</string>
-    <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Boost the voice range and reduce low-end mud</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="spatial_section">3D Spatial Audio</string>
     <string name="spatial_off">Off</string>
     <string name="spatial_off_summary">Turn spatial processing off and restore the original audio</string>
@@ -61,6 +64,9 @@
     <string name="spatial_surround_summary">Front, side, and rear cues from binaural placement and early reflections</string>
     <string name="spatial_orbit">Orbit</string>
     <string name="spatial_orbit_summary">A virtual source moves slowly around the horizontal plane</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">The speaker mixes left and right. This mode still adds space with echoes and width. Headphones make the left-right image clearer.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="orbit_speed">Rotation speed</string>
     <string name="orbit_speed_value">%1$.0f sec/turn</string>
     <string name="orbit_direction">Rotation direction</string>

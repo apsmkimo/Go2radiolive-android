@@ -13,6 +13,7 @@ import kotlin.math.PI
 import kotlin.math.abs
 import kotlin.math.exp
 import kotlin.math.max
+import kotlin.math.sin
 import kotlin.math.sqrt
 
 /**
@@ -22,13 +23,15 @@ import kotlin.math.sqrt
  *
  * While a spatial mode is on, the dry signal uses the same
  * [BinauralModel.BASE_DELAY_SAMPLES] center delay as the binaural path so the
- * mix does not comb. Off does not use that delay. A mono stream configured
- * while Off leaves this processor inactive, so the original mono buffer is
- * not copied or delayed. Stereo Off copies both channels with no delay.
+ * mix does not comb. Off does not use that delay. Mono and stereo both stay
+ * active and always emit stereo, so turning a mode on does not wait for the
+ * player to rebuild the sink. Stereo Off copies both channels with no delay.
+ * Mono Off duplicates the sample to both channels with no delay.
  * Entering or leaving Off crossfades the direct and delayed paths (~30 ms)
  * after the delay line is primed, so the switch does not click.
- * Natural stereo width follows correlation continuously; it is not a step
- * between two angles. Mono Natural stays at azimuth 0.
+ * Natural width follows correlation continuously; it is not a step between
+ * two angles. Mono uses the same left/right pair as stereo, plus a common
+ * room tail so a phone speaker (left + right) still hears the space.
  *
  * More than two channels stay inactive and are left untouched.
  */
@@ -36,6 +39,11 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
     private val leftSource = SourcePath()
     private val rightSource = SourcePath()
     private val reflections = ReflectionBus()
+    // SMCPKG_SUPPORT>>>Cursor116
+    private val commonRoom = CommonRoom()
+    private val haas = FractionalDelay(DELAY_CAPACITY)
+    private var spaceArmed = false
+    // SMCPKG_SUPPORT<<<Cursor116
 
     private var sampleRate = 48_000
     private var wetCoeff = 0.01
@@ -46,6 +54,11 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
     private var align = 0.0
     private var alignTarget = 0.0
     private var priming = 0
+    // SMCPKG_SUPPORT>>>Cursor116
+    // Priming used to re-arm whenever align was still near 0, and align only
+    // advanced after priming, so the spatial path never ran.
+    private var primeDone = false
+    // SMCPKG_SUPPORT<<<Cursor116
     private var outGain = 1.0
     private var targetWet = 0.0
     private var activeMode = SpatialAudioMode.OFF
@@ -68,16 +81,26 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         }
         configuredChannels = inputAudioFormat.channelCount
         SpatialRoute.inputChannels = inputAudioFormat.channelCount
-        val spatialOn = AudioSettingsRepository.settings.value.spatialMode != SpatialAudioMode.OFF
+        // SMCPKG_SUPPORT>>>Cursor116
+        // val spatialOn = AudioSettingsRepository.settings.value.spatialMode != SpatialAudioMode.OFF
+        // val outChannels = when (inputAudioFormat.channelCount) {
+        //     1 -> if (spatialOn) 2 else 1
+        //     2 -> 2
+        //     else -> inputAudioFormat.channelCount
+        // }
+        // Mono Off used to drop this processor until the stream was reloaded.
+        // Keep one stereo format for one or two input channels so toggles apply
+        // on the next buffer.
         val outChannels = when (inputAudioFormat.channelCount) {
-            1 -> if (spatialOn) 2 else 1
-            2 -> 2
+            1, 2 -> 2
             else -> inputAudioFormat.channelCount
         }
         // SMCPKG_SUPPORT>>>Cursor071
         // Mono Off is inactive so the pipeline never feeds this processor.
-        bypassMono = inputAudioFormat.channelCount == 1 && outChannels == 1
+        // bypassMono = inputAudioFormat.channelCount == 1 && outChannels == 1
+        bypassMono = false
         // SMCPKG_SUPPORT<<<Cursor071
+        // SMCPKG_SUPPORT<<<Cursor116
         return AudioProcessor.AudioFormat(
             inputAudioFormat.sampleRate,
             outChannels,
@@ -96,6 +119,9 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         align = 0.0
         alignTarget = 0.0
         priming = 0
+        // SMCPKG_SUPPORT>>>Cursor116
+        primeDone = false
+        // SMCPKG_SUPPORT<<<Cursor116
         outGain = 1.0
         heldCorrelation = 0.0
         smoothedCorrelation = 0.0
@@ -103,6 +129,11 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         leftSource.reset()
         rightSource.reset()
         reflections.reset(sampleRate)
+        // SMCPKG_SUPPORT>>>Cursor116
+        commonRoom.reset(sampleRate)
+        haas.clear()
+        spaceArmed = false
+        // SMCPKG_SUPPORT<<<Cursor116
         orbitAzimuth = 0.0
         leftSource.prepare(0.0, sampleRate)
         rightSource.prepare(0.0, sampleRate)
@@ -168,14 +199,28 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
                 rightIn = finite(inputBuffer.getFloat())
             }
             updateAlignTarget()
-            if (alignTarget > 0.5 && align < 0.0008 && priming == 0) {
+            // SMCPKG_SUPPORT>>>Cursor116
+            // if (alignTarget > 0.5 && align < 0.0008 && priming == 0) {
+            //     priming = BinauralModel.BASE_DELAY_SAMPLES
+            // }
+            if (alignTarget < 0.0008 && align < 0.0008 && wet < 0.01) {
+                primeDone = false
+            }
+            if (alignTarget > 0.5 && align < 0.0008 && priming == 0 && !primeDone) {
                 priming = BinauralModel.BASE_DELAY_SAMPLES
             }
+            // SMCPKG_SUPPORT<<<Cursor116
             if (priming > 0) {
                 leftSource.pushOnly(leftIn)
-                if (channels == 2) rightSource.pushOnly(rightIn)
+                // SMCPKG_SUPPORT>>>Cursor116
+                // if (channels == 2) rightSource.pushOnly(rightIn)
+                rightSource.pushOnly(rightIn)
+                // SMCPKG_SUPPORT<<<Cursor116
                 writeDirectSample(output, leftIn, if (channels == 2) rightIn else leftIn, channels, outChannels)
                 priming--
+                // SMCPKG_SUPPORT>>>Cursor116
+                if (priming == 0) primeDone = true
+                // SMCPKG_SUPPORT<<<Cursor116
                 index++
                 continue
             }
@@ -190,34 +235,74 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
             }
             azLeft = sourceAzimuth(activeMode, channels, orbitAzimuth, naturalHalf, right = false)
             azRight = sourceAzimuth(activeMode, channels, orbitAzimuth, naturalHalf, right = true)
+            // SMCPKG_SUPPORT>>>Cursor116
+            // Mono Natural/Surround is a left/right pair. Mono Orbit stays one moving source.
+            val pair = channels == 2 ||
+                activeMode == SpatialAudioMode.NATURAL ||
+                activeMode == SpatialAudioMode.SURROUND
+            // SMCPKG_SUPPORT<<<Cursor116
             if (index == 0) {
                 leftSource.prepare(azLeft, sampleRate)
-                if (channels == 2) rightSource.prepare(azRight, sampleRate)
+                // SMCPKG_SUPPORT>>>Cursor116
+                // if (channels == 2) rightSource.prepare(azRight, sampleRate)
+                if (pair) rightSource.prepare(azRight, sampleRate)
+                // SMCPKG_SUPPORT<<<Cursor116
             }
             leftSource.render(leftIn, azLeft, sampleRate)
             var spatL = leftSource.renderedL
             var spatR = leftSource.renderedR
             val delayedL = leftSource.readDry().toDouble()
             val delayedR: Double
-            if (channels == 2) {
+            // SMCPKG_SUPPORT>>>Cursor116
+            // if (channels == 2) {
+            if (pair) {
+            // SMCPKG_SUPPORT<<<Cursor116
                 rightSource.render(rightIn, azRight, sampleRate)
                 spatL = (spatL + rightSource.renderedL) * STEREO_SCALE
                 spatR = (spatR + rightSource.renderedR) * STEREO_SCALE
                 delayedR = rightSource.readDry().toDouble()
-                sumL += leftIn * leftIn
-                sumR += rightIn * rightIn
-                sumLR += leftIn * rightIn
+                if (channels == 2) {
+                    sumL += leftIn * leftIn
+                    sumR += rightIn * rightIn
+                    sumLR += leftIn * rightIn
+                }
             } else {
                 delayedR = delayedL
             }
             val dryL = bypassMix(leftIn.toDouble(), delayedL, align)
             val dryR = bypassMix(rightIn.toDouble(), delayedR, align)
-            if (activeMode == SpatialAudioMode.SURROUND) {
+            // SMCPKG_SUPPORT>>>Cursor116
+            // if (activeMode == SpatialAudioMode.SURROUND) {
+            //     val mid = if (channels == 2) 0.5f * (leftIn + rightIn) else leftIn
+            //     reflections.process(mid, sampleRate)
+            //     spatL += reflections.outL
+            //     spatR += reflections.outR
+            // }
+            if (activeMode == SpatialAudioMode.OFF && wet < 0.01) {
+                if (spaceArmed) {
+                    commonRoom.reset(sampleRate)
+                    haas.clear()
+                    spaceArmed = false
+                }
+            } else if (activeMode != SpatialAudioMode.OFF) {
+                spaceArmed = true
                 val mid = if (channels == 2) 0.5f * (leftIn + rightIn) else leftIn
-                reflections.process(mid, sampleRate)
-                spatL += reflections.outL
-                spatR += reflections.outR
+                val wobble = if (activeMode == SpatialAudioMode.ORBIT) sin(orbitAzimuth) * 0.004 else 0.0
+                commonRoom.process(mid, sampleRate, wobble)
+                val room = commonRoom.out * roomScale(activeMode)
+                spatL += room
+                spatR += room
+                haas.push(spatR.toFloat())
+                val smeared = haas.read(haasDelaySamples(activeMode, sampleRate)).toDouble()
+                val blend = haasBlend(activeMode)
+                spatR = spatR * (1.0 - blend) + smeared * blend
+                if (activeMode == SpatialAudioMode.SURROUND) {
+                    reflections.process(mid, sampleRate)
+                    spatL += reflections.outL
+                    spatR += reflections.outR
+                }
             }
+            // SMCPKG_SUPPORT<<<Cursor116
             val keep = 1.0 - wet
             val mixedL = dryL * keep + spatL * wet
             val mixedR = dryR * keep + spatR * wet
@@ -506,6 +591,42 @@ internal class SpatialAudioProcessor : BaseAudioProcessor() {
         }
     }
 
+    // SMCPKG_SUPPORT>>>Cursor116
+    /**
+     * Early reflections that are identical on both channels. A phone speaker
+     * sums left and right, which cancels a binaural image; this tail remains.
+     */
+    private class CommonRoom {
+        private val delay = FractionalDelay(DELAY_CAPACITY)
+        private val lowpass = OnePoleLowpass()
+        private val tapsSec = floatArrayOf(0.017f, 0.031f, 0.047f)
+        private val gains = doubleArrayOf(0.40, 0.26, 0.16)
+        var out = 0.0
+
+        fun reset(sampleRate: Int) {
+            delay.clear()
+            lowpass.reset()
+            lowpass.setCutoff(3_400.0, sampleRate.toDouble())
+            out = 0.0
+        }
+
+        fun process(mid: Float, sampleRate: Int, wobbleSec: Double) {
+            val dull = lowpass.process(mid.toDouble()).toFloat()
+            delay.push(dull)
+            val rate = sampleRate.toFloat()
+            val wobble = wobbleSec.toFloat()
+            var acc = 0.0
+            var index = 0
+            while (index < tapsSec.size) {
+                val center = (tapsSec[index] + wobble) * rate
+                acc += delay.read(center.coerceAtLeast(1f)).toDouble() * gains[index]
+                index++
+            }
+            out = acc
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor116
+
     private companion object {
         const val DELAY_CAPACITY = 8192
         const val WET_SECONDS = 0.045
@@ -564,8 +685,15 @@ internal fun wetEarDelaySamples(itdSamples: Double, earSign: Double): Float {
 
 internal fun naturalHalfRadians(correlation: Double): Double {
     val t = ((correlation - 0.80) / 0.20).coerceIn(0.0, 1.0)
-    val wide = Math.toRadians(22.0)
-    val narrow = Math.toRadians(10.0)
+    // SMCPKG_SUPPORT>>>Cursor116
+    // ±10° on a correlated radio stream is inaudible, especially after the
+    // speaker sums both channels. Keep the change continuous, but never narrower
+    // than about ±48° and open out to about ±76° when the channels differ.
+    // val wide = Math.toRadians(22.0)
+    // val narrow = Math.toRadians(10.0)
+    val wide = Math.toRadians(76.0)
+    val narrow = Math.toRadians(48.0)
+    // SMCPKG_SUPPORT<<<Cursor116
     return wide + (narrow - wide) * t
 }
 
@@ -581,9 +709,20 @@ internal fun sourceAzimuth(
     right: Boolean,
 ): Double {
     val sign = if (right) 1.0 else -1.0
+    // SMCPKG_SUPPORT>>>Cursor116
+    // return when (mode) {
+    //     SpatialAudioMode.NATURAL -> if (channels == 1) 0.0 else sign * naturalHalf
+    //     SpatialAudioMode.SURROUND -> if (channels == 1) 0.0 else sign * Math.toRadians(50.0)
+    //     SpatialAudioMode.ORBIT -> if (channels == 1) {
+    //         orbitAzimuth
+    //     } else {
+    //         BinauralModel.wrapAzimuth(orbitAzimuth + sign * Math.toRadians(28.0))
+    //     }
+    //     SpatialAudioMode.OFF -> 0.0
+    // }
     return when (mode) {
-        SpatialAudioMode.NATURAL -> if (channels == 1) 0.0 else sign * naturalHalf
-        SpatialAudioMode.SURROUND -> if (channels == 1) 0.0 else sign * Math.toRadians(50.0)
+        SpatialAudioMode.NATURAL -> sign * naturalHalf
+        SpatialAudioMode.SURROUND -> sign * Math.toRadians(62.0)
         SpatialAudioMode.ORBIT -> if (channels == 1) {
             orbitAzimuth
         } else {
@@ -591,6 +730,7 @@ internal fun sourceAzimuth(
         }
         SpatialAudioMode.OFF -> 0.0
     }
+    // SMCPKG_SUPPORT<<<Cursor116
 }
 
 internal data class SpatialModeStep(
@@ -622,7 +762,41 @@ internal fun advanceSpatialMode(
 
 internal fun wetTargetFor(mode: SpatialAudioMode, strength: Double): Double = when (mode) {
     SpatialAudioMode.OFF -> 0.0
-    SpatialAudioMode.NATURAL -> 0.38
-    SpatialAudioMode.SURROUND -> 0.58
-    SpatialAudioMode.ORBIT -> 0.18 + 0.82 * strength.coerceIn(0.0, 1.0)
+    // SMCPKG_SUPPORT>>>Cursor116
+    // SpatialAudioMode.NATURAL -> 0.38
+    // SpatialAudioMode.SURROUND -> 0.58
+    // SpatialAudioMode.ORBIT -> 0.18 + 0.82 * strength.coerceIn(0.0, 1.0)
+    SpatialAudioMode.NATURAL -> 0.62
+    SpatialAudioMode.SURROUND -> 0.82
+    SpatialAudioMode.ORBIT -> 0.30 + 0.60 * strength.coerceIn(0.0, 1.0)
+    // SMCPKG_SUPPORT<<<Cursor116
+}
+
+/** How much of the common room is mixed in. The room itself is already modest. */
+internal fun roomScale(mode: SpatialAudioMode): Double = when (mode) {
+    SpatialAudioMode.NATURAL -> 1.0
+    SpatialAudioMode.SURROUND -> 1.0
+    SpatialAudioMode.ORBIT -> 0.90
+    SpatialAudioMode.OFF -> 0.0
+}
+
+/**
+ * Blend of the right channel with a short delayed copy of itself. Headphones
+ * hear that as width. A speaker that adds both channels still keeps the
+ * undelayed left channel plus the delayed copy.
+ */
+internal fun haasBlend(mode: SpatialAudioMode): Double = when (mode) {
+    SpatialAudioMode.NATURAL -> 0.42
+    SpatialAudioMode.SURROUND -> 0.55
+    SpatialAudioMode.ORBIT -> 0.48
+    SpatialAudioMode.OFF -> 0.0
+}
+
+internal fun haasDelaySamples(mode: SpatialAudioMode, sampleRate: Int): Float {
+    val milliseconds = when (mode) {
+        SpatialAudioMode.SURROUND -> 12.0
+        SpatialAudioMode.ORBIT -> 10.0
+        else -> 8.0
+    }
+    return (milliseconds * 0.001 * sampleRate).toFloat().coerceIn(1f, 4_000f)
 }

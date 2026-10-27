@@ -48,7 +48,10 @@
     <string name="audio_panel_button">音效面板按钮</string>
     <string name="audio_panel_button_summary">在播放栏的播放按钮旁显示音效面板按钮</string>
     <string name="voice_enhancement">语音增强</string>
-    <string name="voice_enhancement_summary">加强人声频段，并稍微降低低频浑浊</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">加强人声频段，并稍微降低低频浑浊</string> -->
+    <string name="voice_enhancement_summary">加强人声频段，并降低低频浑浊</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="spatial_section">3D 空间音效</string>
     <string name="spatial_off">关闭</string>
     <string name="spatial_off_summary">关闭空间处理，恢复原始音频</string>
@@ -58,6 +61,9 @@
     <string name="spatial_surround_summary">以双耳方位与早期反射呈现前、侧、后方向</string>
     <string name="spatial_orbit">环轨</string>
     <string name="spatial_orbit_summary">虚拟声源沿水平面平缓绕行</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">扬声器会把左右声混合。此模式仍会以回声与宽度增加空间感；耳机才能听清楚左右定位。</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="orbit_speed">旋转速度</string>
     <string name="orbit_speed_value">%1$.0f 秒／圈</string>
     <string name="orbit_direction">旋转方向</string>
