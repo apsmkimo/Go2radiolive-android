@@ -25,6 +25,10 @@
     <string name="podcast_search_hint">搜尋 Podcast</string>
     <string name="podcast_search_empty">找不到符合的 Podcast</string>
     <string name="podcast_search_failed">無法搜尋 Podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">檢視更多</string>
+    <string name="episode_show_less">顯示較少</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
     <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">此地區沒有 Podcast 排行榜，因此顯示美國排行榜。</string>
     <string name="podcast_region">國家或地區</string>

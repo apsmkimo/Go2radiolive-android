@@ -571,6 +571,9 @@ fun HomeScreen(
                         // SMCPKG_SUPPORT>>>Cursor117
                         episodeNotes = state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null,
                         // SMCPKG_SUPPORT<<<Cursor117
+                        // SMCPKG_SUPPORT>>>Cursor118
+                        notesScope = state.selectedPodcast?.id,
+                        // SMCPKG_SUPPORT<<<Cursor118
                     )
                 }
             }

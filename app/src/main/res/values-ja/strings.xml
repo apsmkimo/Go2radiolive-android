@@ -22,6 +22,10 @@
     <string name="podcast_search_hint">ポッドキャストを検索</string>
     <string name="podcast_search_empty">一致するポッドキャストがありません</string>
     <string name="podcast_search_failed">ポッドキャストを検索できませんでした</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">もっと見る</string>
+    <string name="episode_show_less">閉じる</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
     <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">この地域にはポッドキャストチャートがないため、米国のチャートを表示しています。</string>
     <string name="podcast_region">国・地域</string>

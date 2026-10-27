@@ -22,6 +22,10 @@
     <string name="podcast_search_hint">搜索播客</string>
     <string name="podcast_search_empty">找不到符合的播客</string>
     <string name="podcast_search_failed">无法搜索播客</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">查看更多</string>
+    <string name="episode_show_less">显示较少</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
     <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">此地区没有播客排行榜，因此显示美国排行榜。</string>
     <string name="podcast_region">国家或地区</string>

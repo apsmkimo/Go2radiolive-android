@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -44,8 +45,16 @@ fun StationList(
     // SMCPKG_SUPPORT>>>Cursor117
     episodeNotes: Boolean = false,
     // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor118
+    notesScope: String? = null,
+    // SMCPKG_SUPPORT<<<Cursor118
 ) {
     val listState = rememberLazyListState()
+    // SMCPKG_SUPPORT>>>Cursor118
+    // Lives with this list. Scrolling recycles rows but keeps the set.
+    // Leaving the show disposes the list, so the next visit starts collapsed.
+    val notesExpansion = remember(notesScope) { EpisodeDescriptionExpansion() }
+    // SMCPKG_SUPPORT<<<Cursor118
     LaunchedEffect(scrollToken) {
         if (scrollToken > 0 && stations.isNotEmpty()) listState.scrollToItem(0)
     }
@@ -89,6 +98,12 @@ fun StationList(
                         // SMCPKG_SUPPORT>>>Cursor117
                         episodeNotes = episodeNotes,
                         // SMCPKG_SUPPORT<<<Cursor117
+                        // SMCPKG_SUPPORT>>>Cursor118
+                        notesExpanded = episodeNotes && notesExpansion.isExpanded(station.stationUuid),
+                        notesOverflow = episodeNotes && notesExpansion.overflows(station.stationUuid),
+                        onToggleNotes = { notesExpansion.toggle(station.stationUuid) },
+                        onNotesOverflow = { notesExpansion.markOverflow(station.stationUuid) },
+                        // SMCPKG_SUPPORT<<<Cursor118
                     )
                     if (showNativeAds && nativeAdInsertAfterIndex(index)) {
                         NativeAdSlot()
