@@ -49,7 +49,9 @@ import com.apsmkimo.go2radiolive.domain.model.CatalogSort
 import com.apsmkimo.go2radiolive.domain.model.CategoryHub
 import com.apsmkimo.go2radiolive.domain.model.CountResult
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
+import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
+import com.apsmkimo.go2radiolive.domain.station.stationIsFavorite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,6 +84,9 @@ fun CatalogTab(
     onFavorite: (RadioStation) -> Unit,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    // SMCPKG_SUPPORT>>>Cursor119
+    playback: PlaybackState = PlaybackState(),
+    // SMCPKG_SUPPORT<<<Cursor119
 ) {
     var scopeOpen by remember { mutableStateOf(false) }
     var languageOpen by remember { mutableStateOf(false) }
@@ -137,6 +142,9 @@ fun CatalogTab(
                     onHighBitrate = onHighBitrate,
                     onStation = onStation,
                     onFavorite = onFavorite,
+                    // SMCPKG_SUPPORT>>>Cursor119
+                    playback = playback,
+                    // SMCPKG_SUPPORT<<<Cursor119
                 )
             }
             level == CatalogLevel.GROUP && groupId == CatalogTopics.LANGUAGE -> {
@@ -344,6 +352,9 @@ private fun CatalogStationPage(
     onHighBitrate: (Boolean) -> Unit,
     onStation: (RadioStation) -> Unit,
     onFavorite: (RadioStation) -> Unit,
+    // SMCPKG_SUPPORT>>>Cursor119
+    playback: PlaybackState = PlaybackState(),
+    // SMCPKG_SUPPORT<<<Cursor119
 ) {
     // SMCPKG_SUPPORT>>>Cursor113
     val adsRemoved by AdsEntitlement.removed.collectAsStateWithLifecycle()
@@ -440,7 +451,11 @@ private fun CatalogStationPage(
                     is CatalogRow.StationRow -> {
                         StationCard(
                             station = row.station,
-                            isFavorite = row.station.stationUuid in favoriteIds,
+                            // SMCPKG_SUPPORT>>>Cursor119
+                            // isFavorite = row.station.stationUuid in favoriteIds,
+                            isFavorite = stationIsFavorite(row.station, favoriteIds),
+                            playback = playback,
+                            // SMCPKG_SUPPORT<<<Cursor119
                             onClick = { onStation(row.station) },
                             onToggleFavorite = { onFavorite(row.station) },
                         )

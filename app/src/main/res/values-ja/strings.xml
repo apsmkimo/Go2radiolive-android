@@ -118,6 +118,10 @@
     <string name="alarm_failed">放送局を再生できませんでした。アラーム音を鳴らします。</string>
     <string name="alarm_snoozed">10分後に再通知します</string>
     <string name="alarm_channel">起床アラーム</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">この放送局に接続できません</string>
+    <string name="next_station">次の放送局</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
     <string name="playback_failed">再生できませんでした</string>
     <string name="catalog_global">グローバル</string>
     <string name="catalog_scope">国・地域</string>

@@ -21,6 +21,18 @@ data class RadioStation(
     /** Plain-text podcast show notes. Null on radio stations and older saved rows. */
     val summary: String? = null,
     // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor119
+    /** Other stream addresses: the unused url/url_resolved pair and merged duplicates. */
+    val alternateUrls: List<String>? = null,
+    /** Uuids folded into this row. Older saved rows leave this null. */
+    val mergedUuids: List<String>? = null,
+    /** 1 = last check succeeded, 0 = failed, null = unknown on older saved rows. */
+    val lastCheckOk: Int? = null,
+    val lastCheckTimeMs: Long = 0,
+    val codec: String? = null,
+    val sslError: Boolean = false,
+    val hls: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor119
 )
 
 data class StationCategory(
@@ -60,6 +72,10 @@ data class PlaybackState(
     val isPlaying: Boolean = false,
     val isBuffering: Boolean = false,
     val errorMessage: String? = null,
+    // SMCPKG_SUPPORT>>>Cursor119
+    /** Every saved stream was tried and the station still did not connect. */
+    val cannotConnect: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor119
 )
 
 enum class BrowseTab {

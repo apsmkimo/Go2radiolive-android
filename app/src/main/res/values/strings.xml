@@ -121,6 +121,10 @@
     <string name="alarm_failed">Couldn\'t play the station. Playing an alarm sound instead.</string>
     <string name="alarm_snoozed">Snoozed for 10 minutes</string>
     <string name="alarm_channel">Wake-up alarm</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Can\'t connect to this station</string>
+    <string name="next_station">Next station</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
     <string name="playback_failed">Playback failed</string>
     <string name="catalog_global">Global</string>
     <string name="catalog_scope">Country</string>

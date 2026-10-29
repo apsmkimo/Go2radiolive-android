@@ -1,6 +1,7 @@
 package com.apsmkimo.go2radiolive.presentation.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,13 +20,13 @@ import androidx.compose.material.icons.filled.Pause
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.outlined.GraphicEq
 import androidx.compose.material.icons.outlined.Tune
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.alarm.PlaybackSignals
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
+import com.apsmkimo.go2radiolive.domain.station.stationIconMotion
 
 // SMCPKG_SUPPORT>>>Cursor020
 // @Composable
@@ -135,6 +137,10 @@ fun MiniPlayer(
     onBalanceChange: (Float) -> Unit,
     onResetTone: () -> Unit,
     modifier: Modifier = Modifier,
+    // SMCPKG_SUPPORT>>>Cursor119
+    onOpenPlayer: () -> Unit = {},
+    onNextStation: () -> Unit = {},
+    // SMCPKG_SUPPORT<<<Cursor119
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         HorizontalDivider()
@@ -142,25 +148,54 @@ fun MiniPlayer(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                imageVector = Icons.Outlined.GraphicEq,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(end = 12.dp),
-            )
-            Column(modifier = Modifier.weight(1f)) {
-                Text(
-                    text = playback.station?.name ?: stringResource(R.string.no_station_playing),
+            // SMCPKG_SUPPORT>>>Cursor119
+            // Icon(
+            //     imageVector = Icons.Outlined.GraphicEq,
+            //     contentDescription = null,
+            //     tint = MaterialTheme.colorScheme.primary,
+            //     modifier = Modifier.padding(end = 12.dp),
+            // )
+            val station = playback.station
+            if (station == null) {
+                Icon(
+                    imageVector = Icons.Outlined.GraphicEq,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(end = 12.dp),
+                )
+            } else {
+                StationArtwork(
+                    station = station,
+                    motion = stationIconMotion(station.stationUuid, playback),
+                    modifier = Modifier
+                        .padding(end = 12.dp)
+                        .size(48.dp)
+                        .clickable(onClick = onOpenPlayer),
+                )
+            }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable(enabled = station != null, onClick = onOpenPlayer),
+            ) {
+                // Text(
+                //     text = playback.station?.name ?: stringResource(R.string.no_station_playing),
+                //     style = MaterialTheme.typography.titleMedium,
+                //     maxLines = 1,
+                //     overflow = TextOverflow.Ellipsis,
+                // )
+                MarqueeTitle(
+                    text = station?.name ?: stringResource(R.string.no_station_playing),
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
                 val status = when {
+                    playback.cannotConnect -> stringResource(R.string.cannot_connect)
                     playback.isBuffering -> stringResource(R.string.buffering)
                     playback.isPlaying -> stringResource(R.string.now_playing)
-                    playback.station != null -> stringResource(R.string.paused)
+                    station != null -> stringResource(R.string.paused)
                     else -> stringResource(R.string.tap_station_to_play)
                 }
+            // SMCPKG_SUPPORT<<<Cursor119
                 val sleep by PlaybackSignals.sleep.collectAsStateWithLifecycle()
                 val sleepLabel = sleepRemainingLabel(sleep)
                 Text(
@@ -171,14 +206,25 @@ fun MiniPlayer(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            if (playback.isBuffering) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .padding(end = 8.dp)
-                        .size(22.dp),
-                    strokeWidth = 2.dp,
-                )
+            // SMCPKG_SUPPORT>>>Cursor119
+            // if (playback.isBuffering) {
+            //     CircularProgressIndicator(
+            //         modifier = Modifier
+            //             .padding(end = 8.dp)
+            //             .size(22.dp),
+            //         strokeWidth = 2.dp,
+            //     )
+            // }
+            if (playback.cannotConnect) {
+                TextButton(onClick = onNextStation) {
+                    Text(
+                        text = stringResource(R.string.next_station),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
             }
+            // SMCPKG_SUPPORT<<<Cursor119
             FilledTonalIconButton(
                 onClick = onTogglePlayPause,
                 enabled = playback.station != null,

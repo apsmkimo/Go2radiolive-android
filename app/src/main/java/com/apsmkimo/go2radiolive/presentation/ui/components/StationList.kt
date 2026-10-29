@@ -26,8 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.ads.nativeAdInsertAfterIndex
+import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
+import com.apsmkimo.go2radiolive.domain.station.stationIsFavorite
 
 @Composable
 fun StationList(
@@ -48,6 +50,9 @@ fun StationList(
     // SMCPKG_SUPPORT>>>Cursor118
     notesScope: String? = null,
     // SMCPKG_SUPPORT<<<Cursor118
+    // SMCPKG_SUPPORT>>>Cursor119
+    playback: PlaybackState = PlaybackState(),
+    // SMCPKG_SUPPORT<<<Cursor119
 ) {
     val listState = rememberLazyListState()
     // SMCPKG_SUPPORT>>>Cursor118
@@ -92,9 +97,13 @@ fun StationList(
                 itemsIndexed(stations, key = { _, station -> station.stationUuid }) { index, station ->
                     StationCard(
                         station = station,
-                        isFavorite = station.stationUuid in favoriteIds,
+                        // SMCPKG_SUPPORT>>>Cursor119
+                        // isFavorite = station.stationUuid in favoriteIds,
+                        isFavorite = stationIsFavorite(station, favoriteIds),
+                        // SMCPKG_SUPPORT<<<Cursor119
                         onClick = { onStationClick(station) },
                         onToggleFavorite = { onToggleFavorite(station) },
+                        playback = playback,
                         // SMCPKG_SUPPORT>>>Cursor117
                         episodeNotes = episodeNotes,
                         // SMCPKG_SUPPORT<<<Cursor117

@@ -8,6 +8,8 @@ import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.billing.BillingManager
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
+import com.apsmkimo.go2radiolive.data.local.StationFailureStore
+import com.apsmkimo.go2radiolive.data.remote.OkHttpPlaylistClient
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
@@ -184,7 +186,16 @@ class AppContainer(context: Context) {
     val toggleFavoriteUseCase = ToggleFavoriteUseCase(favoriteRepository)
     val resolveStreamUrlUseCase = ResolveStreamUrlUseCase(stationRepository)
 
-    val playerController = RadioPlayerController(appContext, gson)
+    // SMCPKG_SUPPORT>>>Cursor119
+    // val playerController = RadioPlayerController(appContext, gson)
+    val stationFailureStore = StationFailureStore(appContext, gson)
+    val playerController = RadioPlayerController(
+        appContext,
+        gson,
+        playlists = OkHttpPlaylistClient(RadioPlaybackService.USER_AGENT),
+        failures = stationFailureStore,
+    )
+    // SMCPKG_SUPPORT<<<Cursor119
 
     companion object {
         const val RADIO_BROWSER_BASE_URL = "https://de1.api.radio-browser.info/"
