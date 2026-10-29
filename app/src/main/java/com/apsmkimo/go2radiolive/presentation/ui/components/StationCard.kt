@@ -1,6 +1,11 @@
 package com.apsmkimo.go2radiolive.presentation.ui.components
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,14 +23,26 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.apsmkimo.go2radiolive.data.remote.plainPodcastText
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.apsmkimo.go2radiolive.R
@@ -38,6 +55,15 @@ fun StationCard(
     onClick: () -> Unit,
     onToggleFavorite: () -> Unit,
     modifier: Modifier = Modifier,
+    // SMCPKG_SUPPORT>>>Cursor117
+    episodeNotes: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor118
+    notesExpanded: Boolean = false,
+    notesOverflow: Boolean = false,
+    onToggleNotes: () -> Unit = {},
+    onNotesOverflow: () -> Unit = {},
+    // SMCPKG_SUPPORT<<<Cursor118
 ) {
     Card(
         modifier = modifier
@@ -48,7 +74,10 @@ fun StationCard(
     ) {
         Row(
             modifier = Modifier.padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
+            // SMCPKG_SUPPORT>>>Cursor117
+            // verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = if (episodeNotes) Alignment.Top else Alignment.CenterVertically,
+            // SMCPKG_SUPPORT<<<Cursor117
         ) {
             val context = LocalContext.current
             AsyncImage(
@@ -76,6 +105,31 @@ fun StationCard(
                     .weight(1f)
                     .padding(horizontal = 12.dp),
             ) {
+                // SMCPKG_SUPPORT>>>Cursor117
+                if (episodeNotes) {
+                    Text(
+                        text = plainPodcastText(station.name).ifBlank { station.name },
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 15.sp,
+                            lineHeight = 20.sp,
+                            fontWeight = FontWeight.Medium,
+                        ),
+                    )
+                    val notes = plainPodcastText(station.summary.orEmpty())
+                    if (notes.isNotEmpty()) {
+                        // SMCPKG_SUPPORT>>>Cursor118
+                        EpisodeDescription(
+                            episodeId = station.stationUuid,
+                            notes = notes,
+                            expanded = notesExpanded,
+                            knownOverflow = notesOverflow,
+                            onToggle = onToggleNotes,
+                            onOverflow = onNotesOverflow,
+                        )
+                        // SMCPKG_SUPPORT<<<Cursor118
+                    }
+                } else {
+                // SMCPKG_SUPPORT<<<Cursor117
                 Text(
                     text = station.name,
                     style = MaterialTheme.typography.titleMedium,
@@ -103,6 +157,9 @@ fun StationCard(
                         overflow = TextOverflow.Ellipsis,
                     )
                 }
+                // SMCPKG_SUPPORT>>>Cursor117
+                }
+                // SMCPKG_SUPPORT<<<Cursor117
             }
             IconButton(onClick = onToggleFavorite) {
                 Icon(
@@ -114,3 +171,90 @@ fun StationCard(
         }
     }
 }
+
+// SMCPKG_SUPPORT>>>Cursor118
+@Composable
+private fun EpisodeDescription(
+    episodeId: String,
+    notes: String,
+    expanded: Boolean,
+    knownOverflow: Boolean,
+    onToggle: () -> Unit,
+    onOverflow: () -> Unit,
+) {
+    var overflows by remember(episodeId, notes) { mutableStateOf(knownOverflow) }
+    var reportOverflow by remember(episodeId, notes) { mutableStateOf(false) }
+    val seeMore = stringResource(R.string.episode_see_more)
+    val showLess = stringResource(R.string.episode_show_less)
+    val toggleLabel = if (expanded) showLess else seeMore
+    // Arm animation only after the collapsed measurement (and its control) has
+    // been placed, so scrolling a row into view does not grow the list.
+    var placed by remember(episodeId, notes) { mutableStateOf(false) }
+    var animate by remember(episodeId, notes) { mutableStateOf(false) }
+    val interaction = remember(episodeId) { MutableInteractionSource() }
+    if (placed && !animate) {
+        SideEffect { animate = true }
+    }
+    if (reportOverflow) {
+        SideEffect {
+            onOverflow()
+            reportOverflow = false
+        }
+    }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 4.dp)
+            .then(
+                if (animate) {
+                    Modifier.animateContentSize(
+                        animationSpec = tween(durationMillis = 180, easing = FastOutSlowInEasing),
+                    )
+                } else {
+                    Modifier
+                },
+            ),
+    ) {
+        Text(
+            text = notes,
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontSize = 13.sp,
+                lineHeight = 18.sp,
+            ),
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            maxLines = episodeDescriptionMaxLines(expanded),
+            overflow = if (expanded) TextOverflow.Clip else TextOverflow.Ellipsis,
+            onTextLayout = { layout ->
+                if (!expanded && layout.hasVisualOverflow) {
+                    overflows = true
+                    reportOverflow = true
+                }
+                placed = true
+            },
+        )
+        if (showEpisodeDescriptionToggle(overflows, expanded)) {
+            Text(
+                text = toggleLabel,
+                style = MaterialTheme.typography.bodyMedium.copy(
+                    fontSize = 13.sp,
+                    lineHeight = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                ),
+                color = MaterialTheme.colorScheme.primary,
+                textDecoration = TextDecoration.Underline,
+                modifier = Modifier
+                    .align(Alignment.End)
+                    .padding(top = 2.dp)
+                    .clickable(
+                        interactionSource = interaction,
+                        indication = LocalIndication.current,
+                        role = Role.Button,
+                        onClick = onToggle,
+                    )
+                    .padding(vertical = 8.dp, horizontal = 4.dp)
+                    .semantics { contentDescription = toggleLabel },
+            )
+        }
+    }
+}
+// SMCPKG_SUPPORT<<<Cursor118

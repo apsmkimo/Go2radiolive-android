@@ -20,16 +20,20 @@ import com.apsmkimo.go2radiolive.locale.AppLocale
 import com.apsmkimo.go2radiolive.locale.refreshLocalizedChannels
 import com.apsmkimo.go2radiolive.locale.withAppLocale
 import com.apsmkimo.go2radiolive.audio.dsp.Go2RenderersFactory
-import com.apsmkimo.go2radiolive.audio.spatial.SpatialRoute
-import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
+// SMCPKG_SUPPORT>>>Cursor116
+// import com.apsmkimo.go2radiolive.audio.spatial.SpatialRoute
+// import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
+// SMCPKG_SUPPORT<<<Cursor116
 import com.apsmkimo.go2radiolive.presentation.MainActivity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+// SMCPKG_SUPPORT>>>Cursor116
+// import kotlinx.coroutines.delay
+// import kotlinx.coroutines.launch
+// SMCPKG_SUPPORT<<<Cursor116
 
 @OptIn(UnstableApi::class)
 class RadioPlaybackService : MediaSessionService() {
@@ -108,43 +112,51 @@ class RadioPlaybackService : MediaSessionService() {
         // Mono Off reports one channel and skips this processor. Media3 keeps
         // that format until the sink is configured again, so a mono stream
         // fades out, reloads the current item, and fades back in.
-        spatialRouteJob = spatialRouteScope.launch {
-            var previousOff: Boolean? = null
-            AudioSettingsRepository.settings.collect { settings ->
-                val off = settings.spatialMode == SpatialAudioMode.OFF
-                val wasOff = previousOff
-                previousOff = off
-                if (wasOff == null || wasOff == off) return@collect
-                if (SpatialRoute.inputChannels != 1) return@collect
-                if (player.mediaItemCount == 0 || player.currentMediaItem == null) return@collect
-                fadeAcrossBypass(player)
-            }
-        }
+        // spatialRouteJob = spatialRouteScope.launch {
+        //     var previousOff: Boolean? = null
+        //     AudioSettingsRepository.settings.collect { settings ->
+        //         val off = settings.spatialMode == SpatialAudioMode.OFF
+        //         val wasOff = previousOff
+        //         previousOff = off
+        //         if (wasOff == null || wasOff == off) return@collect
+        //         if (SpatialRoute.inputChannels != 1) return@collect
+        //         if (player.mediaItemCount == 0 || player.currentMediaItem == null) return@collect
+        //         fadeAcrossBypass(player)
+        //     }
+        // }
         // SMCPKG_SUPPORT<<<Cursor072
+        // SMCPKG_SUPPORT>>>Cursor116
+        // The spatial processor stays active for mono and stereo and always
+        // emits stereo, so a mode change is heard on the next buffers. Reloading
+        // the stream here only interrupted playback.
+        spatialRouteJob = null
+        // SMCPKG_SUPPORT<<<Cursor116
     }
 
-    private suspend fun fadeAcrossBypass(player: ExoPlayer) {
-        val item = player.currentMediaItem ?: return
-        val resume = player.playWhenReady
-        fadeVolume(player, 0f)
-        try {
-            player.setMediaItem(item, /* resetPosition = */ false)
-            player.prepare()
-            player.playWhenReady = resume
-        } finally {
-            fadeVolume(player, 1f)
-        }
-    }
-
-    private suspend fun fadeVolume(player: ExoPlayer, target: Float) {
-        val start = player.volume
-        var step = 1
-        while (step <= VOLUME_STEPS) {
-            player.volume = start + (target - start) * (step / VOLUME_STEPS.toFloat())
-            delay(VOLUME_STEP_MS)
-            step++
-        }
-    }
+    // SMCPKG_SUPPORT>>>Cursor116
+    // private suspend fun fadeAcrossBypass(player: ExoPlayer) {
+    //     val item = player.currentMediaItem ?: return
+    //     val resume = player.playWhenReady
+    //     fadeVolume(player, 0f)
+    //     try {
+    //         player.setMediaItem(item, /* resetPosition = */ false)
+    //         player.prepare()
+    //         player.playWhenReady = resume
+    //     } finally {
+    //         fadeVolume(player, 1f)
+    //     }
+    // }
+    //
+    // private suspend fun fadeVolume(player: ExoPlayer, target: Float) {
+    //     val start = player.volume
+    //     var step = 1
+    //     while (step <= VOLUME_STEPS) {
+    //         player.volume = start + (target - start) * (step / VOLUME_STEPS.toFloat())
+    //         delay(VOLUME_STEP_MS)
+    //         step++
+    //     }
+    // }
+    // SMCPKG_SUPPORT<<<Cursor116
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         // SMCPKG_SUPPORT>>>Cursor098
@@ -219,7 +231,9 @@ class RadioPlaybackService : MediaSessionService() {
         const val ACTION_ALARM_STOP = "com.apsmkimo.go2radiolive.ALARM_STOP"
         const val ACTION_ALARM_SNOOZE = "com.apsmkimo.go2radiolive.ALARM_SNOOZE"
         const val EXTRA_MINUTES = "extra_minutes"
-        private const val VOLUME_STEPS = 6
-        private const val VOLUME_STEP_MS = 15L
+        // SMCPKG_SUPPORT>>>Cursor116
+        // private const val VOLUME_STEPS = 6
+        // private const val VOLUME_STEP_MS = 15L
+        // SMCPKG_SUPPORT<<<Cursor116
     }
 }

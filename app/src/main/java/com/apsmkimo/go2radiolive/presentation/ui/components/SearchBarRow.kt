@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +40,9 @@ fun SearchBarRow(
     onPickPodcastRegion: (() -> Unit)? = null,
     onAlarm: () -> Unit = {},
     sleepBadge: String? = null,
+    // SMCPKG_SUPPORT>>>Cursor115
+    @StringRes hintRes: Int = R.string.search_hint,
+    // SMCPKG_SUPPORT<<<Cursor115
 ) {
     // SMCPKG_SUPPORT>>>Cursor096
     Row(
@@ -59,7 +63,10 @@ fun SearchBarRow(
             },
             placeholder = {
                 Text(
-                    text = stringResource(R.string.search_hint),
+                    // SMCPKG_SUPPORT>>>Cursor115
+                    // text = stringResource(R.string.search_hint),
+                    text = stringResource(hintRes),
+                    // SMCPKG_SUPPORT<<<Cursor115
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     style = MaterialTheme.typography.bodyMedium,

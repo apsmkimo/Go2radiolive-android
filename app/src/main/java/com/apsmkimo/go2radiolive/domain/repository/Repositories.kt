@@ -42,6 +42,11 @@ interface PodcastRepository {
     fun topShows(region: String?, bypassCache: Boolean = false): Flow<PodcastChart>
     // SMCPKG_SUPPORT<<<Cursor103
     suspend fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): List<RadioStation>
+
+    // SMCPKG_SUPPORT>>>Cursor115
+    /** iTunes Search. An empty term returns an empty list. An empty regional result falls back to the US store. */
+    suspend fun searchShows(term: String, region: String?, bypassCache: Boolean = false): List<PodcastShow>
+    // SMCPKG_SUPPORT<<<Cursor115
 }
 
 interface FavoriteRepository {

@@ -4,6 +4,8 @@ import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.remote.AppleStorefronts
 import com.apsmkimo.go2radiolive.data.remote.PodcastRssParser
 import com.apsmkimo.go2radiolive.data.remote.dedupePodcasts
+import com.apsmkimo.go2radiolive.data.remote.itunesPodcastSearchUrl
+import com.apsmkimo.go2radiolive.data.remote.mapItunesPodcastSearch
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
 import com.apsmkimo.go2radiolive.data.remote.retryIo
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
@@ -17,15 +19,23 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.coroutines.sync.Semaphore
 import kotlinx.coroutines.sync.withPermit
 import kotlinx.coroutines.withContext
+import okhttp3.Call
+import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.Response
 import java.io.IOException
+import kotlin.coroutines.coroutineContext
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 /**
  * Public Apple charts, no API key.
@@ -75,10 +85,33 @@ class PodcastRepositoryImpl(
         region: String?,
         bypassCache: Boolean,
     ): List<RadioStation> = withContext(Dispatchers.IO) {
+        // SMCPKG_SUPPORT>>>Cursor115
+        // val country = podcastStorefront(region)
+        // if (!bypassCache) {
+        //     val cachedFeed = catalogStore.feedUrl(show.id)
+        //     if (!cachedFeed.isNullOrBlank()) {
+        //         val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
+        //         if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
+        //     }
+        // }
+        // val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
+        //     ?: throw IOException("missing feed")
+        // readRss(feedUrl, show, bypassCache)
         val country = podcastStorefront(region)
+        val embedded = show.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
+        if (embedded != null) {
+            catalogStore.saveFeedUrl(show.id, embedded)
+            try {
+                return@withContext readRss(embedded, show, bypassCache)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (_: Exception) {
+                // The search feed failed. Fall through to the cached or lookup feed.
+            }
+        }
         if (!bypassCache) {
             val cachedFeed = catalogStore.feedUrl(show.id)
-            if (!cachedFeed.isNullOrBlank()) {
+            if (!cachedFeed.isNullOrBlank() && cachedFeed != embedded) {
                 val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
                 if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
             }
@@ -86,7 +119,38 @@ class PodcastRepositoryImpl(
         val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
             ?: throw IOException("missing feed")
         readRss(feedUrl, show, bypassCache)
+        // SMCPKG_SUPPORT<<<Cursor115
     }
+
+    // SMCPKG_SUPPORT>>>Cursor115
+    override suspend fun searchShows(
+        term: String,
+        region: String?,
+        bypassCache: Boolean,
+    ): List<PodcastShow> = withContext(Dispatchers.IO) {
+        val query = term.trim()
+        if (query.isEmpty()) return@withContext emptyList()
+        val country = podcastStorefront(region)
+        val primary = fetchPodcastSearch(query, country, bypassCache)
+        if (primary.isNotEmpty() || country == "us") return@withContext primary
+        val withoutCountry = runCatching { fetchPodcastSearch(query, null, bypassCache) }
+            .getOrElse { error ->
+                if (error is CancellationException) throw error
+                emptyList()
+            }
+        if (withoutCountry.isNotEmpty()) return@withContext withoutCountry
+        fetchPodcastSearch(query, "us", bypassCache)
+    }
+
+    private suspend fun fetchPodcastSearch(
+        term: String,
+        country: String?,
+        bypassCache: Boolean,
+    ): List<PodcastShow> {
+        val body = getStringCancellable(itunesPodcastSearchUrl(term, country), bypassCache)
+        return mapItunesPodcastSearch(body)
+    }
+    // SMCPKG_SUPPORT<<<Cursor115
 
     // SMCPKG_SUPPORT>>>Cursor103
     // private fun loadCatalog(country: String, bypassCache: Boolean): List<PodcastShow> {
@@ -243,6 +307,48 @@ class PodcastRepositoryImpl(
             response.body?.string().orEmpty()
         }
     }
+
+    // SMCPKG_SUPPORT>>>Cursor115
+    /** Same cache and retry as [getString], but the call is cancelled when the coroutine is. */
+    private suspend fun getStringCancellable(url: String, bypassCache: Boolean): String = retryIo {
+        coroutineContext.ensureActive()
+        val request = bust(
+            Request.Builder().url(url).header("Accept", "application/json").build(),
+            bypassCache,
+        )
+        suspendCancellableCoroutine { cont ->
+            val call = client.newCall(request)
+            cont.invokeOnCancellation { call.cancel() }
+            call.enqueue(object : Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    if (!cont.isActive) return
+                    if (call.isCanceled()) {
+                        cont.resumeWithException(CancellationException("podcast search cancelled", e))
+                    } else {
+                        cont.resumeWithException(e)
+                    }
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    try {
+                        val body = response.use { payload ->
+                            if (!payload.isSuccessful) throw IOException("http ${payload.code}")
+                            payload.body?.string().orEmpty()
+                        }
+                        if (cont.isActive) cont.resume(body)
+                    } catch (error: Exception) {
+                        if (!cont.isActive) return
+                        if (call.isCanceled() || error is CancellationException) {
+                            cont.resumeWithException(CancellationException("podcast search cancelled", error))
+                        } else {
+                            cont.resumeWithException(error)
+                        }
+                    }
+                }
+            })
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor115
 
     private fun ChartItem.toShow(): PodcastShow? {
         val showId = id?.trim().orEmpty()

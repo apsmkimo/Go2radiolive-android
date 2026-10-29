@@ -24,6 +24,11 @@ internal object PodcastRssParser {
         var title = ""
         var guid = ""
         var audioUrl = ""
+        // SMCPKG_SUPPORT>>>Cursor117
+        var description = ""
+        var summary = ""
+        var encoded = ""
+        // SMCPKG_SUPPORT<<<Cursor117
         var event = parser.eventType
         while (event != XmlPullParser.END_DOCUMENT && episodes.size < limit) {
             when (event) {
@@ -34,14 +39,33 @@ internal object PodcastRssParser {
                         title = ""
                         guid = ""
                         audioUrl = ""
+                        // SMCPKG_SUPPORT>>>Cursor117
+                        description = ""
+                        summary = ""
+                        encoded = ""
+                        // SMCPKG_SUPPORT<<<Cursor117
                     } else if (inItem && name == "title" && title.isEmpty()) {
-                        title = parser.nextText().trim()
+                        // SMCPKG_SUPPORT>>>Cursor117
+                        // title = parser.nextText().trim()
+                        title = plainPodcastText(readInnerText(parser))
+                        // SMCPKG_SUPPORT<<<Cursor117
                     } else if (inItem && name == "guid" && guid.isEmpty()) {
-                        guid = parser.nextText().trim()
+                        // SMCPKG_SUPPORT>>>Cursor117
+                        // guid = parser.nextText().trim()
+                        guid = readInnerText(parser).trim()
+                        // SMCPKG_SUPPORT<<<Cursor117
                     } else if (inItem && audioUrl.isEmpty() && (name == "enclosure" || name == "content")) {
                         val url = parser.getAttributeValue(null, "url").orEmpty().trim()
                         val type = parser.getAttributeValue(null, "type").orEmpty().lowercase()
                         if (url.isNotEmpty() && isAudio(type, url)) audioUrl = url
+                    // SMCPKG_SUPPORT>>>Cursor117
+                    } else if (inItem && name == "description" && description.isEmpty()) {
+                        description = readInnerText(parser)
+                    } else if (inItem && name == "summary" && summary.isEmpty()) {
+                        summary = readInnerText(parser)
+                    } else if (inItem && name == "encoded" && encoded.isEmpty()) {
+                        encoded = readInnerText(parser)
+                    // SMCPKG_SUPPORT<<<Cursor117
                     }
                 }
                 XmlPullParser.END_TAG -> {
@@ -58,6 +82,9 @@ internal object PodcastRssParser {
                                     country = showName,
                                     tags = "podcast",
                                     directStream = true,
+                                    // SMCPKG_SUPPORT>>>Cursor117
+                                    summary = pickEpisodeSummary(description, summary, encoded).ifBlank { null },
+                                    // SMCPKG_SUPPORT<<<Cursor117
                                 ),
                             )
                         }
@@ -68,6 +95,24 @@ internal object PodcastRssParser {
         }
         return episodes
     }
+
+    // SMCPKG_SUPPORT>>>Cursor117
+    /** Reads until the matching end tag and leaves the parser on that end tag. */
+    private fun readInnerText(parser: XmlPullParser): String {
+        if (parser.isEmptyElementTag) return ""
+        val depth = parser.depth
+        val text = StringBuilder()
+        var event = parser.next()
+        while (event != XmlPullParser.END_DOCUMENT) {
+            if (event == XmlPullParser.END_TAG && parser.depth == depth) break
+            if (event == XmlPullParser.TEXT || event == XmlPullParser.CDSECT) {
+                text.append(parser.text ?: "")
+            }
+            event = parser.next()
+        }
+        return text.toString()
+    }
+    // SMCPKG_SUPPORT<<<Cursor117
 
     private fun localName(raw: String?): String {
         val name = raw?.trim()?.lowercase().orEmpty()

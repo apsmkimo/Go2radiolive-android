@@ -16,12 +16,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.ads.nativeAdInsertAfterIndex
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
@@ -40,8 +42,19 @@ fun StationList(
     modifier: Modifier = Modifier,
     showNativeAds: Boolean = false,
     scrollToken: Int = 0,
+    // SMCPKG_SUPPORT>>>Cursor117
+    episodeNotes: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor118
+    notesScope: String? = null,
+    // SMCPKG_SUPPORT<<<Cursor118
 ) {
     val listState = rememberLazyListState()
+    // SMCPKG_SUPPORT>>>Cursor118
+    // Lives with this list. Scrolling recycles rows but keeps the set.
+    // Leaving the show disposes the list, so the next visit starts collapsed.
+    val notesExpansion = remember(notesScope) { EpisodeDescriptionExpansion() }
+    // SMCPKG_SUPPORT<<<Cursor118
     LaunchedEffect(scrollToken) {
         if (scrollToken > 0 && stations.isNotEmpty()) listState.scrollToItem(0)
     }
@@ -82,6 +95,15 @@ fun StationList(
                         isFavorite = station.stationUuid in favoriteIds,
                         onClick = { onStationClick(station) },
                         onToggleFavorite = { onToggleFavorite(station) },
+                        // SMCPKG_SUPPORT>>>Cursor117
+                        episodeNotes = episodeNotes,
+                        // SMCPKG_SUPPORT<<<Cursor117
+                        // SMCPKG_SUPPORT>>>Cursor118
+                        notesExpanded = episodeNotes && notesExpansion.isExpanded(station.stationUuid),
+                        notesOverflow = episodeNotes && notesExpansion.overflows(station.stationUuid),
+                        onToggleNotes = { notesExpansion.toggle(station.stationUuid) },
+                        onNotesOverflow = { notesExpansion.markOverflow(station.stationUuid) },
+                        // SMCPKG_SUPPORT<<<Cursor118
                     )
                     if (showNativeAds && nativeAdInsertAfterIndex(index)) {
                         NativeAdSlot()
@@ -141,6 +163,9 @@ fun BrowseRowList(
     header: String? = null,
     showNativeAds: Boolean = false,
     scrollToken: Int = 0,
+    // SMCPKG_SUPPORT>>>Cursor117
+    nameWraps: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor117
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(scrollToken) {
@@ -202,6 +227,31 @@ fun BrowseRowList(
                         onClick = { onRowClick(row) },
                         modifier = Modifier.fillMaxWidth(),
                     ) {
+                        // SMCPKG_SUPPORT>>>Cursor117
+                        if (nameWraps) {
+                            Column(Modifier.padding(16.dp).fillMaxWidth()) {
+                                Text(
+                                    text = row.title,
+                                    style = MaterialTheme.typography.bodyLarge.copy(
+                                        fontSize = 15.sp,
+                                        lineHeight = 20.sp,
+                                        fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
+                                    ),
+                                )
+                                if (row.subtitle.isNotEmpty()) {
+                                    Text(
+                                        text = row.subtitle,
+                                        style = MaterialTheme.typography.bodyMedium.copy(
+                                            fontSize = 13.sp,
+                                            lineHeight = 18.sp,
+                                        ),
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.padding(top = 2.dp),
+                                    )
+                                }
+                            }
+                        } else
+                        // SMCPKG_SUPPORT<<<Cursor117
                         androidx.compose.foundation.layout.Row(
                             modifier = Modifier.padding(16.dp),
                             verticalAlignment = Alignment.CenterVertically,

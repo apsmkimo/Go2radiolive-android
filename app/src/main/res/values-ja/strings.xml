@@ -18,6 +18,15 @@
     <string name="empty_categories">カテゴリがありません</string>
     <string name="empty_countries">国がありません</string>
     <string name="empty_podcasts">ポッドキャストがありません</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">ポッドキャストを検索</string>
+    <string name="podcast_search_empty">一致するポッドキャストがありません</string>
+    <string name="podcast_search_failed">ポッドキャストを検索できませんでした</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">もっと見る</string>
+    <string name="episode_show_less">閉じる</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
     <string name="podcast_us_fallback">この地域にはポッドキャストチャートがないため、米国のチャートを表示しています。</string>
     <string name="podcast_region">国・地域</string>
     <string name="podcast_region_automatic">自動（端末の地域）</string>
@@ -43,7 +52,10 @@
     <string name="audio_panel_button">オーディオパネルボタン</string>
     <string name="audio_panel_button_summary">再生バーの再生ボタンの横にオーディオパネルボタンを表示</string>
     <string name="voice_enhancement">音声強調</string>
-    <string name="voice_enhancement_summary">声の帯域を強め、低域のこもりを少し下げます</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">声の帯域を強め、低域のこもりを少し下げます</string> -->
+    <string name="voice_enhancement_summary">声の帯域を強め、低域のこもりを下げます</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="spatial_section">3D空間オーディオ</string>
     <string name="spatial_off">オフ</string>
     <string name="spatial_off_summary">空間処理をオフにして元の音声に戻します</string>
@@ -53,6 +65,9 @@
     <string name="spatial_surround_summary">バイノーラル定位と初期反射で前・横・後ろを表します</string>
     <string name="spatial_orbit">オービット</string>
     <string name="spatial_orbit_summary">音源が水平面をゆっくり周回します</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">スピーカーは左右を混ぜて再生します。このモードは残響と広がりで空間を加えます。左右の定位はヘッドホンだとはっきり聞こえます。</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
     <string name="orbit_speed">回転速度</string>
     <string name="orbit_speed_value">%1$.0f 秒／周</string>
     <string name="orbit_direction">回転方向</string>

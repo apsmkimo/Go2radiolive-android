@@ -29,6 +29,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +42,11 @@ import androidx.compose.ui.unit.dp
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.media.AudioDeviceCallback
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
+import android.os.Handler
+import android.os.Looper
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.apsmkimo.go2radiolive.BuildConfig
 import com.apsmkimo.go2radiolive.Go2RadioApp
@@ -49,6 +55,7 @@ import com.apsmkimo.go2radiolive.ads.AdsConsent
 import com.apsmkimo.go2radiolive.ads.AdsEntitlement
 import com.apsmkimo.go2radiolive.data.billing.RemoveAdsUiState
 import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
+import com.apsmkimo.go2radiolive.audio.PlaybackRoute
 import com.apsmkimo.go2radiolive.domain.model.AudioSettings
 import com.apsmkimo.go2radiolive.domain.model.SpatialAudioMode
 import com.apsmkimo.go2radiolive.locale.AppLanguage
@@ -314,11 +321,24 @@ private fun languageName(tag: String): String = when (tag) {
 
 @Composable
 private fun SpatialAudioSection(settings: AudioSettings) {
+    // SMCPKG_SUPPORT>>>Cursor116
+    val speakerOnly = rememberBuiltinSpeakerOnly()
+    // SMCPKG_SUPPORT<<<Cursor116
     Text(
         text = stringResource(R.string.spatial_section),
         style = MaterialTheme.typography.titleMedium,
         modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
     )
+    // SMCPKG_SUPPORT>>>Cursor116
+    if (speakerOnly && settings.spatialMode != SpatialAudioMode.OFF) {
+        Text(
+            text = stringResource(R.string.spatial_speaker_note),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+        )
+    }
+    // SMCPKG_SUPPORT<<<Cursor116
     SpatialModeRow(
         title = stringResource(R.string.spatial_off),
         summary = stringResource(R.string.spatial_off_summary),
@@ -347,6 +367,32 @@ private fun SpatialAudioSection(settings: AudioSettings) {
         OrbitControls(settings)
     }
 }
+
+// SMCPKG_SUPPORT>>>Cursor116
+@Composable
+private fun rememberBuiltinSpeakerOnly(): Boolean {
+    val context = LocalContext.current
+    var speakerOnly by remember { mutableStateOf(false) }
+    DisposableEffect(context) {
+        val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as? AudioManager
+        if (audioManager == null) {
+            onDispose { }
+        } else {
+            fun refresh() {
+                speakerOnly = PlaybackRoute.isBuiltinSpeakerOnly(audioManager)
+            }
+            val callback = object : AudioDeviceCallback() {
+                override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>) = refresh()
+                override fun onAudioDevicesRemoved(removedDevices: Array<out AudioDeviceInfo>) = refresh()
+            }
+            refresh()
+            audioManager.registerAudioDeviceCallback(callback, Handler(Looper.getMainLooper()))
+            onDispose { audioManager.unregisterAudioDeviceCallback(callback) }
+        }
+    }
+    return speakerOnly
+}
+// SMCPKG_SUPPORT<<<Cursor116
 
 @Composable
 private fun SpatialModeRow(

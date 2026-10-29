@@ -158,10 +158,40 @@ internal object DspRuntime {
     private fun ensureVoice(rate: Int) {
         if (voiceRate == rate) return
         voiceRate = rate
-        // Mild cut under 150 Hz plus a wide presence peak centered at 2 kHz (about 1–4 kHz).
-        voiceLowCut = designLowShelf(rate, 150.0, -3.5)
-        voicePresence = designPeaking(rate, 2_000.0, 4.5, q = 0.65)
+        // SMCPKG_SUPPORT>>>Cursor116
+        // A −3.5 dB shelf and +4.5 dB presence peak were easy to miss on a phone
+        // speaker, and a hot stream is pulled back by the output limiter.
+        // voiceLowCut = designLowShelf(rate, 150.0, -3.5)
+        // voicePresence = designPeaking(rate, 2_000.0, 4.5, q = 0.65)
+        // Stronger relative balance: bass cut near 180 Hz (still in a phone
+        // speaker's range) and a presence peak near 2.5 kHz. The ratio survives
+        // the limiter, so speech stays intelligible and obviously brighter.
+        voiceLowCut = designLowShelf(rate, 180.0, -8.0)
+        voicePresence = designPeaking(rate, 2_500.0, 10.0, q = 0.9)
+        // SMCPKG_SUPPORT<<<Cursor116
     }
+
+    // SMCPKG_SUPPORT>>>Cursor116
+    /** Unit tests share this process-wide object. Drop smoothed state between cases. */
+    internal fun resetForTests() {
+        lastAdvanceNs = 0L
+        smoothedBass = 0.0
+        smoothedLow = 0.0
+        smoothedMid = 0.0
+        smoothedHigh = 0.0
+        smoothedBalance = 0.0
+        smoothedVoice = 0.0
+        smoothedSurround = 0.0
+        spatialEngaged = false
+        designedRate = 0
+        designedBass = Double.NaN
+        designedLow = Double.NaN
+        designedMid = Double.NaN
+        designedHigh = Double.NaN
+        voiceRate = 0
+        frame = DspFrame.NEUTRAL
+    }
+    // SMCPKG_SUPPORT<<<Cursor116
 
     private fun publish(): DspFrame {
         val eqActive = abs(smoothedBass) > 0.04 || abs(smoothedLow) > 0.04 ||

@@ -70,6 +70,11 @@ data class HomeUiState(
     val userRefreshOk: Boolean = true,
     /** Bumped when a podcast refresh fails but a saved list is still on screen. */
     val podcastStaleEvent: Int = 0,
+    // SMCPKG_SUPPORT>>>Cursor115
+    val podcastSearchResults: List<PodcastShow> = emptyList(),
+    val podcastSearchLoading: Boolean = false,
+    @StringRes val podcastSearchErrorResId: Int? = null,
+    // SMCPKG_SUPPORT<<<Cursor115
     // SMCPKG_SUPPORT>>>Cursor106
     val catalogScope: String = "",
     val catalogLevel: CatalogLevel = CatalogLevel.HUB,
@@ -92,6 +97,10 @@ data class HomeUiState(
     val visibleStations: List<RadioStation>
         get() {
             val source = if (selectedTab == BrowseTab.FAVORITES) favoriteStations else stations
+            // SMCPKG_SUPPORT>>>Cursor117
+            // A parked podcast search must not hide episodes while a show is open.
+            if (selectedTab == BrowseTab.PODCAST && selectedPodcast != null) return source
+            // SMCPKG_SUPPORT<<<Cursor117
             val query = searchQuery.trim()
             return if (query.isEmpty()) {
                 source
@@ -122,15 +131,19 @@ data class HomeUiState(
 
     val visiblePodcasts: List<PodcastShow>
         get() {
+            // SMCPKG_SUPPORT>>>Cursor115
+            // val query = searchQuery.trim()
+            // return if (query.isEmpty()) {
+            //     podcasts
+            // } else {
+            //     podcasts.filter {
+            //         it.name.contains(query, ignoreCase = true) ||
+            //             it.author.contains(query, ignoreCase = true)
+            //     }
+            // }
             val query = searchQuery.trim()
-            return if (query.isEmpty()) {
-                podcasts
-            } else {
-                podcasts.filter {
-                    it.name.contains(query, ignoreCase = true) ||
-                        it.author.contains(query, ignoreCase = true)
-                }
-            }
+            return if (query.isEmpty()) podcasts else podcastSearchResults
+            // SMCPKG_SUPPORT<<<Cursor115
         }
 
     val showingCategories: Boolean
@@ -142,6 +155,13 @@ data class HomeUiState(
     val showingPodcasts: Boolean
         get() = selectedTab == BrowseTab.PODCAST && selectedPodcast == null
 }
+
+// SMCPKG_SUPPORT>>>Cursor117
+/** Search, reload, region, and alarm stay on radio tabs and the podcast show list. */
+internal fun showsBrowseSearchToolbar(tab: BrowseTab, selectedPodcast: PodcastShow?): Boolean {
+    return !(tab == BrowseTab.PODCAST && selectedPodcast != null)
+}
+// SMCPKG_SUPPORT<<<Cursor117
 
 private fun <T> filterByName(items: List<T>, query: String, name: (T) -> String): List<T> {
     val trimmed = query.trim()
@@ -167,6 +187,10 @@ class HomeViewModel(
 
     private val internalState = MutableStateFlow(HomeUiState())
     private var loadJob: Job? = null
+    // SMCPKG_SUPPORT>>>Cursor115
+    private var podcastSearchJob: Job? = null
+    private var podcastSearchGeneration = 0
+    // SMCPKG_SUPPORT<<<Cursor115
 
     val uiState: StateFlow<HomeUiState> = combine(
         internalState,
@@ -213,7 +237,18 @@ class HomeViewModel(
     }
 
     fun onSearchQueryChange(query: String) {
+        // SMCPKG_SUPPORT>>>Cursor115
+        // internalState.update { it.copy(searchQuery = query) }
         internalState.update { it.copy(searchQuery = query) }
+        val snap = internalState.value
+        if (snap.selectedTab != BrowseTab.PODCAST || snap.selectedPodcast != null) return
+        val term = query.trim()
+        if (term.isEmpty()) {
+            cancelPodcastSearch()
+            return
+        }
+        startPodcastSearch(term, debounce = true, bypassCache = false)
+        // SMCPKG_SUPPORT<<<Cursor115
     }
 
     fun onCategorySelected(category: StationCategory) {
@@ -373,16 +408,29 @@ class HomeViewModel(
 
     fun onPodcastSelected(show: PodcastShow) {
         internalState.update {
-            it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null)
+            // SMCPKG_SUPPORT>>>Cursor117
+            // it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null)
+            // Keep the show-list query so Back restores the same search.
+            it.copy(selectedPodcast = show, stations = emptyList(), errorResId = null)
+            // SMCPKG_SUPPORT<<<Cursor117
         }
         refresh()
     }
 
     fun onClearPodcast() {
+        loadJob?.cancel()
         internalState.update {
-            it.copy(selectedPodcast = null, stations = emptyList(), searchQuery = "", errorResId = null)
+            // SMCPKG_SUPPORT>>>Cursor117
+            // it.copy(selectedPodcast = null, stations = emptyList(), searchQuery = "", errorResId = null)
+            it.copy(selectedPodcast = null, stations = emptyList(), isLoading = false, errorResId = null)
+            // SMCPKG_SUPPORT<<<Cursor117
         }
-        refresh()
+        // SMCPKG_SUPPORT>>>Cursor117
+        // refresh()
+        val snap = internalState.value
+        val hasShows = snap.searchQuery.trim().isNotEmpty() || snap.podcasts.isNotEmpty()
+        if (!hasShows) refresh()
+        // SMCPKG_SUPPORT<<<Cursor117
     }
 
     // SMCPKG_SUPPORT>>>Cursor092
@@ -418,6 +466,23 @@ class HomeViewModel(
 
     fun refresh(userInitiated: Boolean = false) {
         val snapshot = internalState.value
+        // SMCPKG_SUPPORT>>>Cursor115
+        if (
+            snapshot.selectedTab == BrowseTab.PODCAST &&
+            snapshot.selectedPodcast == null &&
+            snapshot.searchQuery.trim().isNotEmpty()
+        ) {
+            startPodcastSearch(snapshot.searchQuery.trim(), debounce = false, bypassCache = true)
+            return
+        }
+        // SMCPKG_SUPPORT>>>Cursor117
+        // Opening or retrying episodes must not drop the show-list search results.
+        // cancelPodcastSearch()
+        if (snapshot.selectedTab != BrowseTab.PODCAST || snapshot.selectedPodcast == null) {
+            cancelPodcastSearch()
+        }
+        // SMCPKG_SUPPORT<<<Cursor117
+        // SMCPKG_SUPPORT<<<Cursor115
         if (snapshot.selectedTab == BrowseTab.FAVORITES) {
             if (!userInitiated) {
                 internalState.update { it.copy(isLoading = false, errorResId = null) }
@@ -512,6 +577,81 @@ class HomeViewModel(
             }
         }
     }
+
+    // SMCPKG_SUPPORT>>>Cursor115
+    private fun startPodcastSearch(term: String, debounce: Boolean, bypassCache: Boolean) {
+        val generation = ++podcastSearchGeneration
+        podcastSearchJob?.cancel()
+        internalState.update {
+            it.copy(
+                podcastSearchResults = emptyList(),
+                podcastSearchLoading = true,
+                podcastSearchErrorResId = null,
+            )
+        }
+        podcastSearchJob = viewModelScope.launch {
+            if (debounce) delay(PODCAST_SEARCH_DEBOUNCE_MS)
+            if (generation != podcastSearchGeneration) return@launch
+            try {
+                podcastRegion.awaitLoaded()
+                if (generation != podcastSearchGeneration) return@launch
+                val region = podcastRegion.selection.value.ifBlank { deviceRegion() }
+                val results = getPodcastShows.search(term, region, bypassCache)
+                if (generation != podcastSearchGeneration) return@launch
+                val current = internalState.value
+                if (
+                    current.searchQuery.trim() != term ||
+                    current.selectedTab != BrowseTab.PODCAST
+                    // SMCPKG_SUPPORT>>>Cursor117
+                    // || current.selectedPodcast != null
+                    // SMCPKG_SUPPORT<<<Cursor117
+                ) {
+                    return@launch
+                }
+                internalState.update {
+                    it.copy(
+                        podcastSearchResults = results,
+                        podcastSearchLoading = false,
+                        podcastSearchErrorResId = null,
+                    )
+                }
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                Log.w(TAG, "podcast search failed", error)
+                if (generation != podcastSearchGeneration) return@launch
+                internalState.update {
+                    it.copy(
+                        podcastSearchResults = emptyList(),
+                        podcastSearchLoading = false,
+                        podcastSearchErrorResId = R.string.podcast_search_failed,
+                    )
+                }
+            }
+        }
+    }
+
+    private fun cancelPodcastSearch() {
+        podcastSearchGeneration++
+        podcastSearchJob?.cancel()
+        podcastSearchJob = null
+        internalState.update { current ->
+            if (
+                current.podcastSearchResults.isEmpty() &&
+                !current.podcastSearchLoading &&
+                current.podcastSearchErrorResId == null
+            ) {
+                current
+            } else {
+                current.copy(
+                    podcastSearchResults = emptyList(),
+                    podcastSearchLoading = false,
+                    podcastSearchErrorResId = null,
+                )
+            }
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor115
 
     // SMCPKG_SUPPORT>>>Cursor103
     private suspend fun loadPodcastList(userInitiated: Boolean) {
@@ -869,6 +1009,10 @@ class HomeViewModel(
 }
 
 private const val TAG = "HomeViewModel"
+
+// SMCPKG_SUPPORT>>>Cursor115
+private const val PODCAST_SEARCH_DEBOUNCE_MS = 400L
+// SMCPKG_SUPPORT<<<Cursor115
 
 class HomeViewModelFactory(
     private val container: AppContainer,
