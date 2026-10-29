@@ -19,6 +19,8 @@ import androidx.compose.material.icons.outlined.Settings
 import android.content.Intent
 import android.os.SystemClock
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -71,6 +73,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
+import com.apsmkimo.go2radiolive.presentation.ui.components.FullPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.PodcastRegionDialog
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
@@ -174,6 +177,12 @@ fun HomeScreen(
         nestedBack?.invoke()
     }
     // SMCPKG_SUPPORT<<<Cursor112
+    // SMCPKG_SUPPORT>>>Cursor119
+    var playerOpen by rememberSaveable { mutableStateOf(false) }
+    BackHandler(enabled = playerOpen) {
+        playerOpen = false
+    }
+    // SMCPKG_SUPPORT<<<Cursor119
 
     val tabs = listOf(
         TabSpec(BrowseTab.LOCAL, R.string.tab_local, Icons.Outlined.Home),
@@ -270,6 +279,10 @@ fun HomeScreen(
                     onHighChange = AudioSettingsRepository::setHighDb,
                     onBalanceChange = AudioSettingsRepository::setBalance,
                     onResetTone = AudioSettingsRepository::resetTone,
+                    // SMCPKG_SUPPORT>>>Cursor119
+                    onOpenPlayer = { if (state.playback.station != null) playerOpen = true },
+                    onNextStation = viewModel::onPlayNextStation,
+                    // SMCPKG_SUPPORT<<<Cursor119
                 )
                 // SMCPKG_SUPPORT<<<Cursor023
                 // SMCPKG_SUPPORT>>>Cursor112
@@ -436,11 +449,14 @@ fun HomeScreen(
                         listKind = state.catalogListKind,
                         hub = state.catalogHub,
                         stations = state.visibleStations,
-                        others = state.catalogOthers.filter { station ->
-                            val q = state.searchQuery.trim()
-                            q.isEmpty() || station.name.contains(q, true) ||
-                                station.tags.contains(q, true) || station.country.contains(q, true)
-                        },
+                        // SMCPKG_SUPPORT>>>Cursor119
+                        // others = state.catalogOthers.filter { station ->
+                        //     val q = state.searchQuery.trim()
+                        //     q.isEmpty() || station.name.contains(q, true) ||
+                        //         station.tags.contains(q, true) || station.country.contains(q, true)
+                        // },
+                        others = state.visibleCatalogOthers,
+                        // SMCPKG_SUPPORT<<<Cursor119
                         countries = state.countries,
                         sort = state.catalogSort,
                         languageFilter = state.catalogLanguageFilter,
@@ -461,6 +477,9 @@ fun HomeScreen(
                         onStation = viewModel::onStationClick,
                         onFavorite = viewModel::onToggleFavorite,
                         onRetry = viewModel::onRefreshClick,
+                        // SMCPKG_SUPPORT>>>Cursor119
+                        playback = state.playback,
+                        // SMCPKG_SUPPORT<<<Cursor119
                     )
                 }
                 state.showingCountries -> {
@@ -574,11 +593,35 @@ fun HomeScreen(
                         // SMCPKG_SUPPORT>>>Cursor118
                         notesScope = state.selectedPodcast?.id,
                         // SMCPKG_SUPPORT<<<Cursor118
+                        // SMCPKG_SUPPORT>>>Cursor119
+                        playback = state.playback,
+                        // SMCPKG_SUPPORT<<<Cursor119
                     )
                 }
             }
         }
     }
+    // SMCPKG_SUPPORT>>>Cursor119
+    if (playerOpen && state.playback.station != null) {
+        Dialog(
+            onDismissRequest = { playerOpen = false },
+            properties = DialogProperties(
+                usePlatformDefaultWidth = false,
+                dismissOnBackPress = true,
+                dismissOnClickOutside = false,
+            ),
+        ) {
+            FullPlayer(
+                playback = state.playback,
+                onClose = { playerOpen = false },
+                onTogglePlayPause = viewModel::onTogglePlayPause,
+                onNextStation = {
+                    viewModel.onPlayNextStation()
+                },
+            )
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor119
 }
 
 // SMCPKG_SUPPORT>>>Cursor117

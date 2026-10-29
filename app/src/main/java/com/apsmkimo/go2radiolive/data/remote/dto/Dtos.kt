@@ -18,6 +18,16 @@ data class StationDto(
     @SerializedName("votes") val votes: Int? = null,
     @SerializedName("clickcount") val clickCount: Int? = null,
     // SMCPKG_SUPPORT<<<Cursor106
+    // SMCPKG_SUPPORT>>>Cursor119
+    @SerializedName("lastcheckok") val lastCheckOk: Int? = null,
+    @SerializedName("lastcheckoktime_iso8601") val lastCheckOkTimeIso: String? = null,
+    @SerializedName("lastchecktime_iso8601") val lastCheckTimeIso: String? = null,
+    @SerializedName("lastcheckoktime") val lastCheckOkTime: String? = null,
+    @SerializedName("lastchecktime") val lastCheckTime: String? = null,
+    @SerializedName("codec") val codec: String? = null,
+    @SerializedName("ssl_error") val sslError: Int? = null,
+    @SerializedName("hls") val hls: Int? = null,
+    // SMCPKG_SUPPORT<<<Cursor119
 )
 
 data class TagDto(

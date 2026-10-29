@@ -91,9 +91,13 @@ android {
         // versionName = "1.0.2"
         // SMCPKG_SUPPORT<<<Cursor113
         // SMCPKG_SUPPORT>>>Cursor115
-        versionCode = 15
-        versionName = "1.0.3"
+        // versionCode = 15
+        // versionName = "1.0.3"
         // SMCPKG_SUPPORT<<<Cursor115
+        // SMCPKG_SUPPORT>>>Cursor119
+        versionCode = 16
+        versionName = "1.0.4"
+        // SMCPKG_SUPPORT<<<Cursor119
 
         vectorDrawables {
             useSupportLibrary = true

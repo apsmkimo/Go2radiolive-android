@@ -6,15 +6,28 @@ import com.apsmkimo.go2radiolive.data.remote.dto.TagDto
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
+import com.apsmkimo.go2radiolive.domain.station.StationLists
 import java.util.Locale
 
 fun StationDto.toDomain(): RadioStation? {
     val uuid = stationUuid?.trim().orEmpty()
     val displayName = name?.trim().orEmpty()
-    val stream = urlResolved?.trim().takeUnless { it.isNullOrEmpty() }
-        ?: url?.trim().orEmpty()
+    // SMCPKG_SUPPORT>>>Cursor119
+    // val stream = urlResolved?.trim().takeUnless { it.isNullOrEmpty() }
+    //     ?: url?.trim().orEmpty()
+    // if (uuid.isEmpty() || displayName.isEmpty() || stream.isEmpty()) return null
+    val resolved = urlResolved?.trim().orEmpty()
+    val raw = url?.trim().orEmpty()
+    val stream = resolved.ifEmpty { raw }
     if (uuid.isEmpty() || displayName.isEmpty() || stream.isEmpty()) return null
-    return RadioStation(
+    val alternates = listOf(raw, resolved).filter { it.isNotEmpty() && it != stream }.distinct()
+    val checkedAt = StationLists.parseCheckTime(lastCheckOkTimeIso)
+        ?: StationLists.parseCheckTime(lastCheckTimeIso)
+        ?: StationLists.parseCheckTime(lastCheckOkTime)
+        ?: StationLists.parseCheckTime(lastCheckTime)
+        ?: 0L
+    val station = RadioStation(
+        // SMCPKG_SUPPORT<<<Cursor119
         stationUuid = uuid,
         name = displayName,
         streamUrl = stream,
@@ -29,7 +42,16 @@ fun StationDto.toDomain(): RadioStation? {
         votes = votes ?: 0,
         clickCount = clickCount ?: 0,
         // SMCPKG_SUPPORT<<<Cursor106
+        // SMCPKG_SUPPORT>>>Cursor119
+        alternateUrls = alternates,
+        lastCheckOk = lastCheckOk,
+        lastCheckTimeMs = checkedAt,
+        codec = codec,
+        sslError = sslError == 1,
+        hls = hls == 1,
     )
+    return station.takeIf { StationLists.isListable(it) }
+    // SMCPKG_SUPPORT<<<Cursor119
 }
 
 fun TagDto.toDomain(): StationCategory? {
@@ -42,8 +64,11 @@ fun TagDto.toDomain(): StationCategory? {
 }
 
 fun List<StationDto>.toDomainStations(): List<RadioStation> =
-    mapNotNull { it.toDomain() }
-        .distinctBy { it.stationUuid }
+    // SMCPKG_SUPPORT>>>Cursor119
+    // mapNotNull { it.toDomain() }
+    //     .distinctBy { it.stationUuid }
+    StationLists.dedupe(mapNotNull { it.toDomain() })
+    // SMCPKG_SUPPORT<<<Cursor119
 
 fun CountryDto.toDomain(locale: Locale = Locale.getDefault()): CountryOption? {
     val code = isoCode?.trim()?.uppercase().orEmpty()

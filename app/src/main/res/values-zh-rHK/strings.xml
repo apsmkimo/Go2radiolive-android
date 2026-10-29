@@ -121,6 +121,10 @@
     <string name="alarm_failed">無法播放電台，改以鬧鐘鈴聲提醒。</string>
     <string name="alarm_snoozed">已延後 10 分鐘</string>
     <string name="alarm_channel">定時開播</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">無法連線到這個電台</string>
+    <string name="next_station">下一個電台</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
     <string name="playback_failed">播放失敗</string>
     <string name="catalog_global">全球</string>
     <string name="catalog_scope">國家或地區</string>

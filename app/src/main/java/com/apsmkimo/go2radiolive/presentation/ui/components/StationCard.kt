@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
@@ -30,9 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.contentDescription
@@ -43,10 +39,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.apsmkimo.go2radiolive.data.remote.plainPodcastText
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.apsmkimo.go2radiolive.R
+import com.apsmkimo.go2radiolive.domain.model.PlaybackState
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
+import com.apsmkimo.go2radiolive.domain.station.stationIconMotion
 
 @Composable
 fun StationCard(
@@ -64,6 +60,9 @@ fun StationCard(
     onToggleNotes: () -> Unit = {},
     onNotesOverflow: () -> Unit = {},
     // SMCPKG_SUPPORT<<<Cursor118
+    // SMCPKG_SUPPORT>>>Cursor119
+    playback: PlaybackState = PlaybackState(),
+    // SMCPKG_SUPPORT<<<Cursor119
 ) {
     Card(
         modifier = modifier
@@ -76,30 +75,40 @@ fun StationCard(
             modifier = Modifier.padding(12.dp),
             // SMCPKG_SUPPORT>>>Cursor117
             // verticalAlignment = Alignment.CenterVertically,
-            verticalAlignment = if (episodeNotes) Alignment.Top else Alignment.CenterVertically,
+            // SMCPKG_SUPPORT>>>Cursor119
+            // verticalAlignment = if (episodeNotes) Alignment.Top else Alignment.CenterVertically,
+            verticalAlignment = Alignment.Top,
+            // SMCPKG_SUPPORT<<<Cursor119
             // SMCPKG_SUPPORT<<<Cursor117
         ) {
-            val context = LocalContext.current
-            AsyncImage(
-                model = ImageRequest.Builder(context)
-                    .data(station.faviconUrl.takeIf { it.isNotBlank() })
-                    .crossfade(true)
-                    .build(),
-                contentDescription = station.name,
-                modifier = Modifier
-                    .size(52.dp)
-                    .clip(RoundedCornerShape(12.dp)),
-                contentScale = ContentScale.Crop,
-                error = androidx.compose.ui.graphics.painter.ColorPainter(
-                    MaterialTheme.colorScheme.primaryContainer,
-                ),
-                fallback = androidx.compose.ui.graphics.painter.ColorPainter(
-                    MaterialTheme.colorScheme.primaryContainer,
-                ),
-                placeholder = androidx.compose.ui.graphics.painter.ColorPainter(
-                    MaterialTheme.colorScheme.primaryContainer,
-                ),
+            // SMCPKG_SUPPORT>>>Cursor119
+            // val context = LocalContext.current
+            // AsyncImage(
+            //     model = ImageRequest.Builder(context)
+            //         .data(station.faviconUrl.takeIf { it.isNotBlank() })
+            //         .crossfade(true)
+            //         .build(),
+            //     contentDescription = station.name,
+            //     modifier = Modifier
+            //         .size(52.dp)
+            //         .clip(RoundedCornerShape(12.dp)),
+            //     contentScale = ContentScale.Crop,
+            //     error = androidx.compose.ui.graphics.painter.ColorPainter(
+            //         MaterialTheme.colorScheme.primaryContainer,
+            //     ),
+            //     fallback = androidx.compose.ui.graphics.painter.ColorPainter(
+            //         MaterialTheme.colorScheme.primaryContainer,
+            //     ),
+            //     placeholder = androidx.compose.ui.graphics.painter.ColorPainter(
+            //         MaterialTheme.colorScheme.primaryContainer,
+            //     ),
+            // )
+            StationArtwork(
+                station = station,
+                motion = stationIconMotion(station.stationUuid, playback),
+                modifier = Modifier.size(52.dp),
             )
+            // SMCPKG_SUPPORT<<<Cursor119
             Column(
                 modifier = Modifier
                     .weight(1f)
@@ -130,12 +139,18 @@ fun StationCard(
                     }
                 } else {
                 // SMCPKG_SUPPORT<<<Cursor117
+                // SMCPKG_SUPPORT>>>Cursor119
+                // Text(
+                //     text = station.name,
+                //     style = MaterialTheme.typography.titleMedium,
+                //     maxLines = 1,
+                //     overflow = TextOverflow.Ellipsis,
+                // )
                 Text(
                     text = station.name,
                     style = MaterialTheme.typography.titleMedium,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
                 )
+                // SMCPKG_SUPPORT<<<Cursor119
                 val subtitle = listOf(station.country, station.tags)
                     .filter { it.isNotBlank() }
                     .joinToString(" · ")

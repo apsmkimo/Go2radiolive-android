@@ -32,6 +32,8 @@ import com.apsmkimo.go2radiolive.domain.usecase.GetPodcastShowsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.GetStationsUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ObserveFavoritesUseCase
 import com.apsmkimo.go2radiolive.domain.usecase.ResolveStreamUrlUseCase
+import com.apsmkimo.go2radiolive.domain.station.PlayFailureRecord
+import com.apsmkimo.go2radiolive.domain.station.StationLists
 import com.apsmkimo.go2radiolive.domain.usecase.ToggleFavoriteUseCase
 import com.apsmkimo.go2radiolive.presentation.player.RadioPlayerController
 import kotlinx.coroutines.CancellationException
@@ -102,16 +104,16 @@ data class HomeUiState(
             if (selectedTab == BrowseTab.PODCAST && selectedPodcast != null) return source
             // SMCPKG_SUPPORT<<<Cursor117
             val query = searchQuery.trim()
-            return if (query.isEmpty()) {
-                source
-            } else {
-                source.filter { station ->
-                    station.name.contains(query, ignoreCase = true) ||
-                        station.tags.contains(query, ignoreCase = true) ||
-                        station.country.contains(query, ignoreCase = true)
-                }
-            }
+            return if (query.isEmpty()) source else source.filter { it.matchesStationQuery(query) }
         }
+
+    // SMCPKG_SUPPORT>>>Cursor119
+    val visibleCatalogOthers: List<RadioStation>
+        get() {
+            val query = searchQuery.trim()
+            return if (query.isEmpty()) catalogOthers else catalogOthers.filter { it.matchesStationQuery(query) }
+        }
+    // SMCPKG_SUPPORT<<<Cursor119
 
     val visibleCategories: List<StationCategory>
         get() = filterByName(categories, searchQuery) { it.name }
@@ -163,6 +165,22 @@ internal fun showsBrowseSearchToolbar(tab: BrowseTab, selectedPodcast: PodcastSh
 }
 // SMCPKG_SUPPORT<<<Cursor117
 
+// SMCPKG_SUPPORT>>>Cursor119
+private fun RadioStation.matchesStationQuery(query: String): Boolean {
+    return name.contains(query, ignoreCase = true) ||
+        tags.contains(query, ignoreCase = true) ||
+        country.contains(query, ignoreCase = true)
+}
+
+internal fun playbackQueue(state: HomeUiState): List<RadioStation> {
+    return if (state.selectedTab == BrowseTab.CATEGORIES && state.catalogLevel == CatalogLevel.LIST) {
+        state.visibleStations + state.visibleCatalogOthers
+    } else {
+        state.visibleStations
+    }
+}
+// SMCPKG_SUPPORT<<<Cursor119
+
 private fun <T> filterByName(items: List<T>, query: String, name: (T) -> String): List<T> {
     val trimmed = query.trim()
     return if (trimmed.isEmpty()) items else items.filter { name(it).contains(trimmed, ignoreCase = true) }
@@ -178,6 +196,9 @@ class HomeViewModel(
     private val toggleFavorite: ToggleFavoriteUseCase,
     private val resolveStreamUrl: ResolveStreamUrlUseCase,
     private val playerController: RadioPlayerController,
+    // SMCPKG_SUPPORT>>>Cursor119
+    private val playFailures: kotlinx.coroutines.flow.Flow<Map<String, PlayFailureRecord>>,
+    // SMCPKG_SUPPORT<<<Cursor119
     private val deviceRegion: () -> String,
     private val podcastRegion: PodcastRegionRepository,
     private val podcastCache: PodcastCatalogStore,
@@ -196,12 +217,25 @@ class HomeViewModel(
         internalState,
         observeFavorites(),
         playerController.playbackState,
-    ) { ui, favorites, playback ->
+        // SMCPKG_SUPPORT>>>Cursor119
+        // ) { ui, favorites, playback ->
+        //     ui.copy(
+        //         favoriteStations = favorites,
+        //         favoriteIds = favorites.map { it.stationUuid }.toSet(),
+        //         playback = playback,
+        //     )
+        playFailures,
+    ) { ui, favorites, playback, failures ->
+        val now = System.currentTimeMillis()
+        val rankLocal = ui.selectedTab == BrowseTab.LOCAL && ui.selectedPodcast == null
         ui.copy(
-            favoriteStations = favorites,
+            stations = StationLists.present(ui.stations, failures, now, rankLocal),
+            catalogOthers = StationLists.present(ui.catalogOthers, failures, now, rankLocal = false),
+            favoriteStations = StationLists.present(favorites, failures, now, rankLocal = false),
             favoriteIds = favorites.map { it.stationUuid }.toSet(),
             playback = playback,
         )
+        // SMCPKG_SUPPORT<<<Cursor119
     }.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
@@ -1006,6 +1040,19 @@ class HomeViewModel(
         if (uiState.value.playback.station == null) return
         playerController.togglePlayPause()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor119
+    fun onPlayNextStation() {
+        val state = uiState.value
+        val current = state.playback.station?.stationUuid
+        val list = playbackQueue(state)
+        if (list.isEmpty()) return
+        val start = list.indexOfFirst { it.stationUuid == current }
+        val next = list.drop(start + 1).firstOrNull { it.stationUuid != current }
+            ?: list.firstOrNull { it.stationUuid != current }
+        if (next != null) onStationClick(next)
+    }
+    // SMCPKG_SUPPORT<<<Cursor119
 }
 
 private const val TAG = "HomeViewModel"
@@ -1029,6 +1076,9 @@ class HomeViewModelFactory(
             toggleFavorite = container.toggleFavoriteUseCase,
             resolveStreamUrl = container.resolveStreamUrlUseCase,
             playerController = container.playerController,
+            // SMCPKG_SUPPORT>>>Cursor119
+            playFailures = container.stationFailureStore.records,
+            // SMCPKG_SUPPORT<<<Cursor119
             deviceRegion = container::deviceRegion,
             podcastRegion = container.podcastRegionRepository,
             podcastCache = container.podcastCatalogStore,
