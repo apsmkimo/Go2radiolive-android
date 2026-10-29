@@ -132,7 +132,7 @@ object StationLists {
         val normalized = text.replace(' ', 'T')
         val zoned = when {
             normalized.endsWith("Z", ignoreCase = true) -> normalized
-            OFFSET.containsMatchIn(normalized) -> normalized
+            offsetRegex?.containsMatchIn(normalized) == true -> normalized
             else -> normalized + "Z"
         }
         return runCatching { Instant.parse(zoned).toEpochMilli() }.getOrNull()
@@ -145,9 +145,14 @@ object StationLists {
 
     fun nameKey(name: String): String? {
         var text = name.lowercase(Locale.ROOT)
-        text = BRACKETS.replace(text, " ")
-        text = FREQUENCY.replace(text, " ")
-        val tokens = text.split(NON_WORD).filter { it.isNotBlank() && it !in DROP_TOKENS }
+        // SMCPKG_SUPPORT>>>Cursor120
+        // text = BRACKETS.replace(text, " ")
+        // text = FREQUENCY.replace(text, " ")
+        // val tokens = text.split(NON_WORD).filter { it.isNotBlank() && it !in DROP_TOKENS }
+        text = bracketsRegex?.replace(text, " ") ?: text
+        text = frequencyRegex?.replace(text, " ") ?: text
+        val tokens = text.split(nonWordRegex).filter { it.isNotBlank() && it !in DROP_TOKENS }
+        // SMCPKG_SUPPORT<<<Cursor120
         if (tokens.isEmpty()) return null
         var core = tokens
         while (core.size > 1 && (core.first() == "radio" || core.first() == "the")) {
@@ -244,12 +249,31 @@ object StationLists {
         if (a < b) parent[b] = a else parent[a] = b
     }
 
-    private val BRACKETS = Regex("""\([^)]*\)|\[[^\]]*\]|\{[^}]*}|【[^】]*】|「[^」]*」|『[^』]*』""")
-    private val FREQUENCY = Regex(
-        """(?i)(?<!\d)(?:8[7-9]|9\d|10[0-8])(?:[.,]\d{1,2})?\s*(?:mhz|fm|am)?(?!\d)|(?<!\d)\d{2,4}(?:[.,]\d{1,2})?\s*(?:mhz|khz|fm|am)(?![a-z0-9])""",
+    // SMCPKG_SUPPORT>>>Cursor120
+    // Android ICU rejects a literal unescaped "}". The JVM accepts it, so this
+    // used to pass host tests and then crash StationLists' class init on device:
+    // private val BRACKETS = Regex("""\([^)]*\)|\[[^\]]*\]|\{[^}]*}|【[^】]*】|「[^」]*」|『[^』]*』""")
+    // Patterns are compiled lazily and a syntax error becomes "skip this rule"
+    // instead of ExceptionInInitializerError during the first list bind.
+    internal const val BRACKETS_PATTERN =
+        """\([^)]*\)|\[[^\]]*\]|\{[^}]*\}|【[^】]*】|「[^」]*」|『[^』]*』"""
+    internal const val FREQUENCY_PATTERN =
+        """(?i)(?<!\d)(?:8[7-9]|9\d|10[0-8])(?:[.,]\d{1,2})?\s*(?:mhz|fm|am)?(?!\d)|(?<!\d)\d{2,4}(?:[.,]\d{1,2})?\s*(?:mhz|khz|fm|am)(?![a-z0-9])"""
+    internal const val NON_WORD_PATTERN = """[^\p{L}\p{N}]+"""
+    internal const val OFFSET_PATTERN = """[+-]\d{2}:?\d{2}${'$'}"""
+
+    internal val patternSources: List<String> = listOf(
+        BRACKETS_PATTERN,
+        FREQUENCY_PATTERN,
+        NON_WORD_PATTERN,
+        OFFSET_PATTERN,
     )
-    private val NON_WORD = Regex("""[^\p{L}\p{N}]+""")
-    private val OFFSET = Regex("""[+-]\d{2}:?\d{2}$""")
+
+    private val bracketsRegex: Regex? by lazy { IcuPatternRules.compile(BRACKETS_PATTERN) }
+    private val frequencyRegex: Regex? by lazy { IcuPatternRules.compile(FREQUENCY_PATTERN) }
+    private val nonWordRegex: Regex by lazy { IcuPatternRules.compile(NON_WORD_PATTERN) ?: Regex("""\s+""") }
+    private val offsetRegex: Regex? by lazy { IcuPatternRules.compile(OFFSET_PATTERN) }
+    // SMCPKG_SUPPORT<<<Cursor120
     private val DROP_TOKENS = setOf(
         "fm", "am", "hd", "hd1", "hd2", "hd3", "live", "online", "stream", "streaming", "webradio",
     )

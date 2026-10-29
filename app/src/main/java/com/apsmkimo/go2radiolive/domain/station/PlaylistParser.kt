@@ -27,7 +27,7 @@ object PlaylistParser {
         val found = when {
             text.contains("#EXT-X-", ignoreCase = true) ->
                 parseM3u(text, baseUrl).filterNot { isHlsSegment(it) || isPlaylistUrl(it) }
-            FILE_LINE.containsMatchIn(text) || text.contains("[playlist]", ignoreCase = true) ->
+            fileLine?.containsMatchIn(text) == true || text.contains("[playlist]", ignoreCase = true) ->
                 parsePls(text)
             text.contains("<asx", ignoreCase = true) || text.contains("<ref", ignoreCase = true) ->
                 parseAsx(text)
@@ -57,7 +57,8 @@ object PlaylistParser {
     }
 
     private fun parsePls(text: String): List<String> {
-        return FILE_LINE.findAll(text).map { it.groupValues[1].trim() }.toList()
+        val pattern = fileLine ?: return emptyList()
+        return pattern.findAll(text).map { it.groupValues[1].trim() }.toList()
     }
 
     private fun parseM3u(text: String, baseUrl: String): List<String> {
@@ -71,7 +72,8 @@ object PlaylistParser {
     }
 
     private fun parseAsx(text: String): List<String> {
-        return HREF.findAll(text).map { it.groupValues[1].trim() }.toList()
+        val pattern = href ?: return emptyList()
+        return pattern.findAll(text).map { it.groupValues[1].trim() }.toList()
     }
 
     private fun resolve(baseUrl: String, reference: String): String {
@@ -84,6 +86,13 @@ object PlaylistParser {
         return path.endsWith(".ts") || path.endsWith(".m4s") || path.endsWith(".cmfv") || path.endsWith(".cmfa")
     }
 
-    private val FILE_LINE = Regex("""(?im)^\s*File\d+\s*=\s*(\S.*?)\s*$""")
-    private val HREF = Regex("""(?i)href\s*=\s*["']([^"']+)["']""")
+    // SMCPKG_SUPPORT>>>Cursor120
+    // private val FILE_LINE = Regex("""(?im)^\s*File\d+\s*=\s*(\S.*?)\s*$""")
+    // private val HREF = Regex("""(?i)href\s*=\s*["']([^"']+)["']""")
+    internal const val FILE_LINE_PATTERN = """(?im)^\s*File\d+\s*=\s*(\S.*?)\s*$"""
+    internal const val HREF_PATTERN = """(?i)href\s*=\s*["']([^"']+)["']"""
+    internal val patternSources: List<String> = listOf(FILE_LINE_PATTERN, HREF_PATTERN)
+    private val fileLine: Regex? by lazy { IcuPatternRules.compile(FILE_LINE_PATTERN) }
+    private val href: Regex? by lazy { IcuPatternRules.compile(HREF_PATTERN) }
+    // SMCPKG_SUPPORT<<<Cursor120
 }
