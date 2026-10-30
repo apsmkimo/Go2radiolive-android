@@ -48,6 +48,13 @@
     <string name="settings_version_value">%1$s（versionCode %2$d）</string>
     <string name="privacy_options">隐私选项</string>
     <string name="privacy_options_summary">管理广告个性化方式</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">隐私政策</string>
+    <string name="privacy_policy_summary">查看本应用如何处理信息</string>
+    <string name="settings_section_audio">音效</string>
+    <string name="settings_section_general">一般</string>
+    <string name="settings_section_about">关于</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
     <string name="ad_label">广告</string>
     <string name="audio_panel_button">音效面板按钮</string>
     <string name="audio_panel_button_summary">在播放栏的播放按钮旁显示音效面板按钮</string>

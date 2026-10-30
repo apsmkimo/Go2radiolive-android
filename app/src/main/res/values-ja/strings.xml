@@ -48,6 +48,13 @@
     <string name="settings_version_value">%1$s（versionCode %2$d）</string>
     <string name="privacy_options">プライバシーオプション</string>
     <string name="privacy_options_summary">広告のパーソナライズを管理</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">プライバシーポリシー</string>
+    <string name="privacy_policy_summary">このアプリでの情報の取り扱い</string>
+    <string name="settings_section_audio">オーディオ</string>
+    <string name="settings_section_general">一般</string>
+    <string name="settings_section_about">このアプリについて</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
     <string name="ad_label">広告</string>
     <string name="audio_panel_button">オーディオパネルボタン</string>
     <string name="audio_panel_button_summary">再生バーの再生ボタンの横にオーディオパネルボタンを表示</string>
