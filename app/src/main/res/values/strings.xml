@@ -51,6 +51,13 @@
     <string name="settings_version_value">%1$s (versionCode %2$d)</string>
     <string name="privacy_options">Privacy options</string>
     <string name="privacy_options_summary">Manage how ads are personalized</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="privacy_policy_summary">How this app handles information</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_about">About</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
     <string name="ad_label">Ad</string>
     <string name="audio_panel_button">Audio panel button</string>
     <string name="audio_panel_button_summary">Show an audio panel button next to play in the player bar</string>

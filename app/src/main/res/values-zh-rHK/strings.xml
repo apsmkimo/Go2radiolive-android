@@ -51,6 +51,13 @@
     <string name="settings_version_value">%1$s（versionCode %2$d）</string>
     <string name="privacy_options">隱私選項</string>
     <string name="privacy_options_summary">管理廣告個人化方式</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">私隱政策</string>
+    <string name="privacy_policy_summary">查看本應用程式如何處理資訊</string>
+    <string name="settings_section_audio">音效</string>
+    <string name="settings_section_general">一般</string>
+    <string name="settings_section_about">關於</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
     <string name="ad_label">廣告</string>
     <string name="audio_panel_button">音效面板按鈕</string>
     <string name="audio_panel_button_summary">在播放列的播放按鈕旁顯示音效面板按鈕</string>
