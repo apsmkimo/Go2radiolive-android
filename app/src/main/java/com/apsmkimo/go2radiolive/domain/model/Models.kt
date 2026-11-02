@@ -21,6 +21,10 @@ data class RadioStation(
     /** Plain-text podcast show notes. Null on radio stations and older saved rows. */
     val summary: String? = null,
     // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor122
+    /** RSS pubDate in epoch millis. 0 when the feed omitted a date or the row is a radio station. */
+    val publishedAtMs: Long = 0,
+    // SMCPKG_SUPPORT<<<Cursor122
     // SMCPKG_SUPPORT>>>Cursor119
     /** Other stream addresses: the unused url/url_resolved pair and merged duplicates. */
     val alternateUrls: List<String>? = null,
@@ -56,6 +60,14 @@ data class PodcastShow(
     val feedUrl: String? = null,
     // SMCPKG_SUPPORT<<<Cursor115
 )
+
+// SMCPKG_SUPPORT>>>Cursor122
+/** One emission of a podcast episode list. [loadingMore] stays true while the full RSS is still merging. */
+data class PodcastEpisodePage(
+    val episodes: List<RadioStation>,
+    val loadingMore: Boolean,
+)
+// SMCPKG_SUPPORT<<<Cursor122
 
 /** Chart page plus whether the device region was replaced by the US chart. */
 data class PodcastChart(

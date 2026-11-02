@@ -26,7 +26,12 @@ object StationLists {
         } else {
             deduped
         }
+        // SMCPKG_SUPPORT>>>Cursor122
+        // return StationFailurePolicy.sink(ranked, failures, nowMs)
+        // Episode order is the show order. Sinking a failed episode would reshuffle it.
+        if (!rankLocal && ranked.isNotEmpty() && ranked.all { it.directStream }) return ranked
         return StationFailurePolicy.sink(ranked, failures, nowMs)
+        // SMCPKG_SUPPORT<<<Cursor122
     }
 
     fun dedupe(stations: List<RadioStation>): List<RadioStation> {
@@ -38,7 +43,18 @@ object StationLists {
         }
         val count = radioIndexes.size
         if (count == 0) {
+            // SMCPKG_SUPPORT>>>Cursor122
+            // return stations.filter { it.directStream }
+            var podcastsOnly = true
+            for (station in stations) {
+                if (!station.directStream) {
+                    podcastsOnly = false
+                    break
+                }
+            }
+            if (podcastsOnly) return stations
             return stations.filter { it.directStream }
+            // SMCPKG_SUPPORT<<<Cursor122
         }
         val parent = IntArray(count) { it }
         val byStream = HashMap<String, Int>()

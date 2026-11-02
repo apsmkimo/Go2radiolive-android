@@ -29,6 +29,10 @@ playServicesAds = "23.5.0"
 userMessagingPlatform = "4.0.0"
 coroutines = "1.9.0"
 junit = "4.13.2"
+# SMCPKG_SUPPORT>>>Cursor122
+kxml2 = "2.3.0"
+mockwebserver = "4.12.0"
+# SMCPKG_SUPPORT<<<Cursor122
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -68,6 +72,10 @@ play-services-ads = { group = "com.google.android.gms", name = "play-services-ad
 user-messaging-platform = { group = "com.google.android.ump", name = "user-messaging-platform", version.ref = "userMessagingPlatform" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+# SMCPKG_SUPPORT>>>Cursor122
+kxml2 = { group = "net.sf.kxml", name = "kxml2", version.ref = "kxml2" }
+mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
+# SMCPKG_SUPPORT<<<Cursor122
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

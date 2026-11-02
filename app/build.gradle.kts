@@ -99,9 +99,13 @@ android {
         // versionName = "1.0.4"
         // SMCPKG_SUPPORT<<<Cursor119
         // SMCPKG_SUPPORT>>>Cursor121
-        versionCode = 17
-        versionName = "1.0.5"
+        // versionCode = 17
+        // versionName = "1.0.5"
         // SMCPKG_SUPPORT<<<Cursor121
+        // SMCPKG_SUPPORT>>>Cursor122
+        versionCode = 18
+        versionName = "1.0.6"
+        // SMCPKG_SUPPORT<<<Cursor122
 
         vectorDrawables {
             useSupportLibrary = true
@@ -270,4 +274,8 @@ dependencies {
     implementation(libs.kotlinx.coroutines.android)
 
     testImplementation(libs.junit)
+    // SMCPKG_SUPPORT>>>Cursor122
+    testImplementation(libs.kxml2)
+    testImplementation(libs.mockwebserver)
+    // SMCPKG_SUPPORT<<<Cursor122
 }

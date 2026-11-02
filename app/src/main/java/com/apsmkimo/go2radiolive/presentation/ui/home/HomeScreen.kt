@@ -48,6 +48,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.selected
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -208,6 +210,10 @@ fun HomeScreen(
                     name = openPodcast.name,
                     onBack = viewModel::onClearPodcast,
                     onSettings = onOpenSettings,
+                    // SMCPKG_SUPPORT>>>Cursor122
+                    newestFirst = state.episodeSortNewest,
+                    onSortNewest = viewModel::onEpisodeSortNewest,
+                    // SMCPKG_SUPPORT<<<Cursor122
                 )
             } else
             // SMCPKG_SUPPORT<<<Cursor117
@@ -596,6 +602,13 @@ fun HomeScreen(
                         // SMCPKG_SUPPORT>>>Cursor119
                         playback = state.playback,
                         // SMCPKG_SUPPORT<<<Cursor119
+                        // SMCPKG_SUPPORT>>>Cursor122
+                        loadingMore = state.selectedTab == BrowseTab.PODCAST &&
+                            state.selectedPodcast != null &&
+                            state.episodesLoadingMore,
+                        preserveScroll = state.selectedTab == BrowseTab.PODCAST && state.selectedPodcast != null,
+                        scrollToTopEpoch = state.episodeSortEpoch,
+                        // SMCPKG_SUPPORT<<<Cursor122
                     )
                 }
             }
@@ -630,12 +643,21 @@ private fun PodcastShowBar(
     name: String,
     onBack: () -> Unit,
     onSettings: () -> Unit,
+    // SMCPKG_SUPPORT>>>Cursor122
+    newestFirst: Boolean = true,
+    onSortNewest: (Boolean) -> Unit = {},
+    // SMCPKG_SUPPORT<<<Cursor122
 ) {
     Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
+        // SMCPKG_SUPPORT>>>Cursor122
+        Column(Modifier.fillMaxWidth().padding(topSafePadding())) {
+        // SMCPKG_SUPPORT<<<Cursor122
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(topSafePadding())
+                // SMCPKG_SUPPORT>>>Cursor122
+                // .padding(topSafePadding())
+                // SMCPKG_SUPPORT<<<Cursor122
                 .heightIn(min = 64.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -663,6 +685,42 @@ private fun PodcastShowBar(
                 )
             }
         }
+        // SMCPKG_SUPPORT>>>Cursor122
+        Row(modifier = Modifier.padding(start = 8.dp, end = 8.dp, bottom = 4.dp)) {
+            EpisodeSortButton(
+                label = stringResource(R.string.episode_sort_newest),
+                selected = newestFirst,
+                onClick = { onSortNewest(true) },
+            )
+            EpisodeSortButton(
+                label = stringResource(R.string.episode_sort_oldest),
+                selected = !newestFirst,
+                onClick = { onSortNewest(false) },
+            )
+        }
+        }
+        // SMCPKG_SUPPORT<<<Cursor122
     }
 }
+
+// SMCPKG_SUPPORT>>>Cursor122
+@Composable
+private fun EpisodeSortButton(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.semantics { this.selected = selected },
+    ) {
+        Text(
+            text = label,
+            color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            fontSize = 14.sp,
+        )
+    }
+}
+// SMCPKG_SUPPORT<<<Cursor122
 // SMCPKG_SUPPORT<<<Cursor117

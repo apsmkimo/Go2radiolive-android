@@ -2,6 +2,7 @@ package com.apsmkimo.go2radiolive.domain.repository
 
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
+import com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
@@ -41,7 +42,14 @@ interface PodcastRepository {
     /** Emits the top chart first, then the same list with genre shows merged in. */
     fun topShows(region: String?, bypassCache: Boolean = false): Flow<PodcastChart>
     // SMCPKG_SUPPORT<<<Cursor103
-    suspend fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): List<RadioStation>
+    // SMCPKG_SUPPORT>>>Cursor122
+    // suspend fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): List<RadioStation>
+    /**
+     * Emits the cached or first screen of episodes immediately, then the full RSS list.
+     * A missing feed or a bad document does not throw when a list is already available.
+     */
+    fun episodes(show: PodcastShow, region: String?, bypassCache: Boolean = false): Flow<PodcastEpisodePage>
+    // SMCPKG_SUPPORT<<<Cursor122
 
     // SMCPKG_SUPPORT>>>Cursor115
     /** iTunes Search. An empty term returns an empty list. An empty regional result falls back to the US store. */

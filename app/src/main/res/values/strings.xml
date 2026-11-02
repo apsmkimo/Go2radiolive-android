@@ -37,6 +37,11 @@
     <string name="podcast_region_device">Device region: %1$s</string>
     <string name="close">Close</string>
     <string name="empty_episodes">No episodes</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Newest</string>
+    <string name="episode_sort_oldest">Oldest</string>
+    <string name="episodes_loading_more">Loading more episodes…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
     <string name="station_count">%d stations</string>
     <string name="no_station_playing">Nothing playing</string>
     <string name="buffering">Connecting…</string>

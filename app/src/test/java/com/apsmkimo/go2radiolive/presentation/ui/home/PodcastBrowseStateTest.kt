@@ -49,5 +49,55 @@ class PodcastBrowseStateTest {
         assertEquals(results, back.visiblePodcasts)
         assertTrue(showsBrowseSearchToolbar(back.selectedTab, back.selectedPodcast))
     }
+
+    @Test
+    fun oldestSortPutsTheEarliestEpisodeFirstWithoutDroppingAny() {
+        val episodes = (3 downTo 1).map { number ->
+            RadioStation(
+                stationUuid = "podcast:$number",
+                name = "Episode $number",
+                streamUrl = "https://cdn.example/$number.mp3",
+                directStream = true,
+            )
+        }
+        val open = HomeUiState(
+            selectedTab = BrowseTab.PODCAST,
+            selectedPodcast = PodcastShow(id = "1", name = "Show", author = "A"),
+            stations = episodes,
+            episodeSortNewest = false,
+        )
+        assertEquals(listOf("podcast:1", "podcast:2", "podcast:3"), open.visibleStations.map { it.stationUuid })
+        assertEquals(episodes, open.copy(episodeSortNewest = true).visibleStations)
+    }
+
+    @Test
+    fun backgroundPageDoesNotShrinkTheListOrRaiseAnError() {
+        val full = List(120) { index ->
+            RadioStation(
+                stationUuid = "podcast:$index",
+                name = "Episode $index",
+                streamUrl = "https://cdn.example/$index.mp3",
+                directStream = true,
+            )
+        }
+        val state = HomeUiState(
+            selectedTab = BrowseTab.PODCAST,
+            selectedPodcast = PodcastShow(id = "9", name = "Show", author = "A"),
+            stations = full,
+        )
+        val shorter = state.withEpisodePage(
+            com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage(full.take(100), loadingMore = true),
+            showId = "9",
+        )
+        assertEquals(full, shorter.stations)
+        assertTrue(shorter.episodesLoadingMore)
+        assertEquals(null, shorter.errorResId)
+        val failed = state.withEpisodePage(
+            com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage(emptyList(), loadingMore = false),
+            showId = "9",
+        )
+        assertEquals(full, failed.stations)
+        assertFalse(failed.episodesLoadingMore)
+    }
 }
 // SMCPKG_SUPPORT<<<Cursor117
