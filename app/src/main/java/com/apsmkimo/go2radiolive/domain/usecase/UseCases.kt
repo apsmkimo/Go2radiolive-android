@@ -3,6 +3,7 @@ package com.apsmkimo.go2radiolive.domain.usecase
 import com.apsmkimo.go2radiolive.domain.model.BrowseTab
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
+import com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
@@ -66,13 +67,22 @@ class GetPodcastShowsUseCase(
 class GetPodcastEpisodesUseCase(
     private val podcastRepository: PodcastRepository,
 ) {
-    suspend operator fun invoke(
+    // SMCPKG_SUPPORT>>>Cursor122
+    // suspend operator fun invoke(
+    //     show: PodcastShow,
+    //     region: String?,
+    //     bypassCache: Boolean = false,
+    // ): List<RadioStation> {
+    //     return podcastRepository.episodes(show, region, bypassCache)
+    // }
+    operator fun invoke(
         show: PodcastShow,
         region: String?,
         bypassCache: Boolean = false,
-    ): List<RadioStation> {
+    ): Flow<PodcastEpisodePage> {
         return podcastRepository.episodes(show, region, bypassCache)
     }
+    // SMCPKG_SUPPORT<<<Cursor122
 }
 
 class GetCategoriesUseCase(

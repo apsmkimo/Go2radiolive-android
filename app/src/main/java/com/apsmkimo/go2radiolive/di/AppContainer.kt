@@ -11,6 +11,7 @@ import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
 import com.apsmkimo.go2radiolive.data.local.StationFailureStore
 import com.apsmkimo.go2radiolive.data.remote.OkHttpPlaylistClient
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
+import com.apsmkimo.go2radiolive.data.local.PodcastEpisodeStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.RadioBrowserApi
 import com.apsmkimo.go2radiolive.data.local.CategoryCatalogStore
@@ -130,8 +131,23 @@ class AppContainer(context: Context) {
     )
     // SMCPKG_SUPPORT<<<Cursor103
 
+    // SMCPKG_SUPPORT>>>Cursor122
+    val podcastEpisodeStore = PodcastEpisodeStore(
+        File(appContext.filesDir, "podcast_episodes"),
+        gson,
+    )
+    // SMCPKG_SUPPORT<<<Cursor122
+
     val stationRepository: StationRepository = StationRepositoryImpl(radioBrowserApi)
-    val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson, podcastCatalogStore)
+    // SMCPKG_SUPPORT>>>Cursor122
+    // val podcastRepository: PodcastRepository = PodcastRepositoryImpl(podcastClient, gson, podcastCatalogStore)
+    val podcastRepository: PodcastRepository = PodcastRepositoryImpl(
+        podcastClient,
+        gson,
+        podcastCatalogStore,
+        podcastEpisodeStore,
+    )
+    // SMCPKG_SUPPORT<<<Cursor122
     val favoriteRepository: FavoriteRepository = FavoriteRepositoryImpl(
         FavoriteLocalDataSource(appContext, gson),
     )

@@ -34,6 +34,11 @@
     <string name="podcast_region_device">设备地区：%1$s</string>
     <string name="close">关闭</string>
     <string name="empty_episodes">目前没有单集</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">最新</string>
+    <string name="episode_sort_oldest">最旧</string>
+    <string name="episodes_loading_more">正在加载更多单集…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
     <string name="station_count">%d 个电台</string>
     <string name="no_station_playing">尚未播放电台</string>
     <string name="buffering">连接中…</string>

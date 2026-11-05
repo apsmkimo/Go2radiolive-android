@@ -21,7 +21,9 @@ import com.apsmkimo.go2radiolive.domain.model.CatalogSort
 import com.apsmkimo.go2radiolive.domain.model.CategoryHub
 import com.apsmkimo.go2radiolive.domain.model.CountryOption
 import com.apsmkimo.go2radiolive.domain.model.PlaybackState
+import com.apsmkimo.go2radiolive.data.remote.displayedPodcastEpisodes
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
+import com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.model.StationCategory
@@ -65,6 +67,14 @@ data class HomeUiState(
     val podcastRegionCode: String = "",
     val deviceRegionCode: String = "",
     val selectedPodcast: PodcastShow? = null,
+    // SMCPKG_SUPPORT>>>Cursor122
+    /** True while older episodes are still being merged behind the list already on screen. */
+    val episodesLoadingMore: Boolean = false,
+    /** Session choice. True keeps RSS order, which is newest first. */
+    val episodeSortNewest: Boolean = true,
+    /** Bumped when the user flips the order so episode 1 (or the newest) sits at the top. */
+    val episodeSortEpoch: Int = 0,
+    // SMCPKG_SUPPORT<<<Cursor122
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
     val isLoading: Boolean = false,
@@ -101,7 +111,10 @@ data class HomeUiState(
             val source = if (selectedTab == BrowseTab.FAVORITES) favoriteStations else stations
             // SMCPKG_SUPPORT>>>Cursor117
             // A parked podcast search must not hide episodes while a show is open.
-            if (selectedTab == BrowseTab.PODCAST && selectedPodcast != null) return source
+            // if (selectedTab == BrowseTab.PODCAST && selectedPodcast != null) return source
+            if (selectedTab == BrowseTab.PODCAST && selectedPodcast != null) {
+                return displayedPodcastEpisodes(source, episodeSortNewest)
+            }
             // SMCPKG_SUPPORT<<<Cursor117
             val query = searchQuery.trim()
             return if (query.isEmpty()) source else source.filter { it.matchesStationQuery(query) }
@@ -164,6 +177,26 @@ internal fun showsBrowseSearchToolbar(tab: BrowseTab, selectedPodcast: PodcastSh
     return !(tab == BrowseTab.PODCAST && selectedPodcast != null)
 }
 // SMCPKG_SUPPORT<<<Cursor117
+
+// SMCPKG_SUPPORT>>>Cursor122
+/**
+ * Applies one episode page without shrinking a list that is already on screen
+ * while the full feed is still loading, and without clearing episodes on a failed refresh.
+ */
+internal fun HomeUiState.withEpisodePage(page: PodcastEpisodePage, showId: String): HomeUiState {
+    if (selectedTab != BrowseTab.PODCAST || selectedPodcast?.id != showId) return this
+    val keepCurrent = stations.isNotEmpty() && (
+        page.episodes.isEmpty() || (page.loadingMore && page.episodes.size < stations.size)
+        )
+    val episodes = if (keepCurrent) stations else page.episodes
+    return copy(
+        stations = episodes,
+        isLoading = false,
+        episodesLoadingMore = page.loadingMore && episodes.isNotEmpty(),
+        errorResId = null,
+    )
+}
+// SMCPKG_SUPPORT<<<Cursor122
 
 // SMCPKG_SUPPORT>>>Cursor119
 private fun RadioStation.matchesStationQuery(query: String): Boolean {
@@ -265,6 +298,9 @@ class HomeViewModel(
                 stations = emptyList(),
                 searchQuery = "",
                 errorResId = null,
+                // SMCPKG_SUPPORT>>>Cursor122
+                episodesLoadingMore = false,
+                // SMCPKG_SUPPORT<<<Cursor122
             )
         }
         refresh()
@@ -445,18 +481,44 @@ class HomeViewModel(
             // SMCPKG_SUPPORT>>>Cursor117
             // it.copy(selectedPodcast = show, stations = emptyList(), searchQuery = "", errorResId = null)
             // Keep the show-list query so Back restores the same search.
-            it.copy(selectedPodcast = show, stations = emptyList(), errorResId = null)
+            // it.copy(selectedPodcast = show, stations = emptyList(), errorResId = null)
+            it.copy(
+                selectedPodcast = show,
+                stations = emptyList(),
+                errorResId = null,
+                episodesLoadingMore = false,
+                isLoading = true,
+            )
             // SMCPKG_SUPPORT<<<Cursor117
         }
         refresh()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor122
+    fun onEpisodeSortNewest(newestFirst: Boolean) {
+        internalState.update { current ->
+            if (current.episodeSortNewest == newestFirst) current
+            else current.copy(
+                episodeSortNewest = newestFirst,
+                episodeSortEpoch = current.episodeSortEpoch + 1,
+            )
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor122
 
     fun onClearPodcast() {
         loadJob?.cancel()
         internalState.update {
             // SMCPKG_SUPPORT>>>Cursor117
             // it.copy(selectedPodcast = null, stations = emptyList(), searchQuery = "", errorResId = null)
-            it.copy(selectedPodcast = null, stations = emptyList(), isLoading = false, errorResId = null)
+            // it.copy(selectedPodcast = null, stations = emptyList(), isLoading = false, errorResId = null)
+            it.copy(
+                selectedPodcast = null,
+                stations = emptyList(),
+                isLoading = false,
+                errorResId = null,
+                episodesLoadingMore = false,
+            )
             // SMCPKG_SUPPORT<<<Cursor117
         }
         // SMCPKG_SUPPORT>>>Cursor117
@@ -534,9 +596,15 @@ class HomeViewModel(
         loadJob = viewModelScope.launch {
             val podcastList = snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast == null
             val catalog = snapshot.selectedTab == BrowseTab.CATEGORIES
-            if (!podcastList && !catalog) {
+            // SMCPKG_SUPPORT>>>Cursor122
+            // if (!podcastList && !catalog) {
+            //     internalState.update { it.copy(isLoading = true, errorResId = null) }
+            // }
+            val openEpisodes = snapshot.selectedTab == BrowseTab.PODCAST && snapshot.selectedPodcast != null
+            if (!podcastList && !catalog && !openEpisodes) {
                 internalState.update { it.copy(isLoading = true, errorResId = null) }
             }
+            // SMCPKG_SUPPORT<<<Cursor122
             runCatching {
                 when {
                     snapshot.selectedTab == BrowseTab.CATEGORIES -> {
@@ -581,8 +649,40 @@ class HomeViewModel(
                         val region = if (snapshot.podcastUsFallback) "us" else selectedRegion
                         // val region = if (snapshot.podcastUsFallback) "us" else deviceRegion()
                         // SMCPKG_SUPPORT<<<Cursor092
-                        val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region, bypassCache = userInitiated)
-                        finishLoad(userInitiated, ok = true) { it.copy(stations = episodes) }
+                        // SMCPKG_SUPPORT>>>Cursor122
+                        // val episodes = getPodcastEpisodes(snapshot.selectedPodcast, region, bypassCache = userInitiated)
+                        // finishLoad(userInitiated, ok = true) { it.copy(stations = episodes) }
+                        val show = snapshot.selectedPodcast
+                        internalState.update { current ->
+                            if (current.selectedPodcast?.id != show.id) current
+                            else current.copy(
+                                isLoading = current.stations.isEmpty(),
+                                episodesLoadingMore = true,
+                                errorResId = null,
+                            )
+                        }
+                        try {
+                            getPodcastEpisodes(show, region, bypassCache = userInitiated).collect { page ->
+                                internalState.update { current ->
+                                    current.withEpisodePage(page, show.id)
+                                }
+                            }
+                            if (userInitiated) {
+                                finishLoad(userInitiated, ok = true) { it.copy(episodesLoadingMore = false) }
+                            }
+                        } catch (cancelled: CancellationException) {
+                            throw cancelled
+                        } catch (error: Exception) {
+                            val current = internalState.value
+                            if (current.selectedPodcast?.id == show.id && current.stations.isNotEmpty()) {
+                                internalState.update {
+                                    it.copy(isLoading = false, episodesLoadingMore = false, errorResId = null)
+                                }
+                            } else {
+                                throw error
+                            }
+                        }
+                        // SMCPKG_SUPPORT<<<Cursor122
                     }
                     else -> {
                         val country = if (snapshot.selectedTab == BrowseTab.LOCAL) {

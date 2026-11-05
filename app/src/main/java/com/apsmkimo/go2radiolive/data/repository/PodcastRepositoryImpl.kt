@@ -1,14 +1,20 @@
 package com.apsmkimo.go2radiolive.data.repository
 
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
+import com.apsmkimo.go2radiolive.data.local.PodcastEpisodeStore
 import com.apsmkimo.go2radiolive.data.remote.AppleStorefronts
+import com.apsmkimo.go2radiolive.data.remote.PODCAST_MAX_EPISODES
+import com.apsmkimo.go2radiolive.data.remote.PODCAST_QUICK_EPISODE_COUNT
 import com.apsmkimo.go2radiolive.data.remote.PodcastRssParser
 import com.apsmkimo.go2radiolive.data.remote.dedupePodcasts
 import com.apsmkimo.go2radiolive.data.remote.itunesPodcastSearchUrl
 import com.apsmkimo.go2radiolive.data.remote.mapItunesPodcastSearch
+import com.apsmkimo.go2radiolive.data.remote.mergePodcastEpisodes
+import com.apsmkimo.go2radiolive.data.remote.newestFirst
 import com.apsmkimo.go2radiolive.data.remote.podcastStorefront
 import com.apsmkimo.go2radiolive.data.remote.retryIo
 import com.apsmkimo.go2radiolive.domain.model.PodcastChart
+import com.apsmkimo.go2radiolive.domain.model.PodcastEpisodePage
 import com.apsmkimo.go2radiolive.domain.model.PodcastShow
 import com.apsmkimo.go2radiolive.domain.model.RadioStation
 import com.apsmkimo.go2radiolive.domain.repository.PodcastRepository
@@ -17,10 +23,13 @@ import com.google.gson.JsonParser
 import com.google.gson.annotations.SerializedName
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.ensureActive
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -33,6 +42,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
 import java.io.IOException
+import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -54,7 +64,18 @@ class PodcastRepositoryImpl(
     private val client: OkHttpClient,
     private val gson: Gson,
     private val catalogStore: PodcastCatalogStore,
+    // SMCPKG_SUPPORT>>>Cursor122
+    private val episodeStore: PodcastEpisodeStore,
+    // SMCPKG_SUPPORT<<<Cursor122
 ) : PodcastRepository {
+
+    // SMCPKG_SUPPORT>>>Cursor122
+    /** The chart client times out too soon for a multi-megabyte feed. The first items still emit as they arrive. */
+    private val rssClient: OkHttpClient = client.newBuilder()
+        .readTimeout(45, TimeUnit.SECONDS)
+        .callTimeout(90, TimeUnit.SECONDS)
+        .build()
+    // SMCPKG_SUPPORT<<<Cursor122
 
     override fun topShows(region: String?, bypassCache: Boolean): Flow<PodcastChart> = flow {
         val country = podcastStorefront(region)
@@ -80,47 +101,83 @@ class PodcastRepositoryImpl(
         }
     }
 
-    override suspend fun episodes(
+    // SMCPKG_SUPPORT>>>Cursor122
+    // override suspend fun episodes(
+    //     show: PodcastShow,
+    //     region: String?,
+    //     bypassCache: Boolean,
+    // ): List<RadioStation> = withContext(Dispatchers.IO) {
+    //     val country = podcastStorefront(region)
+    //     val embedded = show.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
+    //     if (embedded != null) {
+    //         catalogStore.saveFeedUrl(show.id, embedded)
+    //         try {
+    //             return@withContext readRss(embedded, show, bypassCache)
+    //         } catch (cancelled: CancellationException) {
+    //             throw cancelled
+    //         } catch (_: Exception) {
+    //             // The search feed failed. Fall through to the cached or lookup feed.
+    //         }
+    //     }
+    //     if (!bypassCache) {
+    //         val cachedFeed = catalogStore.feedUrl(show.id)
+    //         if (!cachedFeed.isNullOrBlank() && cachedFeed != embedded) {
+    //             val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
+    //             if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
+    //         }
+    //     }
+    //     val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
+    //         ?: throw IOException("missing feed")
+    //     readRss(feedUrl, show, bypassCache)
+    // }
+    override fun episodes(
         show: PodcastShow,
         region: String?,
         bypassCache: Boolean,
-    ): List<RadioStation> = withContext(Dispatchers.IO) {
-        // SMCPKG_SUPPORT>>>Cursor115
-        // val country = podcastStorefront(region)
-        // if (!bypassCache) {
-        //     val cachedFeed = catalogStore.feedUrl(show.id)
-        //     if (!cachedFeed.isNullOrBlank()) {
-        //         val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
-        //         if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
-        //     }
-        // }
-        // val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
-        //     ?: throw IOException("missing feed")
-        // readRss(feedUrl, show, bypassCache)
-        val country = podcastStorefront(region)
-        val embedded = show.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
-        if (embedded != null) {
-            catalogStore.saveFeedUrl(show.id, embedded)
-            try {
-                return@withContext readRss(embedded, show, bypassCache)
-            } catch (cancelled: CancellationException) {
-                throw cancelled
-            } catch (_: Exception) {
-                // The search feed failed. Fall through to the cached or lookup feed.
+    ): Flow<PodcastEpisodePage> = channelFlow {
+        val cached = mergePodcastEpisodes(emptyList(), episodeStore.read(show.id)).takeIf { it.isNotEmpty() }
+        if (cached != null && !bypassCache) send(PodcastEpisodePage(cached, loadingMore = true))
+        var quickList = emptyList<RadioStation>()
+        try {
+            val parsed = loadFeed(show, region, bypassCache) { quick ->
+                val ordered = newestFirst(mergePodcastEpisodes(cached.orEmpty(), quick))
+                quickList = ordered
+                // A partial feed must not replace a longer saved list.
+                if (cached == null && ordered.isNotEmpty()) {
+                    episodeStore.save(show.id, ordered)
+                    trySend(PodcastEpisodePage(ordered, loadingMore = true))
+                }
+            }
+            ensureActive()
+            if (parsed == null) {
+                if (cached != null) {
+                    send(PodcastEpisodePage(cached, loadingMore = false))
+                } else {
+                    send(PodcastEpisodePage(emptyList(), loadingMore = false))
+                }
+                return@channelFlow
+            }
+            val merged = newestFirst(mergePodcastEpisodes(cached.orEmpty(), parsed))
+            val page = when {
+                merged.isNotEmpty() -> merged
+                cached != null -> cached
+                else -> quickList
+            }
+            if (page.isNotEmpty()) episodeStore.save(show.id, page)
+            send(PodcastEpisodePage(page, loadingMore = false))
+        } catch (cancelled: CancellationException) {
+            throw cancelled
+        } catch (error: Exception) {
+            if (!isActive) throw CancellationException("episodes cancelled", error)
+            val fallback = cached ?: quickList.takeIf { it.isNotEmpty() }
+            if (fallback != null) {
+                send(PodcastEpisodePage(fallback, loadingMore = false))
+            } else {
+                throw error
             }
         }
-        if (!bypassCache) {
-            val cachedFeed = catalogStore.feedUrl(show.id)
-            if (!cachedFeed.isNullOrBlank() && cachedFeed != embedded) {
-                val cachedEpisodes = runCatching { readRss(cachedFeed, show, bypassCache = false) }.getOrNull()
-                if (!cachedEpisodes.isNullOrEmpty()) return@withContext cachedEpisodes
-            }
-        }
-        val feedUrl = lookupFeedUrl(show.id, country, bypassCache)
-            ?: throw IOException("missing feed")
-        readRss(feedUrl, show, bypassCache)
-        // SMCPKG_SUPPORT<<<Cursor115
-    }
+    }.flowOn(Dispatchers.IO)
+    // SMCPKG_SUPPORT<<<Cursor122
 
     // SMCPKG_SUPPORT>>>Cursor115
     override suspend fun searchShows(
@@ -274,18 +331,98 @@ class PodcastRepositoryImpl(
         return url
     }
 
-    private suspend fun readRss(feedUrl: String, show: PodcastShow, bypassCache: Boolean): List<RadioStation> {
+    // SMCPKG_SUPPORT>>>Cursor122
+    // private suspend fun readRss(feedUrl: String, show: PodcastShow, bypassCache: Boolean): List<RadioStation> {
+    //     return retryIo {
+    //         val request = Request.Builder().url(feedUrl).build()
+    //         client.newCall(bust(request, bypassCache)).execute().use { response ->
+    //             if (!response.isSuccessful) throw IOException("rss ${response.code}")
+    //             val body = response.body ?: throw IOException("empty rss")
+    //             body.byteStream().use { stream ->
+    //                 PodcastRssParser.parse(stream, show.name, show.artworkUrl)
+    //             }
+    //         }
+    //     }
+    // }
+    /**
+     * Tries the show's own feed, then a saved feed URL, then iTunes Lookup.
+     * Returns null when no feed URL exists. A bad document falls through to the next URL.
+     */
+    private suspend fun loadFeed(
+        show: PodcastShow,
+        region: String?,
+        bypassCache: Boolean,
+        onQuick: (List<RadioStation>) -> Unit,
+    ): List<RadioStation>? {
+        val country = podcastStorefront(region)
+        val embedded = show.feedUrl?.trim()?.takeIf { it.isNotEmpty() }
+        if (embedded != null) catalogStore.saveFeedUrl(show.id, embedded)
+        val candidates = LinkedHashSet<String>()
+        if (embedded != null) candidates.add(embedded)
+        if (!bypassCache) {
+            val saved = catalogStore.feedUrl(show.id)
+            if (!saved.isNullOrBlank()) candidates.add(saved)
+        }
+        var lastError: Exception? = null
+        for (url in candidates) {
+            try {
+                return readRss(url, show, bypassCache, onQuick)
+            } catch (cancelled: CancellationException) {
+                throw cancelled
+            } catch (error: Exception) {
+                lastError = error
+            }
+        }
+        var lookupFailed: Exception? = null
+        val lookedUp = runCatching { lookupFeedUrl(show.id, country, bypassCache) }.getOrElse { error ->
+            if (error is CancellationException) throw error
+            lookupFailed = error as? Exception ?: IOException("lookup failed")
+            null
+        }
+        if (!lookedUp.isNullOrBlank() && lookedUp !in candidates) {
+            return readRss(lookedUp, show, bypassCache, onQuick)
+        }
+        // No feed URL at all is an empty list. A failed request still surfaces when nothing was read.
+        if (candidates.isEmpty() && lookedUp.isNullOrBlank() && lookupFailed == null) return null
+        throw lookupFailed ?: lastError ?: IOException("rss failed")
+    }
+
+    private suspend fun readRss(
+        feedUrl: String,
+        show: PodcastShow,
+        bypassCache: Boolean,
+        onQuick: (List<RadioStation>) -> Unit,
+    ): List<RadioStation> {
         return retryIo {
-            val request = Request.Builder().url(feedUrl).build()
-            client.newCall(bust(request, bypassCache)).execute().use { response ->
+            coroutineContext.ensureActive()
+            val request = bust(
+                Request.Builder()
+                    .url(feedUrl)
+                    .header("Accept", "application/rss+xml, application/xml, text/xml, */*")
+                    .build(),
+                bypassCache,
+            )
+            val call = rssClient.newCall(request)
+            coroutineContext[Job]?.invokeOnCompletion { cause ->
+                if (cause != null) call.cancel()
+            }
+            call.execute().use { response ->
                 if (!response.isSuccessful) throw IOException("rss ${response.code}")
                 val body = response.body ?: throw IOException("empty rss")
                 body.byteStream().use { stream ->
-                    PodcastRssParser.parse(stream, show.name, show.artworkUrl)
+                    PodcastRssParser.parse(
+                        stream,
+                        show.name,
+                        show.artworkUrl,
+                        limit = PODCAST_MAX_EPISODES,
+                        quickCount = PODCAST_QUICK_EPISODE_COUNT,
+                        onQuick = onQuick,
+                    )
                 }
             }
         }
     }
+    // SMCPKG_SUPPORT<<<Cursor122
 
     private fun bust(request: Request, bypassCache: Boolean): Request {
         if (!bypassCache) return request

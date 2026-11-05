@@ -16,6 +16,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -53,8 +56,33 @@ fun StationList(
     // SMCPKG_SUPPORT>>>Cursor119
     playback: PlaybackState = PlaybackState(),
     // SMCPKG_SUPPORT<<<Cursor119
+    // SMCPKG_SUPPORT>>>Cursor122
+    loadingMore: Boolean = false,
+    preserveScroll: Boolean = false,
+    scrollToTopEpoch: Int = 0,
+    // SMCPKG_SUPPORT<<<Cursor122
 ) {
     val listState = rememberLazyListState()
+    // SMCPKG_SUPPORT>>>Cursor122
+    val previousStations = remember { mutableStateOf<List<RadioStation>>(emptyList()) }
+    val appliedSortEpoch = remember { mutableIntStateOf(scrollToTopEpoch) }
+    if (preserveScroll) {
+        val sortChanged = appliedSortEpoch.intValue != scrollToTopEpoch
+        if (sortChanged) appliedSortEpoch.intValue = scrollToTopEpoch
+        if (!sortChanged) {
+            val pinned = listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0
+            val anchor = episodeScrollAfterMerge(
+                previous = previousStations.value,
+                next = stations,
+                firstVisibleIndex = listState.firstVisibleItemIndex,
+                firstVisibleOffset = listState.firstVisibleItemScrollOffset,
+                pinnedToTop = pinned,
+            )
+            if (anchor != null) listState.requestScrollToItem(anchor.index, anchor.offset)
+        }
+        SideEffect { previousStations.value = stations }
+    }
+    // SMCPKG_SUPPORT<<<Cursor122
     // SMCPKG_SUPPORT>>>Cursor118
     // Lives with this list. Scrolling recycles rows but keeps the set.
     // Leaving the show disposes the list, so the next visit starts collapsed.
@@ -63,6 +91,13 @@ fun StationList(
     LaunchedEffect(scrollToken) {
         if (scrollToken > 0 && stations.isNotEmpty()) listState.scrollToItem(0)
     }
+    // SMCPKG_SUPPORT>>>Cursor122
+    LaunchedEffect(scrollToTopEpoch) {
+        if (preserveScroll && scrollToTopEpoch > 0 && stations.isNotEmpty()) {
+            listState.scrollToItem(0)
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor122
     when {
         isLoading && stations.isEmpty() -> {
             Box(modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -94,7 +129,14 @@ fun StationList(
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                itemsIndexed(stations, key = { _, station -> station.stationUuid }) { index, station ->
+                // SMCPKG_SUPPORT>>>Cursor122
+                // itemsIndexed(stations, key = { _, station -> station.stationUuid }) { index, station ->
+                itemsIndexed(
+                    stations,
+                    key = { _, station -> station.stationUuid },
+                    contentType = { _, _ -> "station" },
+                ) { index, station ->
+                // SMCPKG_SUPPORT<<<Cursor122
                     StationCard(
                         station = station,
                         // SMCPKG_SUPPORT>>>Cursor119
@@ -118,6 +160,21 @@ fun StationList(
                         NativeAdSlot()
                     }
                 }
+                // SMCPKG_SUPPORT>>>Cursor122
+                if (loadingMore) {
+                    item(key = "episodes-loading-more", contentType = "episodes-loading") {
+                        Text(
+                            text = stringResource(R.string.episodes_loading_more),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 12.dp),
+                        )
+                    }
+                }
+                // SMCPKG_SUPPORT<<<Cursor122
             }
         }
     }
