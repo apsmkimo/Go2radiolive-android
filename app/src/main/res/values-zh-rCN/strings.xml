@@ -192,4 +192,14 @@
     <string name="remove_ads_debug">调试：模拟已移除广告</string>
     <string name="remove_ads_debug_summary">仅调试版本。假装已拥有移除广告的购买项。</string>
     <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">电台</string>
+    <string name="favorites_section_podcasts">播客节目</string>
+    <string name="empty_favorite_shows">尚未加入最爱节目。点节目上的爱心即可加入。</string>
+    <string name="episode_previous">上一集</string>
+    <string name="episode_next">下一集</string>
+    <string name="rewind_10">后退 10 秒</string>
+    <string name="forward_10">快进 10 秒</string>
+    <string name="seek_position">播放进度</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
 </resources>

@@ -195,4 +195,14 @@
     <string name="remove_ads_debug">Debug: simulate ads removed</string>
     <string name="remove_ads_debug_summary">Debug builds only. Pretend the remove-ads purchase is owned.</string>
     <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Stations</string>
+    <string name="favorites_section_podcasts">Podcast shows</string>
+    <string name="empty_favorite_shows">No favorite podcast shows yet. Tap the heart on a show to add it.</string>
+    <string name="episode_previous">Previous episode</string>
+    <string name="episode_next">Next episode</string>
+    <string name="rewind_10">Back 10 seconds</string>
+    <string name="forward_10">Forward 10 seconds</string>
+    <string name="seek_position">Playback position</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
 </resources>

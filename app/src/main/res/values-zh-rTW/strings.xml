@@ -195,4 +195,14 @@
     <string name="remove_ads_debug">偵錯：模擬已移除廣告</string>
     <string name="remove_ads_debug_summary">僅偵錯版本。假裝已擁有移除廣告的購買項目。</string>
     <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">電台</string>
+    <string name="favorites_section_podcasts">Podcast 節目</string>
+    <string name="empty_favorite_shows">尚未加入最愛節目。點節目上的愛心即可加入。</string>
+    <string name="episode_previous">上一集</string>
+    <string name="episode_next">下一集</string>
+    <string name="rewind_10">倒退 10 秒</string>
+    <string name="forward_10">快轉 10 秒</string>
+    <string name="seek_position">播放進度</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
 </resources>

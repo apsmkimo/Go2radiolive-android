@@ -76,6 +76,10 @@ import kotlinx.coroutines.launch
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRow
 import com.apsmkimo.go2radiolive.presentation.ui.components.BrowseRowList
 import com.apsmkimo.go2radiolive.presentation.ui.components.FullPlayer
+// SMCPKG_SUPPORT>>>Cursor123
+import com.apsmkimo.go2radiolive.presentation.ui.components.FavoriteHeartButton
+import com.apsmkimo.go2radiolive.presentation.ui.components.FavoritesList
+// SMCPKG_SUPPORT<<<Cursor123
 import com.apsmkimo.go2radiolive.presentation.ui.components.MiniPlayer
 import com.apsmkimo.go2radiolive.presentation.ui.components.PodcastRegionDialog
 import com.apsmkimo.go2radiolive.presentation.ui.components.SearchBarRow
@@ -214,6 +218,10 @@ fun HomeScreen(
                     newestFirst = state.episodeSortNewest,
                     onSortNewest = viewModel::onEpisodeSortNewest,
                     // SMCPKG_SUPPORT<<<Cursor122
+                    // SMCPKG_SUPPORT>>>Cursor123
+                    isFavorite = openPodcast.id in state.favoriteShowIds,
+                    onToggleFavorite = { viewModel.onToggleFavoriteShow(openPodcast) },
+                    // SMCPKG_SUPPORT<<<Cursor123
                 )
             } else
             // SMCPKG_SUPPORT<<<Cursor117
@@ -556,6 +564,13 @@ fun HomeScreen(
                         // SMCPKG_SUPPORT>>>Cursor117
                         nameWraps = true,
                         // SMCPKG_SUPPORT<<<Cursor117
+                        // SMCPKG_SUPPORT>>>Cursor123
+                        favoriteRowIds = state.favoriteShowIds,
+                        onToggleRowFavorite = { row ->
+                            state.visiblePodcasts.firstOrNull { it.id == row.id }
+                                ?.let(viewModel::onToggleFavoriteShow)
+                        },
+                        // SMCPKG_SUPPORT<<<Cursor123
                         header = if (!podcastQueryActive && state.podcastUsFallback) {
                             stringResource(R.string.podcast_us_fallback)
                         } else {
@@ -568,6 +583,23 @@ fun HomeScreen(
                         // SMCPKG_SUPPORT<<<Cursor113
                     )
                 }
+                // SMCPKG_SUPPORT>>>Cursor123
+                state.selectedTab == BrowseTab.FAVORITES -> {
+                    FavoritesList(
+                        stations = state.visibleStations,
+                        favoriteIds = state.favoriteIds,
+                        shows = state.visibleFavoriteShows,
+                        favoriteShowIds = state.favoriteShowIds,
+                        isLoading = state.isLoading,
+                        onStationClick = viewModel::onStationClick,
+                        onToggleFavorite = viewModel::onToggleFavorite,
+                        onShowClick = viewModel::onFavoriteShowSelected,
+                        onToggleFavoriteShow = viewModel::onToggleFavoriteShow,
+                        scrollToken = state.scrollToken,
+                        playback = state.playback,
+                    )
+                }
+                // SMCPKG_SUPPORT<<<Cursor123
                 else -> {
                     val emptyText = when {
                         state.selectedTab == BrowseTab.FAVORITES -> stringResource(R.string.empty_favorites)
@@ -631,6 +663,14 @@ fun HomeScreen(
                 onNextStation = {
                     viewModel.onPlayNextStation()
                 },
+                // SMCPKG_SUPPORT>>>Cursor123
+                positionMs = viewModel::currentPositionMs,
+                durationMs = viewModel::durationMs,
+                onSeekTo = viewModel::onSeekTo,
+                onSeekBy = viewModel::onSeekBy,
+                onOlderEpisode = viewModel::onPlayOlderEpisode,
+                onNewerEpisode = viewModel::onPlayNewerEpisode,
+                // SMCPKG_SUPPORT<<<Cursor123
             )
         }
     }
@@ -647,6 +687,10 @@ private fun PodcastShowBar(
     newestFirst: Boolean = true,
     onSortNewest: (Boolean) -> Unit = {},
     // SMCPKG_SUPPORT<<<Cursor122
+    // SMCPKG_SUPPORT>>>Cursor123
+    isFavorite: Boolean = false,
+    onToggleFavorite: (() -> Unit)? = null,
+    // SMCPKG_SUPPORT<<<Cursor123
 ) {
     Surface(color = MaterialTheme.colorScheme.surface, tonalElevation = 3.dp) {
         // SMCPKG_SUPPORT>>>Cursor122
@@ -678,6 +722,11 @@ private fun PodcastShowBar(
                     fontWeight = FontWeight.Medium,
                 ),
             )
+            // SMCPKG_SUPPORT>>>Cursor123
+            if (onToggleFavorite != null) {
+                FavoriteHeartButton(isFavorite = isFavorite, onClick = onToggleFavorite)
+            }
+            // SMCPKG_SUPPORT<<<Cursor123
             IconButton(onClick = onSettings) {
                 Icon(
                     imageVector = Icons.Outlined.Settings,
