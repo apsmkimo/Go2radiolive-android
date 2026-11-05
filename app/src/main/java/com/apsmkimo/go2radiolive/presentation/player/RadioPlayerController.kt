@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.os.SystemClock
 import android.util.Log
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
@@ -69,6 +70,12 @@ class RadioPlayerController(
     private var activeEntryUrl: String? = null
     // SMCPKG_SUPPORT<<<Cursor119
 
+    // SMCPKG_SUPPORT>>>Cursor123
+    /** Newest-first episode list of the show the playing episode was started from. */
+    private var episodeQueue: List<RadioStation> = emptyList()
+    private var episodeQueueKey: String? = null
+    // SMCPKG_SUPPORT<<<Cursor123
+
     private val listener = object : Player.Listener {
         override fun onIsPlayingChanged(isPlaying: Boolean) {
             // SMCPKG_SUPPORT>>>Cursor119
@@ -105,6 +112,14 @@ class RadioPlayerController(
             if (station != null) {
                 _playbackState.update { it.copy(station = station, errorMessage = null) }
             }
+            // SMCPKG_SUPPORT>>>Cursor123
+            // Something outside the episode list (e.g. the wake alarm) took over the player.
+            if (station != null && EpisodeNavigation.indexOf(episodeQueue, station.stationUuid) < 0) {
+                clearEpisodeQueue()
+            } else {
+                publishEpisodeNav()
+            }
+            // SMCPKG_SUPPORT<<<Cursor123
         }
 
         override fun onPlayerError(error: PlaybackException) {
@@ -130,6 +145,14 @@ class RadioPlayerController(
             // SMCPKG_SUPPORT<<<Cursor119
         }
     }
+
+    // SMCPKG_SUPPORT>>>Cursor123
+    init {
+        EpisodeQueue.handler = { newer ->
+            if (newer) playNewerEpisode() else playOlderEpisode()
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor123
 
     fun initialize() {
         if (controllerFuture != null) return
@@ -183,6 +206,12 @@ class RadioPlayerController(
 
     // SMCPKG_SUPPORT>>>Cursor119
     private fun startAttempts(station: RadioStation, entryUrl: String) {
+        // SMCPKG_SUPPORT>>>Cursor123
+        if (EpisodeNavigation.indexOf(episodeQueue, station.stationUuid) < 0) {
+            episodeQueue = emptyList()
+            episodeQueueKey = null
+        }
+        // SMCPKG_SUPPORT<<<Cursor123
         suppressRetry = false
         val token = ++attemptToken
         attemptJob?.cancel()
@@ -198,6 +227,9 @@ class RadioPlayerController(
                 errorMessage = null,
             )
         }
+        // SMCPKG_SUPPORT>>>Cursor123
+        publishEpisodeNav()
+        // SMCPKG_SUPPORT<<<Cursor123
         attemptJob = scope.launch {
             try {
                 runAttempts(token, station, entryUrl)
@@ -317,6 +349,85 @@ class RadioPlayerController(
         val station = activeStation ?: _playbackState.value.station ?: return
         play(station, activeEntryUrl ?: station.streamUrl)
     }
+
+    // SMCPKG_SUPPORT>>>Cursor123
+    /**
+     * Remembers the show's newest-first episode list so Previous (older) and Next (newer)
+     * work from the full player and the media notification. Call before [play].
+     */
+    fun setEpisodeQueue(key: String, episodes: List<RadioStation>) {
+        episodeQueueKey = key
+        episodeQueue = episodes.toList()
+        publishEpisodeNav()
+    }
+
+    /** Follows a show's list as more of its feed loads, only while that show is the active queue. */
+    fun updateEpisodeQueue(key: String, episodes: List<RadioStation>) {
+        if (key != episodeQueueKey || episodes.isEmpty()) return
+        val current = activeStation?.stationUuid ?: _playbackState.value.station?.stationUuid
+        if (EpisodeNavigation.indexOf(episodes, current) < 0) return
+        episodeQueue = episodes.toList()
+        publishEpisodeNav()
+    }
+
+    fun clearEpisodeQueue() {
+        episodeQueue = emptyList()
+        episodeQueueKey = null
+        publishEpisodeNav()
+    }
+
+    /** Next = newer episode (the row above in the newest-first list). No autoplay: only on request. */
+    fun playNewerEpisode() {
+        val current = activeStation?.stationUuid ?: _playbackState.value.station?.stationUuid
+        val target = EpisodeNavigation.newer(episodeQueue, current) ?: return
+        play(target, target.streamUrl)
+    }
+
+    /** Previous = older episode (the row below in the newest-first list). */
+    fun playOlderEpisode() {
+        val current = activeStation?.stationUuid ?: _playbackState.value.station?.stationUuid
+        val target = EpisodeNavigation.older(episodeQueue, current) ?: return
+        play(target, target.streamUrl)
+    }
+
+    private fun publishEpisodeNav() {
+        val current = activeStation?.stationUuid ?: _playbackState.value.station?.stationUuid
+        val nav = EpisodeNavigation.nav(episodeQueue, current)
+        _playbackState.update {
+            if (it.hasNewerEpisode == nav.hasNewer && it.hasOlderEpisode == nav.hasOlder) it
+            else it.copy(hasNewerEpisode = nav.hasNewer, hasOlderEpisode = nav.hasOlder)
+        }
+        EpisodeQueue.publish(nav)
+    }
+
+    /** Current position in ms, read on demand (the full player polls this while visible). */
+    fun currentPositionMs(): Long {
+        val mediaController = controller ?: return 0L
+        if (mediaController.mediaItemCount == 0) return 0L
+        return mediaController.currentPosition.coerceAtLeast(0L)
+    }
+
+    /** Episode length in ms, or 0 while unknown. */
+    fun durationMs(): Long {
+        val mediaController = controller ?: return 0L
+        if (mediaController.mediaItemCount == 0) return 0L
+        val duration = mediaController.duration
+        return if (duration == C.TIME_UNSET || duration < 0L) 0L else duration
+    }
+
+    fun seekTo(positionMs: Long) {
+        val mediaController = controller ?: return
+        if (mediaController.mediaItemCount == 0) return
+        if (!mediaController.isCommandAvailable(Player.COMMAND_SEEK_IN_CURRENT_MEDIA_ITEM)) return
+        val duration = durationMs()
+        val target = if (duration > 0L) positionMs.coerceIn(0L, duration) else positionMs.coerceAtLeast(0L)
+        mediaController.seekTo(target)
+    }
+
+    fun seekBy(deltaMs: Long) {
+        seekTo(currentPositionMs() + deltaMs)
+    }
+    // SMCPKG_SUPPORT<<<Cursor123
 
     fun release() {
         // SMCPKG_SUPPORT>>>Cursor119

@@ -10,6 +10,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -232,6 +235,11 @@ fun BrowseRowList(
     // SMCPKG_SUPPORT>>>Cursor117
     nameWraps: Boolean = false,
     // SMCPKG_SUPPORT<<<Cursor117
+    // SMCPKG_SUPPORT>>>Cursor123
+    /** Row ids drawn with a filled heart. Only used when [onToggleRowFavorite] is set. */
+    favoriteRowIds: Set<String> = emptySet(),
+    onToggleRowFavorite: ((BrowseRow) -> Unit)? = null,
+    // SMCPKG_SUPPORT<<<Cursor123
 ) {
     val listState = rememberLazyListState()
     LaunchedEffect(scrollToken) {
@@ -294,6 +302,16 @@ fun BrowseRowList(
                         modifier = Modifier.fillMaxWidth(),
                     ) {
                         // SMCPKG_SUPPORT>>>Cursor117
+                        // SMCPKG_SUPPORT>>>Cursor123
+                        if (nameWraps && onToggleRowFavorite != null) {
+                            ShowRowContent(
+                                title = row.title,
+                                subtitle = row.subtitle,
+                                isFavorite = row.id in favoriteRowIds,
+                                onToggleFavorite = { onToggleRowFavorite(row) },
+                            )
+                        } else
+                        // SMCPKG_SUPPORT<<<Cursor123
                         if (nameWraps) {
                             Column(Modifier.padding(16.dp).fillMaxWidth()) {
                                 Text(
@@ -345,3 +363,66 @@ fun BrowseRowList(
         }
     }
 }
+
+// SMCPKG_SUPPORT>>>Cursor123
+/** A podcast show row: wrapped name, author, and a heart on the right. */
+@Composable
+internal fun ShowRowContent(
+    title: String,
+    subtitle: String,
+    isFavorite: Boolean,
+    onToggleFavorite: () -> Unit,
+) {
+    androidx.compose.foundation.layout.Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 4.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Column(
+            Modifier
+                .weight(1f)
+                .padding(vertical = 8.dp),
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontSize = 15.sp,
+                    lineHeight = 20.sp,
+                    fontWeight = androidx.compose.ui.text.font.FontWeight.Medium,
+                ),
+            )
+            if (subtitle.isNotEmpty()) {
+                Text(
+                    text = subtitle,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontSize = 13.sp,
+                        lineHeight = 18.sp,
+                    ),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 2.dp),
+                )
+            }
+        }
+        FavoriteHeartButton(isFavorite = isFavorite, onClick = onToggleFavorite)
+    }
+}
+
+@Composable
+internal fun FavoriteHeartButton(
+    isFavorite: Boolean,
+    onClick: () -> Unit,
+) {
+    androidx.compose.material3.IconButton(onClick = onClick) {
+        androidx.compose.material3.Icon(
+            imageVector = if (isFavorite) {
+                Icons.Filled.Favorite
+            } else {
+                Icons.Outlined.FavoriteBorder
+            },
+            contentDescription = stringResource(R.string.favorite),
+            tint = if (isFavorite) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.outline,
+        )
+    }
+}
+// SMCPKG_SUPPORT<<<Cursor123

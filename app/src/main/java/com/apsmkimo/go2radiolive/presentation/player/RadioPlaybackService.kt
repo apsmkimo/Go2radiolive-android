@@ -34,6 +34,9 @@ import kotlinx.coroutines.cancel
 // import kotlinx.coroutines.delay
 // import kotlinx.coroutines.launch
 // SMCPKG_SUPPORT<<<Cursor116
+// SMCPKG_SUPPORT>>>Cursor123
+import kotlinx.coroutines.launch
+// SMCPKG_SUPPORT<<<Cursor123
 
 @OptIn(UnstableApi::class)
 class RadioPlaybackService : MediaSessionService() {
@@ -42,6 +45,9 @@ class RadioPlaybackService : MediaSessionService() {
     private val spatialRouteScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var spatialRouteJob: Job? = null
     private var alarmPlayback: AlarmPlayback? = null
+    // SMCPKG_SUPPORT>>>Cursor123
+    private var episodeNavJob: Job? = null
+    // SMCPKG_SUPPORT<<<Cursor123
     private val onLocaleChanged: () -> Unit = {
         setMediaNotificationProvider(notificationProvider())
         refreshLocalizedChannels()
@@ -105,9 +111,19 @@ class RadioPlaybackService : MediaSessionService() {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
         )
 
-        mediaSession = MediaSession.Builder(this, player)
+        // SMCPKG_SUPPORT>>>Cursor123
+        // mediaSession = MediaSession.Builder(this, player)
+        //     .setSessionActivity(sessionActivity)
+        //     .build()
+        // The session sees episode prev/next through EpisodeNavPlayer; alarms keep the raw player.
+        val sessionPlayer = EpisodeNavPlayer(player)
+        mediaSession = MediaSession.Builder(this, sessionPlayer)
             .setSessionActivity(sessionActivity)
             .build()
+        episodeNavJob = spatialRouteScope.launch {
+            EpisodeQueue.nav.collect { sessionPlayer.notifyNavChanged() }
+        }
+        // SMCPKG_SUPPORT<<<Cursor123
         // SMCPKG_SUPPORT>>>Cursor072
         // Mono Off reports one channel and skips this processor. Media3 keeps
         // that format until the sink is configured again, so a mono stream
@@ -180,6 +196,9 @@ class RadioPlaybackService : MediaSessionService() {
         AppLocale.removeListener(onLocaleChanged)
         alarmPlayback?.release()
         spatialRouteJob?.cancel()
+        // SMCPKG_SUPPORT>>>Cursor123
+        episodeNavJob?.cancel()
+        // SMCPKG_SUPPORT<<<Cursor123
         spatialRouteScope.cancel()
         mediaSession?.run {
             player.release()

@@ -7,6 +7,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.apsmkimo.go2radiolive.R
 import com.apsmkimo.go2radiolive.data.local.CategoryCatalogStore
+// SMCPKG_SUPPORT>>>Cursor123
+import com.apsmkimo.go2radiolive.data.local.FavoriteShowLocalDataSource
+// SMCPKG_SUPPORT<<<Cursor123
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
 import com.apsmkimo.go2radiolive.data.local.PodcastRegionRepository
 import com.apsmkimo.go2radiolive.data.remote.CatalogTopics
@@ -77,6 +80,12 @@ data class HomeUiState(
     // SMCPKG_SUPPORT<<<Cursor122
     val favoriteIds: Set<String> = emptySet(),
     val favoriteStations: List<RadioStation> = emptyList(),
+    // SMCPKG_SUPPORT>>>Cursor123
+    val favoriteShows: List<PodcastShow> = emptyList(),
+    val favoriteShowIds: Set<String> = emptySet(),
+    /** The open show was tapped in Favorites, so Back returns there. */
+    val podcastOpenedFromFavorites: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor123
     val isLoading: Boolean = false,
     val userRefreshEvent: Int = 0,
     val userRefreshOk: Boolean = true,
@@ -127,6 +136,21 @@ data class HomeUiState(
             return if (query.isEmpty()) catalogOthers else catalogOthers.filter { it.matchesStationQuery(query) }
         }
     // SMCPKG_SUPPORT<<<Cursor119
+
+    // SMCPKG_SUPPORT>>>Cursor123
+    val visibleFavoriteShows: List<PodcastShow>
+        get() {
+            val query = searchQuery.trim()
+            return if (query.isEmpty()) {
+                favoriteShows
+            } else {
+                favoriteShows.filter {
+                    it.name.contains(query, ignoreCase = true) ||
+                        it.author.contains(query, ignoreCase = true)
+                }
+            }
+        }
+    // SMCPKG_SUPPORT<<<Cursor123
 
     val visibleCategories: List<StationCategory>
         get() = filterByName(categories, searchQuery) { it.name }
@@ -237,6 +261,9 @@ class HomeViewModel(
     private val podcastCache: PodcastCatalogStore,
     private val categoryCatalog: CategoryCatalogRepository,
     private val categoryCache: CategoryCatalogStore,
+    // SMCPKG_SUPPORT>>>Cursor123
+    private val favoriteShowStore: FavoriteShowLocalDataSource,
+    // SMCPKG_SUPPORT<<<Cursor123
 ) : ViewModel() {
 
     private val internalState = MutableStateFlow(HomeUiState())
@@ -258,7 +285,10 @@ class HomeViewModel(
         //         playback = playback,
         //     )
         playFailures,
-    ) { ui, favorites, playback, failures ->
+        // SMCPKG_SUPPORT>>>Cursor123
+        favoriteShowStore.shows,
+    ) { ui, favorites, playback, failures, shows ->
+        // SMCPKG_SUPPORT<<<Cursor123
         val now = System.currentTimeMillis()
         val rankLocal = ui.selectedTab == BrowseTab.LOCAL && ui.selectedPodcast == null
         ui.copy(
@@ -267,6 +297,10 @@ class HomeViewModel(
             favoriteStations = StationLists.present(favorites, failures, now, rankLocal = false),
             favoriteIds = favorites.map { it.stationUuid }.toSet(),
             playback = playback,
+            // SMCPKG_SUPPORT>>>Cursor123
+            favoriteShows = shows,
+            favoriteShowIds = shows.map { it.id }.toSet(),
+            // SMCPKG_SUPPORT<<<Cursor123
         )
         // SMCPKG_SUPPORT<<<Cursor119
     }.stateIn(
@@ -301,6 +335,9 @@ class HomeViewModel(
                 // SMCPKG_SUPPORT>>>Cursor122
                 episodesLoadingMore = false,
                 // SMCPKG_SUPPORT<<<Cursor122
+                // SMCPKG_SUPPORT>>>Cursor123
+                podcastOpenedFromFavorites = false,
+                // SMCPKG_SUPPORT<<<Cursor123
             )
         }
         refresh()
@@ -488,11 +525,46 @@ class HomeViewModel(
                 errorResId = null,
                 episodesLoadingMore = false,
                 isLoading = true,
+                // SMCPKG_SUPPORT>>>Cursor123
+                podcastOpenedFromFavorites = false,
+                // SMCPKG_SUPPORT<<<Cursor123
             )
             // SMCPKG_SUPPORT<<<Cursor117
         }
         refresh()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor123
+    /** Opens a favorite show's episode list the same way the Podcast tab does. */
+    fun onFavoriteShowSelected(show: PodcastShow) {
+        cancelPodcastSearch()
+        internalState.update {
+            it.copy(
+                selectedTab = BrowseTab.PODCAST,
+                selectedPodcast = show,
+                selectedCategory = null,
+                selectedCountry = null,
+                stations = emptyList(),
+                searchQuery = "",
+                errorResId = null,
+                episodesLoadingMore = false,
+                isLoading = true,
+                podcastOpenedFromFavorites = true,
+            )
+        }
+        refresh()
+    }
+
+    fun onToggleFavoriteShow(show: PodcastShow) {
+        viewModelScope.launch {
+            runCatching { favoriteShowStore.toggle(show) }
+                .onFailure { error ->
+                    if (error is CancellationException) throw error
+                    Log.w(TAG, "favorite show toggle failed", error)
+                }
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor123
 
     // SMCPKG_SUPPORT>>>Cursor122
     fun onEpisodeSortNewest(newestFirst: Boolean) {
@@ -508,6 +580,23 @@ class HomeViewModel(
 
     fun onClearPodcast() {
         loadJob?.cancel()
+        // SMCPKG_SUPPORT>>>Cursor123
+        if (internalState.value.podcastOpenedFromFavorites) {
+            internalState.update {
+                it.copy(
+                    selectedTab = BrowseTab.FAVORITES,
+                    selectedPodcast = null,
+                    stations = emptyList(),
+                    isLoading = false,
+                    errorResId = null,
+                    episodesLoadingMore = false,
+                    searchQuery = "",
+                    podcastOpenedFromFavorites = false,
+                )
+            }
+            return
+        }
+        // SMCPKG_SUPPORT<<<Cursor123
         internalState.update {
             // SMCPKG_SUPPORT>>>Cursor117
             // it.copy(selectedPodcast = null, stations = emptyList(), searchQuery = "", errorResId = null)
@@ -666,6 +755,12 @@ class HomeViewModel(
                                 internalState.update { current ->
                                     current.withEpisodePage(page, show.id)
                                 }
+                                // SMCPKG_SUPPORT>>>Cursor123
+                                val loaded = internalState.value
+                                if (loaded.selectedPodcast?.id == show.id) {
+                                    playerController.updateEpisodeQueue(show.id, loaded.stations)
+                                }
+                                // SMCPKG_SUPPORT<<<Cursor123
                             }
                             if (userInitiated) {
                                 finishLoad(userInitiated, ok = true) { it.copy(episodesLoadingMore = false) }
@@ -1126,6 +1221,21 @@ class HomeViewModel(
             } else {
                 runCatching { resolveStreamUrl(station) }.getOrDefault(station.streamUrl)
             }
+            // SMCPKG_SUPPORT>>>Cursor123
+            // Keep the show's newest-first list so Previous / Next can step through episodes.
+            val state = uiState.value
+            val show = state.selectedPodcast
+            if (station.directStream && state.selectedTab == BrowseTab.PODCAST && show != null) {
+                val episodes = state.stations
+                if (episodes.any { it.stationUuid == station.stationUuid }) {
+                    playerController.setEpisodeQueue(show.id, episodes)
+                } else {
+                    playerController.clearEpisodeQueue()
+                }
+            } else {
+                playerController.clearEpisodeQueue()
+            }
+            // SMCPKG_SUPPORT<<<Cursor123
             playerController.play(station, streamUrl)
         }
     }
@@ -1140,6 +1250,22 @@ class HomeViewModel(
         if (uiState.value.playback.station == null) return
         playerController.togglePlayPause()
     }
+
+    // SMCPKG_SUPPORT>>>Cursor123
+    /** Next = newer episode. */
+    fun onPlayNewerEpisode() = playerController.playNewerEpisode()
+
+    /** Previous = older episode. */
+    fun onPlayOlderEpisode() = playerController.playOlderEpisode()
+
+    fun onSeekTo(positionMs: Long) = playerController.seekTo(positionMs)
+
+    fun onSeekBy(deltaMs: Long) = playerController.seekBy(deltaMs)
+
+    fun currentPositionMs(): Long = playerController.currentPositionMs()
+
+    fun durationMs(): Long = playerController.durationMs()
+    // SMCPKG_SUPPORT<<<Cursor123
 
     // SMCPKG_SUPPORT>>>Cursor119
     fun onPlayNextStation() {
@@ -1184,6 +1310,9 @@ class HomeViewModelFactory(
             podcastCache = container.podcastCatalogStore,
             categoryCatalog = container.categoryCatalogRepository,
             categoryCache = container.categoryCatalogStore,
+            // SMCPKG_SUPPORT>>>Cursor123
+            favoriteShowStore = container.favoriteShowStore,
+            // SMCPKG_SUPPORT<<<Cursor123
         ) as T
     }
 }

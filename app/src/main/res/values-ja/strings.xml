@@ -192,4 +192,14 @@
     <string name="remove_ads_debug">デバッグ: 広告削除をシミュレート</string>
     <string name="remove_ads_debug_summary">デバッグビルド専用。広告削除を購入済みとして扱います。</string>
     <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">放送局</string>
+    <string name="favorites_section_podcasts">ポッドキャスト番組</string>
+    <string name="empty_favorite_shows">お気に入りの番組はまだありません。番組のハートをタップして追加できます。</string>
+    <string name="episode_previous">前のエピソード</string>
+    <string name="episode_next">次のエピソード</string>
+    <string name="rewind_10">10秒戻る</string>
+    <string name="forward_10">10秒進む</string>
+    <string name="seek_position">再生位置</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
 </resources>

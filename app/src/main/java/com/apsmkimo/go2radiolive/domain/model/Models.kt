@@ -88,6 +88,12 @@ data class PlaybackState(
     /** Every saved stream was tried and the station still did not connect. */
     val cannotConnect: Boolean = false,
     // SMCPKG_SUPPORT<<<Cursor119
+    // SMCPKG_SUPPORT>>>Cursor123
+    /** A newer episode sits above this one in its show's newest-first list (Next). */
+    val hasNewerEpisode: Boolean = false,
+    /** An older episode sits below this one in its show's newest-first list (Previous). */
+    val hasOlderEpisode: Boolean = false,
+    // SMCPKG_SUPPORT<<<Cursor123
 )
 
 enum class BrowseTab {

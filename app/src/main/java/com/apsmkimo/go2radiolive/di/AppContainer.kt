@@ -8,6 +8,9 @@ import com.apsmkimo.go2radiolive.audio.AudioSettingsRepository
 import com.apsmkimo.go2radiolive.data.billing.BillingManager
 import com.apsmkimo.go2radiolive.data.remote.preferredRegion
 import com.apsmkimo.go2radiolive.data.local.FavoriteLocalDataSource
+// SMCPKG_SUPPORT>>>Cursor123
+import com.apsmkimo.go2radiolive.data.local.FavoriteShowLocalDataSource
+// SMCPKG_SUPPORT<<<Cursor123
 import com.apsmkimo.go2radiolive.data.local.StationFailureStore
 import com.apsmkimo.go2radiolive.data.remote.OkHttpPlaylistClient
 import com.apsmkimo.go2radiolive.data.local.PodcastCatalogStore
@@ -151,6 +154,9 @@ class AppContainer(context: Context) {
     val favoriteRepository: FavoriteRepository = FavoriteRepositoryImpl(
         FavoriteLocalDataSource(appContext, gson),
     )
+    // SMCPKG_SUPPORT>>>Cursor123
+    val favoriteShowStore = FavoriteShowLocalDataSource(appContext, gson)
+    // SMCPKG_SUPPORT<<<Cursor123
 
     val getStationsUseCase = GetStationsUseCase(stationRepository)
     val getCategoriesUseCase = GetCategoriesUseCase(stationRepository)
