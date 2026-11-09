@@ -1,14 +1,18 @@
 package com.apsmkimo.go2radiolive.data.billing
 
 /**
- * Pure rules for the non-consumable `remove_ads` product.
+ * Pure rules for the non-consumable `radio_remove_ads` product.
  * A successful purchase query is the source of truth: PURCHASED grants
  * entitlement (and must be acknowledged), PENDING does not, and a purchase
  * that is no longer returned is treated as refunded. A failed query keeps
  * the previous entitlement so ads stay off while Play is unreachable.
  */
 internal object RemoveAdsPolicy {
-    const val PRODUCT_ID = "remove_ads"
+    // SMCPKG_SUPPORT>>>Cursor125
+    // const val PRODUCT_ID = "remove_ads"
+    /** Must match the in-app product id created in Play Console. */
+    const val PRODUCT_ID = "radio_remove_ads"
+    // SMCPKG_SUPPORT<<<Cursor125
 
     /** Matches [com.android.billingclient.api.Purchase.PurchaseState]. */
     const val STATE_UNSPECIFIED = 0
