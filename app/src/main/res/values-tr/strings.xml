@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Bu listede ara</string>
+    <string name="refresh">Yenile</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_coming_soon">Alarm henüz kullanılamıyor</string>
+    <string name="tab_local">Yerel</string>
+    <string name="tab_world">Dünya</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategoriler</string>
+    <string name="tab_favorites">Favoriler</string>
+    <string name="favorite">Favori</string>
+    <string name="online_radio">İnternet radyosu</string>
+    <string name="retry">Tekrar denemek için dokunun</string>
+    <string name="empty_stations">İstasyon yok</string>
+    <string name="empty_favorites">Henüz favori istasyon yok</string>
+    <string name="empty_categories">Kategori yok</string>
+    <string name="empty_countries">Ülke yok</string>
+    <string name="empty_podcasts">Podcast yok</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Podcast ara</string>
+    <string name="podcast_search_empty">Eşleşen podcast yok</string>
+    <string name="podcast_search_failed">Podcast araması yapılamadı</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Devamını gör</string>
+    <string name="episode_show_less">Daha az göster</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Bu bölgede podcast listesi yok, bu yüzden ABD listeleri gösteriliyor.</string>
+    <string name="podcast_region">Ülke</string>
+    <string name="podcast_region_automatic">Otomatik (cihaz bölgesi)</string>
+    <string name="podcast_region_search">Ülke ara</string>
+    <string name="podcast_region_device">Cihaz bölgesi: %1$s</string>
+    <string name="close">Kapat</string>
+    <string name="empty_episodes">Bölüm yok</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">En yeni</string>
+    <string name="episode_sort_oldest">En eski</string>
+    <string name="episodes_loading_more">Daha fazla bölüm yükleniyor…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">İstasyon: %d</string>
+    <string name="no_station_playing">Çalan bir şey yok</string>
+    <string name="buffering">Bağlanıyor…</string>
+    <string name="now_playing">Çalıyor</string>
+    <string name="paused">Duraklatıldı</string>
+    <string name="tap_station_to_play">Çalmak için bir istasyona dokunun</string>
+    <string name="play">Çal</string>
+    <string name="pause">Duraklat</string>
+    <string name="back">Geri</string>
+    <string name="settings">Ayarlar</string>
+    <string name="settings_version_title">Sürüm</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Gizlilik seçenekleri</string>
+    <string name="privacy_options_summary">Reklamların nasıl kişiselleştirileceğini yönetin</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Gizlilik politikası</string>
+    <string name="privacy_policy_summary">Bu uygulamanın bilgileri nasıl işlediği</string>
+    <string name="settings_section_audio">Ses</string>
+    <string name="settings_section_general">Genel</string>
+    <string name="settings_section_about">Hakkında</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Reklam</string>
+    <string name="audio_panel_button">Ses paneli düğmesi</string>
+    <string name="audio_panel_button_summary">Oynatıcı çubuğunda çal düğmesinin yanında ses paneli düğmesini göster</string>
+    <string name="voice_enhancement">Ses netleştirme</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Vokal aralığını güçlendirir ve bas bulanıklığını azaltır</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D Uzamsal Ses</string>
+    <string name="spatial_off">Kapalı</string>
+    <string name="spatial_off_summary">Uzamsal işlemeyi kapatır ve orijinal sesi geri getirir</string>
+    <string name="spatial_natural">Doğal 3D</string>
+    <string name="spatial_natural_summary">Uzun dinlemeler için yumuşak binaural görüntü; vokalleri boğmaz</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Binaural konumlandırma ve erken yansımalarla ön, yan ve arka hissi</string>
+    <string name="spatial_orbit">Yörünge</string>
+    <string name="spatial_orbit_summary">Sanal bir ses kaynağı yatay düzlemde yavaşça etrafınızda döner</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Hoparlör sol ve sağ kanalı birleştirir. Bu mod yine de yankı ve genişlikle alan hissi katar. Kulaklıkla sol-sağ görüntüsü daha net olur.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Dönüş hızı</string>
+    <string name="orbit_speed_value">%1$.0f sn/tur</string>
+    <string name="orbit_direction">Dönüş yönü</string>
+    <string name="orbit_clockwise">Saat yönünde</string>
+    <string name="orbit_counterclockwise">Saat yönünün tersine</string>
+    <string name="orbit_strength">Efekt gücü</string>
+    <string name="orbit_strength_value">%%%1$.0f</string>
+    <string name="eq_section">Ekolayzer ve denge</string>
+    <string name="eq_shared_hint">Bu ayarlar hemen uygulanır ve oynatıcının ses paneliyle aynıdır</string>
+    <string name="eq_bass">Bas (−12 ile +15 dB)</string>
+    <string name="eq_low">Düşük</string>
+    <string name="eq_mid">Orta</string>
+    <string name="eq_high">Yüksek</string>
+    <string name="balance">Denge</string>
+    <string name="balance_left">Sol</string>
+    <string name="balance_right">Sağ</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Sıfırla</string>
+    <string name="audio_panel">Ses paneli</string>
+    <string name="open_audio_panel">Ses panelini aç</string>
+    <string name="close_audio_panel">Ses panelini kapat</string>
+    <string name="load_failed">Yüklenemedi. Daha sonra tekrar deneyin.</string>
+    <string name="refresh_updated">Güncellendi</string>
+    <string name="podcast_cached_error">Podcast\'ler güncellenemedi. Kayıtlı liste gösteriliyor.</string>
+    <string name="retry_action">Tekrar dene</string>
+    <string name="sleep_timer">Uyku zamanlayıcısı</string>
+    <string name="alarm_clock">Alarm</string>
+    <string name="alarm_sheet">Uyku zamanlayıcısı ve alarm</string>
+    <string name="sleep_minutes">%d dk</string>
+    <string name="sleep_custom">Özel süre (dk)</string>
+    <string name="sleep_custom_hint">Dakika</string>
+    <string name="sleep_end_episode">Bu bölümün sonunda</string>
+    <string name="sleep_cancel">Zamanlayıcıyı iptal et</string>
+    <string name="sleep_remaining">Uyku zamanlayıcısı %1$s</string>
+    <string name="alarm_once">Bir kez</string>
+    <string name="alarm_weekdays">Hafta içi</string>
+    <string name="alarm_station">İstasyon</string>
+    <string name="alarm_no_station">Önce bir istasyon çalın veya favori ekleyin</string>
+    <string name="alarm_enable">Alarm açık</string>
+    <string name="alarm_save">Alarmı kaydet</string>
+    <string name="alarm_saved">Alarm kaydedildi</string>
+    <string name="alarm_permission">Tam zamanlı alarmlar kapalı, bu yüzden alarm gecikebilir. Radio Live FM AM için Alarmlar ve hatırlatıcılar iznini verin.</string>
+    <string name="alarm_permission_action">Tam zamanlı alarmlara izin ver</string>
+    <string name="alarm_stop">Durdur</string>
+    <string name="alarm_snooze">Ertele</string>
+    <string name="alarm_playing">Alarm</string>
+    <string name="alarm_failed">İstasyon çalınamadı. Bunun yerine alarm sesi çalınıyor.</string>
+    <string name="alarm_snoozed">10 dakika ertelendi</string>
+    <string name="alarm_channel">Uyandırma alarmı</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Bu istasyona bağlanılamıyor</string>
+    <string name="next_station">Sonraki istasyon</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Oynatma başarısız</string>
+    <string name="catalog_global">Küresel</string>
+    <string name="catalog_scope">Ülke</string>
+    <string name="catalog_scope_search">Ülke ara</string>
+    <string name="catalog_rankings">Sıralamalar</string>
+    <string name="catalog_rank_votes">En çok oy alan</string>
+    <string name="catalog_rank_clicks">En çok dinlenen</string>
+    <string name="catalog_rank_trend">Trend olan</string>
+    <string name="catalog_section">Kategoriler</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Haber / Sohbet</string>
+    <string name="catalog_music">Müzik</string>
+    <string name="catalog_decades">On yıllar</string>
+    <string name="catalog_languages">Diller</string>
+    <string name="catalog_news">Haber</string>
+    <string name="catalog_talk">Sohbet</string>
+    <string name="catalog_sports">Spor</string>
+    <string name="catalog_religious">Dini</string>
+    <string name="catalog_classical">Klasik</string>
+    <string name="catalog_jazz">Caz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronik</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Easy listening / Lo-fi</string>
+    <string name="catalog_world_music">Dünya müziği</string>
+    <string name="catalog_60s">60\'lar</string>
+    <string name="catalog_70s">70\'ler</string>
+    <string name="catalog_80s">80\'ler</string>
+    <string name="catalog_90s">90\'lar</string>
+    <string name="catalog_2000s">2000\'ler</string>
+    <string name="catalog_oldies">Eski şarkılar</string>
+    <string name="catalog_sort_clicks">Popüler</string>
+    <string name="catalog_sort_votes">Oylar</string>
+    <string name="catalog_sort_name">Ad</string>
+    <string name="catalog_quality_all">Tüm kaliteler</string>
+    <string name="catalog_quality_high">128 kbps ve üzeri</string>
+    <string name="catalog_language_all">Tüm diller</string>
+    <string name="catalog_other_countries">Diğer ülkeler</string>
+    <string name="catalog_count_plus">İstasyon: %d+</string>
+    <string name="catalog_cached_error">Kategoriler güncellenemedi. Kayıtlı liste gösteriliyor.</string>
+    <string name="settings_language">Dil</string>
+    <string name="settings_language_system">Sistem dilini kullan</string>
+    <string name="media_volume">Ses düzeyi</string>
+    <string name="volume_percent">%%%1$d</string>
+    <string name="playback_channel">Oynatma</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Reklamları kaldır</string>
+    <string name="remove_ads_summary">Tek seferlik satın alma ile banner, liste ve uygulama açılış reklamları kapanır.</string>
+    <string name="remove_ads_buy">Satın al</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Satın alımı geri yükle</string>
+    <string name="remove_ads_unavailable">Geçici olarak kullanılamıyor</string>
+    <string name="remove_ads_pending">Satın alma beklemede. Ödeme tamamlanana kadar reklamlar gösterilmeye devam eder.</string>
+    <string name="remove_ads_thanks">Reklamlar kaldırıldı — desteğiniz için teşekkürler</string>
+    <string name="remove_ads_debug">Hata ayıklama: reklamlar kaldırılmış gibi davran</string>
+    <string name="remove_ads_debug_summary">Yalnızca hata ayıklama derlemelerinde. Reklam kaldırma satın alımı yapılmış sayılır.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">İstasyonlar</string>
+    <string name="favorites_section_podcasts">Podcast programları</string>
+    <string name="empty_favorite_shows">Henüz favori podcast programı yok. Eklemek için programdaki kalp simgesine dokunun.</string>
+    <string name="episode_previous">Önceki bölüm</string>
+    <string name="episode_next">Sonraki bölüm</string>
+    <string name="rewind_10">10 saniye geri</string>
+    <string name="forward_10">10 saniye ileri</string>
+    <string name="seek_position">Oynatma konumu</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

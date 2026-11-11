@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">목록에서 검색</string>
+    <string name="refresh">새로고침</string>
+    <string name="alarm">알람</string>
+    <string name="alarm_coming_soon">알람 기능은 아직 지원되지 않습니다</string>
+    <string name="tab_local">지역</string>
+    <string name="tab_world">세계</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">팟캐스트</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">카테고리</string>
+    <string name="tab_favorites">즐겨찾기</string>
+    <string name="favorite">즐겨찾기</string>
+    <string name="online_radio">인터넷 라디오</string>
+    <string name="retry">탭하여 다시 시도</string>
+    <string name="empty_stations">방송국이 없습니다</string>
+    <string name="empty_favorites">즐겨찾는 방송국이 아직 없습니다</string>
+    <string name="empty_categories">카테고리가 없습니다</string>
+    <string name="empty_countries">국가가 없습니다</string>
+    <string name="empty_podcasts">팟캐스트가 없습니다</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">팟캐스트 검색</string>
+    <string name="podcast_search_empty">일치하는 팟캐스트가 없습니다</string>
+    <string name="podcast_search_failed">팟캐스트를 검색할 수 없습니다</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">더보기</string>
+    <string name="episode_show_less">간략히</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">이 지역에는 팟캐스트 차트가 없어 미국 차트를 표시합니다.</string>
+    <string name="podcast_region">국가</string>
+    <string name="podcast_region_automatic">자동(기기 지역)</string>
+    <string name="podcast_region_search">국가 검색</string>
+    <string name="podcast_region_device">기기 지역: %1$s</string>
+    <string name="close">닫기</string>
+    <string name="empty_episodes">에피소드가 없습니다</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">최신순</string>
+    <string name="episode_sort_oldest">오래된순</string>
+    <string name="episodes_loading_more">에피소드 더 불러오는 중…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">방송국 %d개</string>
+    <string name="no_station_playing">재생 중인 항목 없음</string>
+    <string name="buffering">연결 중…</string>
+    <string name="now_playing">재생 중</string>
+    <string name="paused">일시정지됨</string>
+    <string name="tap_station_to_play">방송국을 탭하여 재생</string>
+    <string name="play">재생</string>
+    <string name="pause">일시정지</string>
+    <string name="back">뒤로</string>
+    <string name="settings">설정</string>
+    <string name="settings_version_title">버전</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">개인정보 보호 옵션</string>
+    <string name="privacy_options_summary">광고 맞춤 설정 방식 관리</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">개인정보처리방침</string>
+    <string name="privacy_policy_summary">이 앱의 정보 처리 방식</string>
+    <string name="settings_section_audio">오디오</string>
+    <string name="settings_section_general">일반</string>
+    <string name="settings_section_about">정보</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">광고</string>
+    <string name="audio_panel_button">오디오 패널 버튼</string>
+    <string name="audio_panel_button_summary">플레이어 바의 재생 버튼 옆에 오디오 패널 버튼 표시</string>
+    <string name="voice_enhancement">음성 강화</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">음성 대역을 강조하고 저음의 탁함을 줄입니다</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D 공간 음향</string>
+    <string name="spatial_off">끄기</string>
+    <string name="spatial_off_summary">공간 처리를 끄고 원래 오디오로 복원합니다</string>
+    <string name="spatial_natural">내추럴 3D</string>
+    <string name="spatial_natural_summary">음성이 둔해지지 않는 부드러운 바이노럴 음상으로 장시간 감상에 적합</string>
+    <string name="spatial_surround">서라운드</string>
+    <string name="spatial_surround_summary">바이노럴 배치와 초기 반사음으로 전방·측면·후방 방향감 제공</string>
+    <string name="spatial_orbit">궤도</string>
+    <string name="spatial_orbit_summary">가상 음원이 수평면을 따라 천천히 회전합니다</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">스피커는 좌우 소리를 섞어서 출력합니다. 이 모드는 에코와 폭으로 공간감을 더하며, 헤드폰을 사용하면 좌우 음상이 더 뚜렷해집니다.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">회전 속도</string>
+    <string name="orbit_speed_value">%1$.0f초/회전</string>
+    <string name="orbit_direction">회전 방향</string>
+    <string name="orbit_clockwise">시계 방향</string>
+    <string name="orbit_counterclockwise">반시계 방향</string>
+    <string name="orbit_strength">효과 강도</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">이퀄라이저 및 밸런스</string>
+    <string name="eq_shared_hint">설정은 즉시 적용되며 플레이어 오디오 패널과 동기화됩니다</string>
+    <string name="eq_bass">베이스 (−12~+15 dB)</string>
+    <string name="eq_low">저음</string>
+    <string name="eq_mid">중음</string>
+    <string name="eq_high">고음</string>
+    <string name="balance">밸런스</string>
+    <string name="balance_left">왼쪽</string>
+    <string name="balance_right">오른쪽</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">초기화</string>
+    <string name="audio_panel">오디오 패널</string>
+    <string name="open_audio_panel">오디오 패널 열기</string>
+    <string name="close_audio_panel">오디오 패널 닫기</string>
+    <string name="load_failed">불러올 수 없습니다. 나중에 다시 시도하세요.</string>
+    <string name="refresh_updated">업데이트됨</string>
+    <string name="podcast_cached_error">팟캐스트를 업데이트할 수 없어 저장된 목록을 표시합니다.</string>
+    <string name="retry_action">다시 시도</string>
+    <string name="sleep_timer">수면 타이머</string>
+    <string name="alarm_clock">알람</string>
+    <string name="alarm_sheet">수면 타이머 및 알람</string>
+    <string name="sleep_minutes">%d분</string>
+    <string name="sleep_custom">직접 입력(분)</string>
+    <string name="sleep_custom_hint">분</string>
+    <string name="sleep_end_episode">이 에피소드가 끝나면</string>
+    <string name="sleep_cancel">타이머 취소</string>
+    <string name="sleep_remaining">수면 타이머 %1$s</string>
+    <string name="alarm_once">한 번</string>
+    <string name="alarm_weekdays">평일</string>
+    <string name="alarm_station">방송국</string>
+    <string name="alarm_no_station">먼저 방송국을 재생하거나 즐겨찾기에 추가하세요</string>
+    <string name="alarm_enable">알람 켜기</string>
+    <string name="alarm_save">알람 저장</string>
+    <string name="alarm_saved">알람이 저장되었습니다</string>
+    <string name="alarm_permission">정확한 알람이 꺼져 있어 알람이 늦게 울릴 수 있습니다. Radio Live FM AM에 알람 및 리마인더를 허용하세요.</string>
+    <string name="alarm_permission_action">정확한 알람 허용</string>
+    <string name="alarm_stop">중지</string>
+    <string name="alarm_snooze">다시 알림</string>
+    <string name="alarm_playing">알람</string>
+    <string name="alarm_failed">방송국을 재생할 수 없어 알람음을 대신 재생합니다.</string>
+    <string name="alarm_snoozed">10분 후 다시 알림</string>
+    <string name="alarm_channel">기상 알람</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">이 방송국에 연결할 수 없습니다</string>
+    <string name="next_station">다음 방송국</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">재생 실패</string>
+    <string name="catalog_global">전 세계</string>
+    <string name="catalog_scope">국가</string>
+    <string name="catalog_scope_search">국가 검색</string>
+    <string name="catalog_rankings">순위</string>
+    <string name="catalog_rank_votes">최다 추천</string>
+    <string name="catalog_rank_clicks">최다 청취</string>
+    <string name="catalog_rank_trend">인기 급상승</string>
+    <string name="catalog_section">카테고리</string>
+    <string name="catalog_pop">팝</string>
+    <string name="catalog_news_talk">뉴스/토크</string>
+    <string name="catalog_music">음악</string>
+    <string name="catalog_decades">연대별</string>
+    <string name="catalog_languages">언어</string>
+    <string name="catalog_news">뉴스</string>
+    <string name="catalog_talk">토크</string>
+    <string name="catalog_sports">스포츠</string>
+    <string name="catalog_religious">종교</string>
+    <string name="catalog_classical">클래식</string>
+    <string name="catalog_jazz">재즈</string>
+    <string name="catalog_rock">록</string>
+    <string name="catalog_electronic">일렉트로닉</string>
+    <string name="catalog_hiphop">힙합/R&amp;B</string>
+    <string name="catalog_country_music">컨트리</string>
+    <string name="catalog_lofi">이지 리스닝/로파이</string>
+    <string name="catalog_world_music">월드 뮤직</string>
+    <string name="catalog_60s">60년대</string>
+    <string name="catalog_70s">70년대</string>
+    <string name="catalog_80s">80년대</string>
+    <string name="catalog_90s">90년대</string>
+    <string name="catalog_2000s">2000년대</string>
+    <string name="catalog_oldies">올디스</string>
+    <string name="catalog_sort_clicks">인기순</string>
+    <string name="catalog_sort_votes">추천순</string>
+    <string name="catalog_sort_name">이름순</string>
+    <string name="catalog_quality_all">모든 음질</string>
+    <string name="catalog_quality_high">128kbps 이상</string>
+    <string name="catalog_language_all">모든 언어</string>
+    <string name="catalog_other_countries">기타 국가</string>
+    <string name="catalog_count_plus">방송국 %d개 이상</string>
+    <string name="catalog_cached_error">카테고리를 업데이트할 수 없어 저장된 목록을 표시합니다.</string>
+    <string name="settings_language">언어</string>
+    <string name="settings_language_system">시스템 설정 따르기</string>
+    <string name="media_volume">볼륨</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">재생</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">광고 제거</string>
+    <string name="remove_ads_summary">한 번만 구매하면 배너, 목록, 앱 실행 광고가 사라집니다.</string>
+    <string name="remove_ads_buy">구매</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">구매 복원</string>
+    <string name="remove_ads_unavailable">일시적으로 사용할 수 없음</string>
+    <string name="remove_ads_pending">구매 대기 중입니다. 결제가 완료될 때까지 광고가 표시됩니다.</string>
+    <string name="remove_ads_thanks">광고가 제거되었습니다. 응원해 주셔서 감사합니다</string>
+    <string name="remove_ads_debug">디버그: 광고 제거 시뮬레이션</string>
+    <string name="remove_ads_debug_summary">디버그 빌드 전용. 광고 제거 구매를 보유한 것으로 간주합니다.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">방송국</string>
+    <string name="favorites_section_podcasts">팟캐스트 프로그램</string>
+    <string name="empty_favorite_shows">즐겨찾는 팟캐스트 프로그램이 아직 없습니다. 프로그램의 하트를 탭하여 추가하세요.</string>
+    <string name="episode_previous">이전 에피소드</string>
+    <string name="episode_next">다음 에피소드</string>
+    <string name="rewind_10">10초 뒤로</string>
+    <string name="forward_10">10초 앞으로</string>
+    <string name="seek_position">재생 위치</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

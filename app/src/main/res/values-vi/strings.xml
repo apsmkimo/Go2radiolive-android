@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Tìm trong danh sách này</string>
+    <string name="refresh">Làm mới</string>
+    <string name="alarm">Báo thức</string>
+    <string name="alarm_coming_soon">Báo thức chưa khả dụng</string>
+    <string name="tab_local">Địa phương</string>
+    <string name="tab_world">Thế giới</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Danh mục</string>
+    <string name="tab_favorites">Yêu thích</string>
+    <string name="favorite">Yêu thích</string>
+    <string name="online_radio">Radio Internet</string>
+    <string name="retry">Nhấn để thử lại</string>
+    <string name="empty_stations">Không có đài</string>
+    <string name="empty_favorites">Chưa có đài yêu thích</string>
+    <string name="empty_categories">Không có danh mục</string>
+    <string name="empty_countries">Không có quốc gia</string>
+    <string name="empty_podcasts">Không có podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Tìm podcast</string>
+    <string name="podcast_search_empty">Không có podcast phù hợp</string>
+    <string name="podcast_search_failed">Không thể tìm podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Xem thêm</string>
+    <string name="episode_show_less">Thu gọn</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Khu vực này không có bảng xếp hạng podcast nên đang hiển thị bảng xếp hạng Hoa Kỳ.</string>
+    <string name="podcast_region">Quốc gia</string>
+    <string name="podcast_region_automatic">Tự động (khu vực thiết bị)</string>
+    <string name="podcast_region_search">Tìm quốc gia</string>
+    <string name="podcast_region_device">Khu vực thiết bị: %1$s</string>
+    <string name="close">Đóng</string>
+    <string name="empty_episodes">Không có tập</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Mới nhất</string>
+    <string name="episode_sort_oldest">Cũ nhất</string>
+    <string name="episodes_loading_more">Đang tải thêm tập…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d đài</string>
+    <string name="no_station_playing">Không có gì đang phát</string>
+    <string name="buffering">Đang kết nối…</string>
+    <string name="now_playing">Đang phát</string>
+    <string name="paused">Đã tạm dừng</string>
+    <string name="tap_station_to_play">Nhấn vào một đài để phát</string>
+    <string name="play">Phát</string>
+    <string name="pause">Tạm dừng</string>
+    <string name="back">Quay lại</string>
+    <string name="settings">Cài đặt</string>
+    <string name="settings_version_title">Phiên bản</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Tùy chọn quyền riêng tư</string>
+    <string name="privacy_options_summary">Quản lý cách cá nhân hóa quảng cáo</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Chính sách quyền riêng tư</string>
+    <string name="privacy_policy_summary">Cách ứng dụng này xử lý thông tin</string>
+    <string name="settings_section_audio">Âm thanh</string>
+    <string name="settings_section_general">Chung</string>
+    <string name="settings_section_about">Giới thiệu</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Quảng cáo</string>
+    <string name="audio_panel_button">Nút bảng âm thanh</string>
+    <string name="audio_panel_button_summary">Hiển thị nút bảng âm thanh cạnh nút phát trên thanh trình phát</string>
+    <string name="voice_enhancement">Tăng cường giọng nói</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Làm nổi dải giọng nói và giảm âm trầm đục</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Âm thanh không gian 3D</string>
+    <string name="spatial_off">Tắt</string>
+    <string name="spatial_off_summary">Tắt xử lý không gian và khôi phục âm thanh gốc</string>
+    <string name="spatial_natural">3D tự nhiên</string>
+    <string name="spatial_natural_summary">Hình ảnh binaural nhẹ nhàng để nghe lâu, không làm giọng nói bị mờ</string>
+    <string name="spatial_surround">Vòm</string>
+    <string name="spatial_surround_summary">Định vị trước, bên và sau nhờ đặt âm binaural và phản xạ sớm</string>
+    <string name="spatial_orbit">Quỹ đạo</string>
+    <string name="spatial_orbit_summary">Nguồn âm ảo di chuyển chậm quanh mặt phẳng ngang</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Loa ngoài trộn lẫn trái và phải. Chế độ này vẫn tạo thêm không gian bằng tiếng vang và độ rộng. Dùng tai nghe sẽ nghe rõ trái phải hơn.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Tốc độ xoay</string>
+    <string name="orbit_speed_value">%1$.0f giây/vòng</string>
+    <string name="orbit_direction">Hướng xoay</string>
+    <string name="orbit_clockwise">Theo chiều kim đồng hồ</string>
+    <string name="orbit_counterclockwise">Ngược chiều kim đồng hồ</string>
+    <string name="orbit_strength">Cường độ hiệu ứng</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Bộ chỉnh âm và cân bằng</string>
+    <string name="eq_shared_hint">Các điều chỉnh này áp dụng ngay và đồng bộ với bảng âm thanh của trình phát</string>
+    <string name="eq_bass">Âm trầm (−12 đến +15 dB)</string>
+    <string name="eq_low">Trầm</string>
+    <string name="eq_mid">Trung</string>
+    <string name="eq_high">Cao</string>
+    <string name="balance">Cân bằng</string>
+    <string name="balance_left">Trái</string>
+    <string name="balance_right">Phải</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Đặt lại</string>
+    <string name="audio_panel">Bảng âm thanh</string>
+    <string name="open_audio_panel">Mở bảng âm thanh</string>
+    <string name="close_audio_panel">Đóng bảng âm thanh</string>
+    <string name="load_failed">Không thể tải. Vui lòng thử lại sau.</string>
+    <string name="refresh_updated">Đã cập nhật</string>
+    <string name="podcast_cached_error">Không thể cập nhật podcast. Đang hiển thị danh sách đã lưu.</string>
+    <string name="retry_action">Thử lại</string>
+    <string name="sleep_timer">Hẹn giờ tắt</string>
+    <string name="alarm_clock">Báo thức</string>
+    <string name="alarm_sheet">Hẹn giờ tắt và báo thức</string>
+    <string name="sleep_minutes">%d phút</string>
+    <string name="sleep_custom">Số phút tùy chỉnh</string>
+    <string name="sleep_custom_hint">Phút</string>
+    <string name="sleep_end_episode">Hết tập này</string>
+    <string name="sleep_cancel">Hủy hẹn giờ</string>
+    <string name="sleep_remaining">Hẹn giờ tắt %1$s</string>
+    <string name="alarm_once">Một lần</string>
+    <string name="alarm_weekdays">Ngày trong tuần</string>
+    <string name="alarm_station">Đài</string>
+    <string name="alarm_no_station">Hãy phát một đài hoặc thêm đài yêu thích trước</string>
+    <string name="alarm_enable">Bật báo thức</string>
+    <string name="alarm_save">Lưu báo thức</string>
+    <string name="alarm_saved">Đã lưu báo thức</string>
+    <string name="alarm_permission">Báo thức chính xác đang tắt nên báo thức này có thể kêu trễ. Hãy cho phép báo thức và lời nhắc cho Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Cho phép báo thức chính xác</string>
+    <string name="alarm_stop">Dừng</string>
+    <string name="alarm_snooze">Báo lại</string>
+    <string name="alarm_playing">Báo thức</string>
+    <string name="alarm_failed">Không thể phát đài. Đang phát âm báo thức thay thế.</string>
+    <string name="alarm_snoozed">Đã báo lại sau 10 phút</string>
+    <string name="alarm_channel">Báo thức đánh thức</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Không thể kết nối với đài này</string>
+    <string name="next_station">Đài tiếp theo</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Phát không thành công</string>
+    <string name="catalog_global">Toàn cầu</string>
+    <string name="catalog_scope">Quốc gia</string>
+    <string name="catalog_scope_search">Tìm quốc gia</string>
+    <string name="catalog_rankings">Bảng xếp hạng</string>
+    <string name="catalog_rank_votes">Nhiều bình chọn nhất</string>
+    <string name="catalog_rank_clicks">Nghe nhiều nhất</string>
+    <string name="catalog_rank_trend">Thịnh hành</string>
+    <string name="catalog_section">Danh mục</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Tin tức / Trò chuyện</string>
+    <string name="catalog_music">Âm nhạc</string>
+    <string name="catalog_decades">Thập niên</string>
+    <string name="catalog_languages">Ngôn ngữ</string>
+    <string name="catalog_news">Tin tức</string>
+    <string name="catalog_talk">Trò chuyện</string>
+    <string name="catalog_sports">Thể thao</string>
+    <string name="catalog_religious">Tôn giáo</string>
+    <string name="catalog_classical">Cổ điển</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Điện tử</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Đồng quê</string>
+    <string name="catalog_lofi">Nhạc nhẹ / Lo-fi</string>
+    <string name="catalog_world_music">Nhạc thế giới</string>
+    <string name="catalog_60s">Thập niên 60</string>
+    <string name="catalog_70s">Thập niên 70</string>
+    <string name="catalog_80s">Thập niên 80</string>
+    <string name="catalog_90s">Thập niên 90</string>
+    <string name="catalog_2000s">Thập niên 2000</string>
+    <string name="catalog_oldies">Nhạc xưa</string>
+    <string name="catalog_sort_clicks">Phổ biến</string>
+    <string name="catalog_sort_votes">Bình chọn</string>
+    <string name="catalog_sort_name">Tên</string>
+    <string name="catalog_quality_all">Mọi chất lượng</string>
+    <string name="catalog_quality_high">Từ 128 kbps trở lên</string>
+    <string name="catalog_language_all">Mọi ngôn ngữ</string>
+    <string name="catalog_other_countries">Quốc gia khác</string>
+    <string name="catalog_count_plus">%d+ đài</string>
+    <string name="catalog_cached_error">Không thể cập nhật danh mục. Đang hiển thị danh sách đã lưu.</string>
+    <string name="settings_language">Ngôn ngữ</string>
+    <string name="settings_language_system">Theo hệ thống</string>
+    <string name="media_volume">Âm lượng</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Phát lại</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Xóa quảng cáo</string>
+    <string name="remove_ads_summary">Mua một lần để tắt quảng cáo biểu ngữ, quảng cáo trong danh sách và quảng cáo khi mở ứng dụng.</string>
+    <string name="remove_ads_buy">Mua</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Khôi phục giao dịch mua</string>
+    <string name="remove_ads_unavailable">Tạm thời không khả dụng</string>
+    <string name="remove_ads_pending">Giao dịch đang chờ xử lý. Quảng cáo vẫn hiển thị cho đến khi thanh toán hoàn tất.</string>
+    <string name="remove_ads_thanks">Đã xóa quảng cáo — cảm ơn bạn đã ủng hộ</string>
+    <string name="remove_ads_debug">Gỡ lỗi: giả lập đã xóa quảng cáo</string>
+    <string name="remove_ads_debug_summary">Chỉ dành cho bản gỡ lỗi. Giả lập đã sở hữu giao dịch xóa quảng cáo.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Đài</string>
+    <string name="favorites_section_podcasts">Chương trình podcast</string>
+    <string name="empty_favorite_shows">Chưa có chương trình podcast yêu thích. Nhấn vào biểu tượng trái tim trên một chương trình để thêm.</string>
+    <string name="episode_previous">Tập trước</string>
+    <string name="episode_next">Tập tiếp theo</string>
+    <string name="rewind_10">Lùi 10 giây</string>
+    <string name="forward_10">Tiến 10 giây</string>
+    <string name="seek_position">Vị trí phát</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

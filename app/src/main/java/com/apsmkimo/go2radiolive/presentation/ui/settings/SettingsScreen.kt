@@ -537,7 +537,14 @@ private fun LanguageDialog(
         modifier = Modifier.padding(safeDrawingPadding()),
         title = { Text(stringResource(R.string.settings_language)) },
         text = {
-            Column(modifier = Modifier.fillMaxWidth()) {
+            // SMCPKG_SUPPORT>>>Cursor126
+            // Column(modifier = Modifier.fillMaxWidth()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(rememberScrollState()),
+            ) {
+            // SMCPKG_SUPPORT<<<Cursor126
                 AppLanguage.tags.forEach { tag ->
                     SpatialModeRow(
                         title = languageLabel(tag),
@@ -566,13 +573,16 @@ private fun languageLabel(tag: String): String {
 }
 // SMCPKG_SUPPORT<<<Cursor121
 
-private fun languageName(tag: String): String = when (tag) {
-    AppLanguage.ENGLISH -> "English"
-    AppLanguage.TRADITIONAL -> "繁體中文"
-    AppLanguage.SIMPLIFIED -> "简体中文"
-    AppLanguage.JAPANESE -> "日本語"
-    else -> tag
-}
+// SMCPKG_SUPPORT>>>Cursor126
+// private fun languageName(tag: String): String = when (tag) {
+//     AppLanguage.ENGLISH -> "English"
+//     AppLanguage.TRADITIONAL -> "繁體中文"
+//     AppLanguage.SIMPLIFIED -> "简体中文"
+//     AppLanguage.JAPANESE -> "日本語"
+//     else -> tag
+// }
+private fun languageName(tag: String): String = AppLanguage.nativeName(tag)
+// SMCPKG_SUPPORT<<<Cursor126
 
 @Composable
 private fun SpatialAudioSection(

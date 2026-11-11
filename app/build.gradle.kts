@@ -109,8 +109,12 @@ android {
         // SMCPKG_SUPPORT>>>Cursor124
         // versionCode = 19
         // versionName = "1.0.7"
-        versionCode = 20
-        versionName = "1.0.8"
+        // versionCode = 20
+        // versionName = "1.0.8"
+        // SMCPKG_SUPPORT>>>Cursor126
+        versionCode = 21
+        versionName = "1.0.9"
+        // SMCPKG_SUPPORT<<<Cursor126
         // SMCPKG_SUPPORT<<<Cursor124
 
         vectorDrawables {
@@ -233,6 +237,16 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
+    // SMCPKG_SUPPORT>>>Cursor126
+    // Ship every language in the base APK. With Play's language splits, a language picked
+    // inside the app was missing on first use and the UI fell back to English.
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor126
 }
 
 dependencies {

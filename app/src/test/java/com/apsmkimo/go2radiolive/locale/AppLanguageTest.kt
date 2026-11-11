@@ -11,6 +11,23 @@ class AppLanguageTest {
         assertEquals(AppLanguage.TRADITIONAL, AppLanguage.selection("zh", "TW", ""))
         assertEquals(AppLanguage.TRADITIONAL, AppLanguage.selection("zh", "HK", "Hant"))
         assertEquals(AppLanguage.SIMPLIFIED, AppLanguage.selection("zh", "CN", "Hans"))
-        assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("fr", "FR", ""))
+        // SMCPKG_SUPPORT>>>Cursor126
+        // assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("fr", "FR", ""))
+        assertEquals(AppLanguage.FRENCH, AppLanguage.selection("fr", "FR", ""))
+        assertEquals(AppLanguage.PORTUGUESE_BR, AppLanguage.selection("pt", "BR", ""))
+        assertEquals(AppLanguage.INDONESIAN, AppLanguage.selection("in", "ID", ""))
+        assertEquals(AppLanguage.INDONESIAN, AppLanguage.selection("id", "ID", ""))
+        assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("ar", "EG", ""))
+        // SMCPKG_SUPPORT<<<Cursor126
     }
+
+    // SMCPKG_SUPPORT>>>Cursor126
+    @Test
+    fun everyChoiceMapsBackToItself() {
+        AppLanguage.tags.filter { it.isNotEmpty() }.forEach { tag ->
+            val locale = java.util.Locale.forLanguageTag(tag)
+            assertEquals(tag, AppLanguage.selection(locale.language, locale.country, locale.script))
+        }
+    }
+    // SMCPKG_SUPPORT<<<Cursor126
 }
