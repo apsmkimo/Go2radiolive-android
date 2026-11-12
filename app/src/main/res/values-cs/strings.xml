@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Hledat v seznamu</string>
+    <string name="refresh">Obnovit</string>
+    <string name="alarm">Budík</string>
+    <string name="alarm_coming_soon">Budík zatím není k dispozici</string>
+    <string name="tab_local">Místní</string>
+    <string name="tab_world">Svět</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcasty</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategorie</string>
+    <string name="tab_favorites">Oblíbené</string>
+    <string name="favorite">Oblíbené</string>
+    <string name="online_radio">Internetové rádio</string>
+    <string name="retry">Klepnutím zkusíte znovu</string>
+    <string name="empty_stations">Žádné stanice</string>
+    <string name="empty_favorites">Zatím žádné oblíbené stanice</string>
+    <string name="empty_categories">Žádné kategorie</string>
+    <string name="empty_countries">Žádné země</string>
+    <string name="empty_podcasts">Žádné podcasty</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Hledat podcasty</string>
+    <string name="podcast_search_empty">Žádné odpovídající podcasty</string>
+    <string name="podcast_search_failed">Podcasty se nepodařilo vyhledat</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Zobrazit více</string>
+    <string name="episode_show_less">Zobrazit méně</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Pro tento region nejsou žebříčky podcastů, proto se zobrazují žebříčky z USA.</string>
+    <string name="podcast_region">Země</string>
+    <string name="podcast_region_automatic">Automaticky (region zařízení)</string>
+    <string name="podcast_region_search">Hledat země</string>
+    <string name="podcast_region_device">Region zařízení: %1$s</string>
+    <string name="close">Zavřít</string>
+    <string name="empty_episodes">Žádné epizody</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Nejnovější</string>
+    <string name="episode_sort_oldest">Nejstarší</string>
+    <string name="episodes_loading_more">Načítání dalších epizod…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Stanice: %d</string>
+    <string name="no_station_playing">Nic nehraje</string>
+    <string name="buffering">Připojování…</string>
+    <string name="now_playing">Přehrává se</string>
+    <string name="paused">Pozastaveno</string>
+    <string name="tap_station_to_play">Klepnutím na stanici spustíte přehrávání</string>
+    <string name="play">Přehrát</string>
+    <string name="pause">Pozastavit</string>
+    <string name="back">Zpět</string>
+    <string name="settings">Nastavení</string>
+    <string name="settings_version_title">Verze</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Možnosti ochrany soukromí</string>
+    <string name="privacy_options_summary">Správa přizpůsobení reklam</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Zásady ochrany soukromí</string>
+    <string name="privacy_policy_summary">Jak tato aplikace nakládá s informacemi</string>
+    <string name="settings_section_audio">Zvuk</string>
+    <string name="settings_section_general">Obecné</string>
+    <string name="settings_section_about">O aplikaci</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Reklama</string>
+    <string name="audio_panel_button">Tlačítko zvukového panelu</string>
+    <string name="audio_panel_button_summary">Zobrazit tlačítko zvukového panelu vedle tlačítka přehrávání v přehrávači</string>
+    <string name="voice_enhancement">Zvýraznění hlasu</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Zesílí hlasové pásmo a omezí zahlcení v basech</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D prostorový zvuk</string>
+    <string name="spatial_off">Vypnuto</string>
+    <string name="spatial_off_summary">Vypne prostorové zpracování a obnoví původní zvuk</string>
+    <string name="spatial_natural">Přirozené 3D</string>
+    <string name="spatial_natural_summary">Jemný binaurální obraz pro dlouhý poslech, bez utlumení hlasů</string>
+    <string name="spatial_surround">Prostorový</string>
+    <string name="spatial_surround_summary">Vjem zepředu, ze stran a zezadu díky binaurálnímu umístění a raným odrazům</string>
+    <string name="spatial_orbit">Oběžná dráha</string>
+    <string name="spatial_orbit_summary">Virtuální zdroj zvuku pomalu krouží ve vodorovné rovině</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Reproduktor mísí levý a pravý kanál. Tento režim přesto přidává prostor pomocí ozvěn a šířky. Se sluchátky je levo-pravý obraz zřetelnější.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Rychlost otáčení</string>
+    <string name="orbit_speed_value">%1$.0f s/otáčka</string>
+    <string name="orbit_direction">Směr otáčení</string>
+    <string name="orbit_clockwise">Po směru hodinových ručiček</string>
+    <string name="orbit_counterclockwise">Proti směru hodinových ručiček</string>
+    <string name="orbit_strength">Síla efektu</string>
+    <string name="orbit_strength_value">%1$.0f %%</string>
+    <string name="eq_section">Ekvalizér a vyvážení</string>
+    <string name="eq_shared_hint">Tato nastavení se projeví okamžitě a odpovídají zvukovému panelu přehrávače</string>
+    <string name="eq_bass">Basy (−12 až +15 dB)</string>
+    <string name="eq_low">Nízké</string>
+    <string name="eq_mid">Střední</string>
+    <string name="eq_high">Vysoké</string>
+    <string name="balance">Vyvážení</string>
+    <string name="balance_left">Vlevo</string>
+    <string name="balance_right">Vpravo</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Obnovit výchozí</string>
+    <string name="audio_panel">Zvukový panel</string>
+    <string name="open_audio_panel">Otevřít zvukový panel</string>
+    <string name="close_audio_panel">Zavřít zvukový panel</string>
+    <string name="load_failed">Načtení se nezdařilo. Zkuste to později.</string>
+    <string name="refresh_updated">Aktualizováno</string>
+    <string name="podcast_cached_error">Podcasty se nepodařilo aktualizovat. Zobrazuje se uložený seznam.</string>
+    <string name="retry_action">Zkusit znovu</string>
+    <string name="sleep_timer">Časovač vypnutí</string>
+    <string name="alarm_clock">Budík</string>
+    <string name="alarm_sheet">Časovač vypnutí a budík</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Vlastní počet minut</string>
+    <string name="sleep_custom_hint">Minuty</string>
+    <string name="sleep_end_episode">Konec této epizody</string>
+    <string name="sleep_cancel">Zrušit časovač</string>
+    <string name="sleep_remaining">Časovač vypnutí %1$s</string>
+    <string name="alarm_once">Jednou</string>
+    <string name="alarm_weekdays">Pracovní dny</string>
+    <string name="alarm_station">Stanice</string>
+    <string name="alarm_no_station">Nejprve pusťte stanici nebo přidejte oblíbenou</string>
+    <string name="alarm_enable">Budík zapnut</string>
+    <string name="alarm_save">Uložit budík</string>
+    <string name="alarm_saved">Budík uložen</string>
+    <string name="alarm_permission">Přesné budíky jsou vypnuté, takže budík se může zpozdit. Povolte aplikaci Radio Live FM AM budíky a připomenutí.</string>
+    <string name="alarm_permission_action">Povolit přesné budíky</string>
+    <string name="alarm_stop">Zastavit</string>
+    <string name="alarm_snooze">Odložit</string>
+    <string name="alarm_playing">Budík</string>
+    <string name="alarm_failed">Stanici nelze přehrát. Místo ní zazní zvuk budíku.</string>
+    <string name="alarm_snoozed">Odloženo o 10 minut</string>
+    <string name="alarm_channel">Budík</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">K této stanici se nelze připojit</string>
+    <string name="next_station">Další stanice</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Přehrávání se nezdařilo</string>
+    <string name="catalog_global">Celosvětově</string>
+    <string name="catalog_scope">Země</string>
+    <string name="catalog_scope_search">Hledat země</string>
+    <string name="catalog_rankings">Žebříčky</string>
+    <string name="catalog_rank_votes">Nejvíce hlasů</string>
+    <string name="catalog_rank_clicks">Nejposlouchanější</string>
+    <string name="catalog_rank_trend">Trendy</string>
+    <string name="catalog_section">Kategorie</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Zprávy / mluvené slovo</string>
+    <string name="catalog_music">Hudba</string>
+    <string name="catalog_decades">Desetiletí</string>
+    <string name="catalog_languages">Jazyky</string>
+    <string name="catalog_news">Zprávy</string>
+    <string name="catalog_talk">Mluvené slovo</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Náboženské</string>
+    <string name="catalog_classical">Klasická hudba</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronická</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Pohodová hudba / Lo-fi</string>
+    <string name="catalog_world_music">World music</string>
+    <string name="catalog_60s">60. léta</string>
+    <string name="catalog_70s">70. léta</string>
+    <string name="catalog_80s">80. léta</string>
+    <string name="catalog_90s">90. léta</string>
+    <string name="catalog_2000s">Nultá léta</string>
+    <string name="catalog_oldies">Oldies</string>
+    <string name="catalog_sort_clicks">Oblíbenost</string>
+    <string name="catalog_sort_votes">Hlasy</string>
+    <string name="catalog_sort_name">Název</string>
+    <string name="catalog_quality_all">Veškerý zvuk</string>
+    <string name="catalog_quality_high">128 kbps a více</string>
+    <string name="catalog_language_all">Všechny jazyky</string>
+    <string name="catalog_other_countries">Další země</string>
+    <string name="catalog_count_plus">Stanice: %d+</string>
+    <string name="catalog_cached_error">Kategorie se nepodařilo aktualizovat. Zobrazuje se uložený seznam.</string>
+    <string name="settings_language">Jazyk</string>
+    <string name="settings_language_system">Podle systému</string>
+    <string name="media_volume">Hlasitost</string>
+    <string name="volume_percent">%1$d %%</string>
+    <string name="playback_channel">Přehrávání</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Odstranit reklamy</string>
+    <string name="remove_ads_summary">Jednorázový nákup vypne bannerové reklamy, reklamy v seznamech i při spuštění aplikace.</string>
+    <string name="remove_ads_buy">Koupit</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Obnovit nákup</string>
+    <string name="remove_ads_unavailable">Dočasně nedostupné</string>
+    <string name="remove_ads_pending">Nákup čeká na vyřízení. Reklamy zůstanou zapnuté, dokud platba neproběhne.</string>
+    <string name="remove_ads_thanks">Reklamy odstraněny — děkujeme za podporu</string>
+    <string name="remove_ads_debug">Ladění: simulovat odstranění reklam</string>
+    <string name="remove_ads_debug_summary">Pouze ladicí sestavení. Předstírá vlastnictví nákupu odstranění reklam.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Stanice</string>
+    <string name="favorites_section_podcasts">Podcastové pořady</string>
+    <string name="empty_favorite_shows">Zatím žádné oblíbené podcastové pořady. Pořad přidáte klepnutím na srdíčko.</string>
+    <string name="episode_previous">Předchozí epizoda</string>
+    <string name="episode_next">Další epizoda</string>
+    <string name="rewind_10">Zpět o 10 sekund</string>
+    <string name="forward_10">Vpřed o 10 sekund</string>
+    <string name="seek_position">Pozice přehrávání</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

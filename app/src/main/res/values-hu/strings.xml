@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Keresés a listában</string>
+    <string name="refresh">Frissítés</string>
+    <string name="alarm">Ébresztő</string>
+    <string name="alarm_coming_soon">Az ébresztő még nem érhető el</string>
+    <string name="tab_local">Helyi</string>
+    <string name="tab_world">Világ</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategóriák</string>
+    <string name="tab_favorites">Kedvencek</string>
+    <string name="favorite">Kedvenc</string>
+    <string name="online_radio">Internetes rádió</string>
+    <string name="retry">Koppints az újrapróbáláshoz</string>
+    <string name="empty_stations">Nincsenek állomások</string>
+    <string name="empty_favorites">Még nincsenek kedvenc állomások</string>
+    <string name="empty_categories">Nincsenek kategóriák</string>
+    <string name="empty_countries">Nincsenek országok</string>
+    <string name="empty_podcasts">Nincsenek podcastok</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Podcastok keresése</string>
+    <string name="podcast_search_empty">Nincs találat a podcastok között</string>
+    <string name="podcast_search_failed">Nem sikerült a podcastok keresése</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Továbbiak</string>
+    <string name="episode_show_less">Kevesebb</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Ehhez a régióhoz nincs podcastlista, ezért az amerikai listák láthatók.</string>
+    <string name="podcast_region">Ország</string>
+    <string name="podcast_region_automatic">Automatikus (eszköz régiója)</string>
+    <string name="podcast_region_search">Országok keresése</string>
+    <string name="podcast_region_device">Eszköz régiója: %1$s</string>
+    <string name="close">Bezárás</string>
+    <string name="empty_episodes">Nincsenek epizódok</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Legújabb</string>
+    <string name="episode_sort_oldest">Legrégebbi</string>
+    <string name="episodes_loading_more">További epizódok betöltése…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d állomás</string>
+    <string name="no_station_playing">Nincs lejátszás</string>
+    <string name="buffering">Csatlakozás…</string>
+    <string name="now_playing">Lejátszás</string>
+    <string name="paused">Szüneteltetve</string>
+    <string name="tap_station_to_play">Koppints egy állomásra a lejátszáshoz</string>
+    <string name="play">Lejátszás</string>
+    <string name="pause">Szünet</string>
+    <string name="back">Vissza</string>
+    <string name="settings">Beállítások</string>
+    <string name="settings_version_title">Verzió</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Adatvédelmi beállítások</string>
+    <string name="privacy_options_summary">A hirdetések személyre szabásának kezelése</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Adatvédelmi irányelvek</string>
+    <string name="privacy_policy_summary">Hogyan kezeli az alkalmazás az adatokat</string>
+    <string name="settings_section_audio">Hang</string>
+    <string name="settings_section_general">Általános</string>
+    <string name="settings_section_about">Névjegy</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Hirdetés</string>
+    <string name="audio_panel_button">Hangpanel gomb</string>
+    <string name="audio_panel_button_summary">Hangpanel gomb megjelenítése a lejátszás mellett a lejátszósávon</string>
+    <string name="voice_enhancement">Hangkiemelés</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Kiemeli a beszédhangot, és csökkenti a mély tartomány zavarosságát</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D térhatású hang</string>
+    <string name="spatial_off">Ki</string>
+    <string name="spatial_off_summary">Térhatás kikapcsolása és az eredeti hang visszaállítása</string>
+    <string name="spatial_natural">Természetes 3D</string>
+    <string name="spatial_natural_summary">Finom binaurális hangkép hosszú hallgatáshoz, tompítatlan beszéddel</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Elöl, oldalt és hátul is érzékelhető hang binaurális elhelyezéssel és korai visszaverődésekkel</string>
+    <string name="spatial_orbit">Körpálya</string>
+    <string name="spatial_orbit_summary">Egy virtuális hangforrás lassan körbejár a vízszintes síkban</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">A hangszóró összekeveri a bal és jobb csatornát. Ez a mód így is teret ad visszhanggal és szélességgel. Fejhallgatóval tisztább a bal-jobb hangkép.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Forgási sebesség</string>
+    <string name="orbit_speed_value">%1$.0f mp/kör</string>
+    <string name="orbit_direction">Forgásirány</string>
+    <string name="orbit_clockwise">Az óramutató járásával megegyező</string>
+    <string name="orbit_counterclockwise">Az óramutató járásával ellentétes</string>
+    <string name="orbit_strength">Effekt erőssége</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Hangszínszabályzó és balansz</string>
+    <string name="eq_shared_hint">Ezek a beállítások azonnal érvényesek, és megegyeznek a lejátszó hangpaneljével</string>
+    <string name="eq_bass">Basszus (−12 – +15 dB)</string>
+    <string name="eq_low">Mély</string>
+    <string name="eq_mid">Közép</string>
+    <string name="eq_high">Magas</string>
+    <string name="balance">Balansz</string>
+    <string name="balance_left">Bal</string>
+    <string name="balance_right">Jobb</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Visszaállítás</string>
+    <string name="audio_panel">Hangpanel</string>
+    <string name="open_audio_panel">Hangpanel megnyitása</string>
+    <string name="close_audio_panel">Hangpanel bezárása</string>
+    <string name="load_failed">Nem sikerült betölteni. Próbáld újra később.</string>
+    <string name="refresh_updated">Frissítve</string>
+    <string name="podcast_cached_error">Nem sikerült frissíteni a podcastokat. A mentett lista látható.</string>
+    <string name="retry_action">Újra</string>
+    <string name="sleep_timer">Elalvási időzítő</string>
+    <string name="alarm_clock">Ébresztő</string>
+    <string name="alarm_sheet">Elalvási időzítő és ébresztő</string>
+    <string name="sleep_minutes">%d perc</string>
+    <string name="sleep_custom">Egyéni perc</string>
+    <string name="sleep_custom_hint">Perc</string>
+    <string name="sleep_end_episode">Az epizód végén</string>
+    <string name="sleep_cancel">Időzítő törlése</string>
+    <string name="sleep_remaining">Elalvási időzítő: %1$s</string>
+    <string name="alarm_once">Egyszer</string>
+    <string name="alarm_weekdays">Hétköznap</string>
+    <string name="alarm_station">Állomás</string>
+    <string name="alarm_no_station">Előbb indíts el egy állomást, vagy adj hozzá egy kedvencet</string>
+    <string name="alarm_enable">Ébresztő be</string>
+    <string name="alarm_save">Ébresztő mentése</string>
+    <string name="alarm_saved">Ébresztő mentve</string>
+    <string name="alarm_permission">A pontos ébresztések ki vannak kapcsolva, ezért az ébresztő késhet. Engedélyezd az ébresztéseket és emlékeztetőket a Radio Live FM AM számára.</string>
+    <string name="alarm_permission_action">Pontos ébresztések engedélyezése</string>
+    <string name="alarm_stop">Leállítás</string>
+    <string name="alarm_snooze">Szundi</string>
+    <string name="alarm_playing">Ébresztő</string>
+    <string name="alarm_failed">Nem sikerült lejátszani az állomást. Helyette ébresztőhang szól.</string>
+    <string name="alarm_snoozed">Szundi 10 percre</string>
+    <string name="alarm_channel">Ébresztő</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Nem lehet csatlakozni ehhez az állomáshoz</string>
+    <string name="next_station">Következő állomás</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">A lejátszás sikertelen</string>
+    <string name="catalog_global">Globális</string>
+    <string name="catalog_scope">Ország</string>
+    <string name="catalog_scope_search">Országok keresése</string>
+    <string name="catalog_rankings">Toplisták</string>
+    <string name="catalog_rank_votes">Legtöbb szavazat</string>
+    <string name="catalog_rank_clicks">Legtöbbet hallgatott</string>
+    <string name="catalog_rank_trend">Felkapott</string>
+    <string name="catalog_section">Kategóriák</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Hírek / Beszélgetés</string>
+    <string name="catalog_music">Zene</string>
+    <string name="catalog_decades">Évtizedek</string>
+    <string name="catalog_languages">Nyelvek</string>
+    <string name="catalog_news">Hírek</string>
+    <string name="catalog_talk">Beszélgetés</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Vallási</string>
+    <string name="catalog_classical">Klasszikus</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronikus</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Könnyűzene / Lo-fi</string>
+    <string name="catalog_world_music">Világzene</string>
+    <string name="catalog_60s">60-as évek</string>
+    <string name="catalog_70s">70-es évek</string>
+    <string name="catalog_80s">80-as évek</string>
+    <string name="catalog_90s">90-es évek</string>
+    <string name="catalog_2000s">2000-es évek</string>
+    <string name="catalog_oldies">Örökzöldek</string>
+    <string name="catalog_sort_clicks">Népszerű</string>
+    <string name="catalog_sort_votes">Szavazatok</string>
+    <string name="catalog_sort_name">Név</string>
+    <string name="catalog_quality_all">Minden minőség</string>
+    <string name="catalog_quality_high">128 kbps vagy több</string>
+    <string name="catalog_language_all">Minden nyelv</string>
+    <string name="catalog_other_countries">Más országok</string>
+    <string name="catalog_count_plus">%d+ állomás</string>
+    <string name="catalog_cached_error">Nem sikerült frissíteni a kategóriákat. A mentett lista látható.</string>
+    <string name="settings_language">Nyelv</string>
+    <string name="settings_language_system">Rendszer szerint</string>
+    <string name="media_volume">Hangerő</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Lejátszás</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Hirdetések eltávolítása</string>
+    <string name="remove_ads_summary">Egyszeri vásárlással kikapcsolhatod a banner-, lista- és indítási hirdetéseket.</string>
+    <string name="remove_ads_buy">Vásárlás</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Vásárlás visszaállítása</string>
+    <string name="remove_ads_unavailable">Átmenetileg nem érhető el</string>
+    <string name="remove_ads_pending">A vásárlás függőben. A hirdetések a fizetés befejezéséig megmaradnak.</string>
+    <string name="remove_ads_thanks">Hirdetések eltávolítva – köszönjük a támogatást</string>
+    <string name="remove_ads_debug">Debug: hirdetések eltávolításának szimulálása</string>
+    <string name="remove_ads_debug_summary">Csak debug buildekben. Úgy tesz, mintha a hirdetéseltávolítás meg lenne vásárolva.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Állomások</string>
+    <string name="favorites_section_podcasts">Podcastműsorok</string>
+    <string name="empty_favorite_shows">Még nincsenek kedvenc podcastműsorok. Koppints a szívre egy műsornál a hozzáadáshoz.</string>
+    <string name="episode_previous">Előző epizód</string>
+    <string name="episode_next">Következő epizód</string>
+    <string name="rewind_10">Vissza 10 másodpercet</string>
+    <string name="forward_10">Előre 10 másodpercet</string>
+    <string name="seek_position">Lejátszási pozíció</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>
