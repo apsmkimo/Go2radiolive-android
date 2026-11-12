@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Поиск по списку</string>
+    <string name="refresh">Обновить</string>
+    <string name="alarm">Будильник</string>
+    <string name="alarm_coming_soon">Будильник пока недоступен</string>
+    <string name="tab_local">Местные</string>
+    <string name="tab_world">Мир</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Подкасты</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Категории</string>
+    <string name="tab_favorites">Избранное</string>
+    <string name="favorite">В избранное</string>
+    <string name="online_radio">Интернет-радио</string>
+    <string name="retry">Нажмите, чтобы повторить</string>
+    <string name="empty_stations">Нет станций</string>
+    <string name="empty_favorites">Избранных станций пока нет</string>
+    <string name="empty_categories">Нет категорий</string>
+    <string name="empty_countries">Нет стран</string>
+    <string name="empty_podcasts">Нет подкастов</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Поиск подкастов</string>
+    <string name="podcast_search_empty">Подходящих подкастов нет</string>
+    <string name="podcast_search_failed">Не удалось найти подкасты</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Ещё</string>
+    <string name="episode_show_less">Свернуть</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Для этого региона нет чарта подкастов, поэтому показаны чарты США.</string>
+    <string name="podcast_region">Страна</string>
+    <string name="podcast_region_automatic">Автоматически (регион устройства)</string>
+    <string name="podcast_region_search">Поиск стран</string>
+    <string name="podcast_region_device">Регион устройства: %1$s</string>
+    <string name="close">Закрыть</string>
+    <string name="empty_episodes">Нет выпусков</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Сначала новые</string>
+    <string name="episode_sort_oldest">Сначала старые</string>
+    <string name="episodes_loading_more">Загрузка выпусков…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Станций: %d</string>
+    <string name="no_station_playing">Ничего не воспроизводится</string>
+    <string name="buffering">Подключение…</string>
+    <string name="now_playing">Воспроизведение</string>
+    <string name="paused">Пауза</string>
+    <string name="tap_station_to_play">Выберите станцию для воспроизведения</string>
+    <string name="play">Воспроизвести</string>
+    <string name="pause">Пауза</string>
+    <string name="back">Назад</string>
+    <string name="settings">Настройки</string>
+    <string name="settings_version_title">Версия</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Настройки конфиденциальности</string>
+    <string name="privacy_options_summary">Управление персонализацией рекламы</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Политика конфиденциальности</string>
+    <string name="privacy_policy_summary">Как приложение обрабатывает данные</string>
+    <string name="settings_section_audio">Звук</string>
+    <string name="settings_section_general">Общие</string>
+    <string name="settings_section_about">О приложении</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Реклама</string>
+    <string name="audio_panel_button">Кнопка аудиопанели</string>
+    <string name="audio_panel_button_summary">Показывать кнопку аудиопанели рядом с кнопкой воспроизведения в плеере</string>
+    <string name="voice_enhancement">Улучшение голоса</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Усиливает голосовой диапазон и убирает гул на низких частотах</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Объёмный 3D-звук</string>
+    <string name="spatial_off">Выкл.</string>
+    <string name="spatial_off_summary">Отключить пространственную обработку и вернуть исходный звук</string>
+    <string name="spatial_natural">Естественный 3D</string>
+    <string name="spatial_natural_summary">Мягкая бинауральная сцена для долгого прослушивания без приглушения голосов</string>
+    <string name="spatial_surround">Окружающий звук</string>
+    <string name="spatial_surround_summary">Звук спереди, сбоку и сзади за счёт бинаурального позиционирования и ранних отражений</string>
+    <string name="spatial_orbit">Орбита</string>
+    <string name="spatial_orbit_summary">Виртуальный источник медленно движется по кругу в горизонтальной плоскости</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Динамик смешивает левый и правый каналы. Режим всё равно добавляет объём за счёт эха и ширины. В наушниках разделение на левый и правый каналы чётче.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Скорость вращения</string>
+    <string name="orbit_speed_value">%1$.0f с/оборот</string>
+    <string name="orbit_direction">Направление вращения</string>
+    <string name="orbit_clockwise">По часовой стрелке</string>
+    <string name="orbit_counterclockwise">Против часовой стрелки</string>
+    <string name="orbit_strength">Сила эффекта</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Эквалайзер и баланс</string>
+    <string name="eq_shared_hint">Изменения применяются сразу и совпадают с аудиопанелью плеера</string>
+    <string name="eq_bass">Бас (от −12 до +15 dB)</string>
+    <string name="eq_low">Низкие</string>
+    <string name="eq_mid">Средние</string>
+    <string name="eq_high">Высокие</string>
+    <string name="balance">Баланс</string>
+    <string name="balance_left">Левый</string>
+    <string name="balance_right">Правый</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Сбросить</string>
+    <string name="audio_panel">Аудиопанель</string>
+    <string name="open_audio_panel">Открыть аудиопанель</string>
+    <string name="close_audio_panel">Закрыть аудиопанель</string>
+    <string name="load_failed">Не удалось загрузить. Повторите попытку позже.</string>
+    <string name="refresh_updated">Обновлено</string>
+    <string name="podcast_cached_error">Не удалось обновить подкасты. Показан сохранённый список.</string>
+    <string name="retry_action">Повторить</string>
+    <string name="sleep_timer">Таймер сна</string>
+    <string name="alarm_clock">Будильник</string>
+    <string name="alarm_sheet">Таймер сна и будильник</string>
+    <string name="sleep_minutes">%d мин</string>
+    <string name="sleep_custom">Своё время (мин)</string>
+    <string name="sleep_custom_hint">Минуты</string>
+    <string name="sleep_end_episode">До конца выпуска</string>
+    <string name="sleep_cancel">Отменить таймер</string>
+    <string name="sleep_remaining">Таймер сна: %1$s</string>
+    <string name="alarm_once">Один раз</string>
+    <string name="alarm_weekdays">По будням</string>
+    <string name="alarm_station">Станция</string>
+    <string name="alarm_no_station">Сначала включите станцию или добавьте её в избранное</string>
+    <string name="alarm_enable">Будильник включён</string>
+    <string name="alarm_save">Сохранить будильник</string>
+    <string name="alarm_saved">Будильник сохранён</string>
+    <string name="alarm_permission">Точные будильники отключены, поэтому сигнал может прозвучать с опозданием. Разрешите будильники и напоминания для Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Разрешить точные будильники</string>
+    <string name="alarm_stop">Стоп</string>
+    <string name="alarm_snooze">Отложить</string>
+    <string name="alarm_playing">Будильник</string>
+    <string name="alarm_failed">Не удалось включить станцию. Вместо неё звучит сигнал будильника.</string>
+    <string name="alarm_snoozed">Отложено на 10 минут</string>
+    <string name="alarm_channel">Будильник</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Не удаётся подключиться к станции</string>
+    <string name="next_station">Следующая станция</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Ошибка воспроизведения</string>
+    <string name="catalog_global">Весь мир</string>
+    <string name="catalog_scope">Страна</string>
+    <string name="catalog_scope_search">Поиск стран</string>
+    <string name="catalog_rankings">Рейтинги</string>
+    <string name="catalog_rank_votes">Больше всего голосов</string>
+    <string name="catalog_rank_clicks">Самые слушаемые</string>
+    <string name="catalog_rank_trend">Популярное сейчас</string>
+    <string name="catalog_section">Категории</string>
+    <string name="catalog_pop">Поп</string>
+    <string name="catalog_news_talk">Новости / Разговорное</string>
+    <string name="catalog_music">Музыка</string>
+    <string name="catalog_decades">По десятилетиям</string>
+    <string name="catalog_languages">Языки</string>
+    <string name="catalog_news">Новости</string>
+    <string name="catalog_talk">Разговорное</string>
+    <string name="catalog_sports">Спорт</string>
+    <string name="catalog_religious">Религия</string>
+    <string name="catalog_classical">Классика</string>
+    <string name="catalog_jazz">Джаз</string>
+    <string name="catalog_rock">Рок</string>
+    <string name="catalog_electronic">Электроника</string>
+    <string name="catalog_hiphop">Хип-хоп / R&amp;B</string>
+    <string name="catalog_country_music">Кантри</string>
+    <string name="catalog_lofi">Лёгкая музыка / Lo-fi</string>
+    <string name="catalog_world_music">Музыка мира</string>
+    <string name="catalog_60s">60-е</string>
+    <string name="catalog_70s">70-е</string>
+    <string name="catalog_80s">80-е</string>
+    <string name="catalog_90s">90-е</string>
+    <string name="catalog_2000s">2000-е</string>
+    <string name="catalog_oldies">Ретро</string>
+    <string name="catalog_sort_clicks">Популярные</string>
+    <string name="catalog_sort_votes">Голоса</string>
+    <string name="catalog_sort_name">Название</string>
+    <string name="catalog_quality_all">Любое качество</string>
+    <string name="catalog_quality_high">От 128 кбит/с</string>
+    <string name="catalog_language_all">Все языки</string>
+    <string name="catalog_other_countries">Другие страны</string>
+    <string name="catalog_count_plus">Станций: %d+</string>
+    <string name="catalog_cached_error">Не удалось обновить категории. Показан сохранённый список.</string>
+    <string name="settings_language">Язык</string>
+    <string name="settings_language_system">Как в системе</string>
+    <string name="media_volume">Громкость</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Воспроизведение</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Отключить рекламу</string>
+    <string name="remove_ads_summary">Разовая покупка отключает баннеры, рекламу в списках и при запуске приложения.</string>
+    <string name="remove_ads_buy">Купить</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Восстановить покупку</string>
+    <string name="remove_ads_unavailable">Временно недоступно</string>
+    <string name="remove_ads_pending">Покупка обрабатывается. Реклама будет показываться до завершения оплаты.</string>
+    <string name="remove_ads_thanks">Реклама отключена — спасибо за поддержку</string>
+    <string name="remove_ads_debug">Отладка: имитировать отключение рекламы</string>
+    <string name="remove_ads_debug_summary">Только для отладочных сборок. Покупка отключения рекламы считается совершённой.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Станции</string>
+    <string name="favorites_section_podcasts">Подкасты</string>
+    <string name="empty_favorite_shows">Избранных подкастов пока нет. Нажмите на сердечко у подкаста, чтобы добавить его.</string>
+    <string name="episode_previous">Предыдущий выпуск</string>
+    <string name="episode_next">Следующий выпуск</string>
+    <string name="rewind_10">Назад на 10 секунд</string>
+    <string name="forward_10">Вперёд на 10 секунд</string>
+    <string name="seek_position">Позиция воспроизведения</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>
