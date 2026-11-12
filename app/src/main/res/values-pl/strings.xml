@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Szukaj na liście</string>
+    <string name="refresh">Odśwież</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_coming_soon">Alarm nie jest jeszcze dostępny</string>
+    <string name="tab_local">Lokalne</string>
+    <string name="tab_world">Świat</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcasty</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategorie</string>
+    <string name="tab_favorites">Ulubione</string>
+    <string name="favorite">Ulubione</string>
+    <string name="online_radio">Radio internetowe</string>
+    <string name="retry">Kliknij, aby spróbować ponownie</string>
+    <string name="empty_stations">Brak stacji</string>
+    <string name="empty_favorites">Nie masz jeszcze ulubionych stacji</string>
+    <string name="empty_categories">Brak kategorii</string>
+    <string name="empty_countries">Brak krajów</string>
+    <string name="empty_podcasts">Brak podcastów</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Szukaj podcastów</string>
+    <string name="podcast_search_empty">Brak pasujących podcastów</string>
+    <string name="podcast_search_failed">Nie udało się wyszukać podcastów</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Pokaż więcej</string>
+    <string name="episode_show_less">Pokaż mniej</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Ten region nie ma listy podcastów, więc wyświetlane są listy z USA.</string>
+    <string name="podcast_region">Kraj</string>
+    <string name="podcast_region_automatic">Automatycznie (region urządzenia)</string>
+    <string name="podcast_region_search">Szukaj krajów</string>
+    <string name="podcast_region_device">Region urządzenia: %1$s</string>
+    <string name="close">Zamknij</string>
+    <string name="empty_episodes">Brak odcinków</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Najnowsze</string>
+    <string name="episode_sort_oldest">Najstarsze</string>
+    <string name="episodes_loading_more">Wczytywanie kolejnych odcinków…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Stacje: %d</string>
+    <string name="no_station_playing">Nic nie jest odtwarzane</string>
+    <string name="buffering">Łączenie…</string>
+    <string name="now_playing">Odtwarzanie</string>
+    <string name="paused">Wstrzymano</string>
+    <string name="tap_station_to_play">Kliknij stację, aby odtworzyć</string>
+    <string name="play">Odtwórz</string>
+    <string name="pause">Wstrzymaj</string>
+    <string name="back">Wstecz</string>
+    <string name="settings">Ustawienia</string>
+    <string name="settings_version_title">Wersja</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Opcje prywatności</string>
+    <string name="privacy_options_summary">Zarządzaj personalizacją reklam</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Polityka prywatności</string>
+    <string name="privacy_policy_summary">Jak aplikacja przetwarza informacje</string>
+    <string name="settings_section_audio">Dźwięk</string>
+    <string name="settings_section_general">Ogólne</string>
+    <string name="settings_section_about">Informacje</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Reklama</string>
+    <string name="audio_panel_button">Przycisk panelu dźwięku</string>
+    <string name="audio_panel_button_summary">Pokazuj przycisk panelu dźwięku obok odtwarzania na pasku odtwarzacza</string>
+    <string name="voice_enhancement">Wzmocnienie głosu</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Wzmacnia zakres głosu i ogranicza zamulenie basu</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Dźwięk przestrzenny 3D</string>
+    <string name="spatial_off">Wył.</string>
+    <string name="spatial_off_summary">Wyłącz przetwarzanie przestrzenne i przywróć oryginalny dźwięk</string>
+    <string name="spatial_natural">Naturalny 3D</string>
+    <string name="spatial_natural_summary">Delikatny obraz binauralny do długiego słuchania, bez tłumienia głosów</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Dźwięki z przodu, z boków i z tyłu dzięki rozmieszczeniu binauralnemu i wczesnym odbiciom</string>
+    <string name="spatial_orbit">Orbita</string>
+    <string name="spatial_orbit_summary">Wirtualne źródło powoli krąży w płaszczyźnie poziomej</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Głośnik miesza lewy i prawy kanał. Ten tryb nadal dodaje przestrzeni dzięki echu i szerokości. W słuchawkach obraz lewo-prawo jest wyraźniejszy.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Prędkość obrotu</string>
+    <string name="orbit_speed_value">%1$.0f s/obrót</string>
+    <string name="orbit_direction">Kierunek obrotu</string>
+    <string name="orbit_clockwise">Zgodnie z ruchem wskazówek zegara</string>
+    <string name="orbit_counterclockwise">Przeciwnie do ruchu wskazówek zegara</string>
+    <string name="orbit_strength">Siła efektu</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Korektor i balans</string>
+    <string name="eq_shared_hint">Te ustawienia działają od razu i są zsynchronizowane z panelem dźwięku odtwarzacza</string>
+    <string name="eq_bass">Bas (od −12 do +15 dB)</string>
+    <string name="eq_low">Niskie</string>
+    <string name="eq_mid">Średnie</string>
+    <string name="eq_high">Wysokie</string>
+    <string name="balance">Balans</string>
+    <string name="balance_left">Lewo</string>
+    <string name="balance_right">Prawo</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Resetuj</string>
+    <string name="audio_panel">Panel dźwięku</string>
+    <string name="open_audio_panel">Otwórz panel dźwięku</string>
+    <string name="close_audio_panel">Zamknij panel dźwięku</string>
+    <string name="load_failed">Nie udało się wczytać. Spróbuj ponownie później.</string>
+    <string name="refresh_updated">Zaktualizowano</string>
+    <string name="podcast_cached_error">Nie udało się zaktualizować podcastów. Wyświetlana jest zapisana lista.</string>
+    <string name="retry_action">Ponów</string>
+    <string name="sleep_timer">Wyłącznik czasowy</string>
+    <string name="alarm_clock">Alarm</string>
+    <string name="alarm_sheet">Wyłącznik czasowy i alarm</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Własna liczba minut</string>
+    <string name="sleep_custom_hint">Minuty</string>
+    <string name="sleep_end_episode">Koniec tego odcinka</string>
+    <string name="sleep_cancel">Anuluj wyłącznik</string>
+    <string name="sleep_remaining">Wyłącznik czasowy %1$s</string>
+    <string name="alarm_once">Jednorazowo</string>
+    <string name="alarm_weekdays">Dni robocze</string>
+    <string name="alarm_station">Stacja</string>
+    <string name="alarm_no_station">Najpierw odtwórz stację lub dodaj ulubioną</string>
+    <string name="alarm_enable">Alarm włączony</string>
+    <string name="alarm_save">Zapisz alarm</string>
+    <string name="alarm_saved">Alarm zapisany</string>
+    <string name="alarm_permission">Dokładne alarmy są wyłączone, więc ten alarm może się spóźnić. Zezwól na alarmy i przypomnienia dla Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Zezwól na dokładne alarmy</string>
+    <string name="alarm_stop">Zatrzymaj</string>
+    <string name="alarm_snooze">Drzemka</string>
+    <string name="alarm_playing">Alarm</string>
+    <string name="alarm_failed">Nie udało się odtworzyć stacji. Zamiast tego odtwarzany jest dźwięk alarmu.</string>
+    <string name="alarm_snoozed">Drzemka na 10 minut</string>
+    <string name="alarm_channel">Budzik</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Nie można połączyć się z tą stacją</string>
+    <string name="next_station">Następna stacja</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Błąd odtwarzania</string>
+    <string name="catalog_global">Cały świat</string>
+    <string name="catalog_scope">Kraj</string>
+    <string name="catalog_scope_search">Szukaj krajów</string>
+    <string name="catalog_rankings">Rankingi</string>
+    <string name="catalog_rank_votes">Najwięcej głosów</string>
+    <string name="catalog_rank_clicks">Najczęściej słuchane</string>
+    <string name="catalog_rank_trend">Popularne teraz</string>
+    <string name="catalog_section">Kategorie</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Wiadomości / Rozmowy</string>
+    <string name="catalog_music">Muzyka</string>
+    <string name="catalog_decades">Dekady</string>
+    <string name="catalog_languages">Języki</string>
+    <string name="catalog_news">Wiadomości</string>
+    <string name="catalog_talk">Rozmowy</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Religijne</string>
+    <string name="catalog_classical">Klasyczna</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektroniczna</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Muzyka relaksacyjna / Lo-fi</string>
+    <string name="catalog_world_music">Muzyka świata</string>
+    <string name="catalog_60s">Lata 60.</string>
+    <string name="catalog_70s">Lata 70.</string>
+    <string name="catalog_80s">Lata 80.</string>
+    <string name="catalog_90s">Lata 90.</string>
+    <string name="catalog_2000s">Lata 2000.</string>
+    <string name="catalog_oldies">Stare przeboje</string>
+    <string name="catalog_sort_clicks">Popularność</string>
+    <string name="catalog_sort_votes">Głosy</string>
+    <string name="catalog_sort_name">Nazwa</string>
+    <string name="catalog_quality_all">Każda jakość</string>
+    <string name="catalog_quality_high">128 kbps i więcej</string>
+    <string name="catalog_language_all">Wszystkie języki</string>
+    <string name="catalog_other_countries">Inne kraje</string>
+    <string name="catalog_count_plus">Stacje: %d+</string>
+    <string name="catalog_cached_error">Nie udało się zaktualizować kategorii. Wyświetlana jest zapisana lista.</string>
+    <string name="settings_language">Język</string>
+    <string name="settings_language_system">Zgodnie z systemem</string>
+    <string name="media_volume">Głośność</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Odtwarzanie</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Usuń reklamy</string>
+    <string name="remove_ads_summary">Jednorazowy zakup wyłącza reklamy w banerach, na listach i przy otwieraniu aplikacji.</string>
+    <string name="remove_ads_buy">Kup</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Przywróć zakup</string>
+    <string name="remove_ads_unavailable">Chwilowo niedostępne</string>
+    <string name="remove_ads_pending">Zakup oczekuje. Reklamy będą wyświetlane do czasu zrealizowania płatności.</string>
+    <string name="remove_ads_thanks">Reklamy usunięte — dziękujemy za wsparcie</string>
+    <string name="remove_ads_debug">Debugowanie: symuluj usunięcie reklam</string>
+    <string name="remove_ads_debug_summary">Tylko w wersjach debug. Traktuj zakup usunięcia reklam jako posiadany.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Stacje</string>
+    <string name="favorites_section_podcasts">Podcasty</string>
+    <string name="empty_favorite_shows">Nie masz jeszcze ulubionych podcastów. Kliknij serce przy podcaście, aby go dodać.</string>
+    <string name="episode_previous">Poprzedni odcinek</string>
+    <string name="episode_next">Następny odcinek</string>
+    <string name="rewind_10">10 sekund do tyłu</string>
+    <string name="forward_10">10 sekund do przodu</string>
+    <string name="seek_position">Pozycja odtwarzania</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

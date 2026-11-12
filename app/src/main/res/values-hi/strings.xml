@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">इस सूची में खोजें</string>
+    <string name="refresh">रीफ़्रेश करें</string>
+    <string name="alarm">अलार्म</string>
+    <string name="alarm_coming_soon">अलार्म अभी उपलब्ध नहीं है</string>
+    <string name="tab_local">स्थानीय</string>
+    <string name="tab_world">दुनिया</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">पॉडकास्ट</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">श्रेणियां</string>
+    <string name="tab_favorites">पसंदीदा</string>
+    <string name="favorite">पसंदीदा</string>
+    <string name="online_radio">इंटरनेट रेडियो</string>
+    <string name="retry">फिर से कोशिश करने के लिए टैप करें</string>
+    <string name="empty_stations">कोई स्टेशन नहीं</string>
+    <string name="empty_favorites">अभी तक कोई पसंदीदा स्टेशन नहीं</string>
+    <string name="empty_categories">कोई श्रेणी नहीं</string>
+    <string name="empty_countries">कोई देश नहीं</string>
+    <string name="empty_podcasts">कोई पॉडकास्ट नहीं</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">पॉडकास्ट खोजें</string>
+    <string name="podcast_search_empty">कोई मिलता-जुलता पॉडकास्ट नहीं</string>
+    <string name="podcast_search_failed">पॉडकास्ट खोजे नहीं जा सके</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">और देखें</string>
+    <string name="episode_show_less">कम दिखाएं</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">इस क्षेत्र का कोई पॉडकास्ट चार्ट नहीं है, इसलिए अमेरिका के चार्ट दिखाए जा रहे हैं.</string>
+    <string name="podcast_region">देश</string>
+    <string name="podcast_region_automatic">अपने-आप (डिवाइस का क्षेत्र)</string>
+    <string name="podcast_region_search">देश खोजें</string>
+    <string name="podcast_region_device">डिवाइस का क्षेत्र: %1$s</string>
+    <string name="close">बंद करें</string>
+    <string name="empty_episodes">कोई एपिसोड नहीं</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">सबसे नए</string>
+    <string name="episode_sort_oldest">सबसे पुराने</string>
+    <string name="episodes_loading_more">और एपिसोड लोड हो रहे हैं…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d स्टेशन</string>
+    <string name="no_station_playing">कुछ नहीं चल रहा</string>
+    <string name="buffering">कनेक्ट हो रहा है…</string>
+    <string name="now_playing">चल रहा है</string>
+    <string name="paused">रोका गया</string>
+    <string name="tap_station_to_play">चलाने के लिए कोई स्टेशन टैप करें</string>
+    <string name="play">चलाएं</string>
+    <string name="pause">रोकें</string>
+    <string name="back">वापस</string>
+    <string name="settings">सेटिंग</string>
+    <string name="settings_version_title">वर्शन</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">निजता के विकल्प</string>
+    <string name="privacy_options_summary">विज्ञापनों को आपके हिसाब से दिखाने का तरीका मैनेज करें</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">निजता नीति</string>
+    <string name="privacy_policy_summary">यह ऐप जानकारी को कैसे संभालता है</string>
+    <string name="settings_section_audio">ऑडियो</string>
+    <string name="settings_section_general">सामान्य</string>
+    <string name="settings_section_about">जानकारी</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">विज्ञापन</string>
+    <string name="audio_panel_button">ऑडियो पैनल बटन</string>
+    <string name="audio_panel_button_summary">प्लेयर बार में चलाएं बटन के पास ऑडियो पैनल बटन दिखाएं</string>
+    <string name="voice_enhancement">आवाज़ को बेहतर बनाएं</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">आवाज़ की रेंज बढ़ाएं और लो-एंड की धुंधलाहट कम करें</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D स्पेशियल ऑडियो</string>
+    <string name="spatial_off">बंद</string>
+    <string name="spatial_off_summary">स्पेशियल प्रोसेसिंग बंद करें और मूल ऑडियो वापस लाएं</string>
+    <string name="spatial_natural">नैचुरल 3D</string>
+    <string name="spatial_natural_summary">लंबे समय तक सुनने के लिए हल्की बाइनॉरल इमेज, आवाज़ें दबती नहीं</string>
+    <string name="spatial_surround">सराउंड</string>
+    <string name="spatial_surround_summary">बाइनॉरल प्लेसमेंट और शुरुआती रिफ़्लेक्शन से आगे, बगल और पीछे की दिशा का एहसास</string>
+    <string name="spatial_orbit">ऑर्बिट</string>
+    <string name="spatial_orbit_summary">एक वर्चुअल ध्वनि स्रोत क्षैतिज तल में धीरे-धीरे चारों ओर घूमता है</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">स्पीकर बाएं और दाएं ऑडियो को मिला देता है. यह मोड फिर भी गूंज और चौड़ाई से स्पेस जोड़ता है. हेडफ़ोन से बाएं-दाएं की इमेज ज़्यादा साफ़ मिलती है.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">घूमने की रफ़्तार</string>
+    <string name="orbit_speed_value">%1$.0f सेकंड/चक्कर</string>
+    <string name="orbit_direction">घूमने की दिशा</string>
+    <string name="orbit_clockwise">घड़ी की दिशा में</string>
+    <string name="orbit_counterclockwise">घड़ी की उल्टी दिशा में</string>
+    <string name="orbit_strength">इफ़ेक्ट की तीव्रता</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">इक्वलाइज़र और बैलेंस</string>
+    <string name="eq_shared_hint">ये कंट्रोल तुरंत लागू होते हैं और प्लेयर के ऑडियो पैनल से मेल खाते हैं</string>
+    <string name="eq_bass">बेस (−12 से +15 dB)</string>
+    <string name="eq_low">लो</string>
+    <string name="eq_mid">मिड</string>
+    <string name="eq_high">हाई</string>
+    <string name="balance">बैलेंस</string>
+    <string name="balance_left">बायां</string>
+    <string name="balance_right">दायां</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">रीसेट करें</string>
+    <string name="audio_panel">ऑडियो पैनल</string>
+    <string name="open_audio_panel">ऑडियो पैनल खोलें</string>
+    <string name="close_audio_panel">ऑडियो पैनल बंद करें</string>
+    <string name="load_failed">लोड नहीं हो सका. बाद में फिर से कोशिश करें.</string>
+    <string name="refresh_updated">अपडेट हो गया</string>
+    <string name="podcast_cached_error">पॉडकास्ट अपडेट नहीं हो सके. सेव की गई सूची दिखाई जा रही है.</string>
+    <string name="retry_action">फिर से कोशिश करें</string>
+    <string name="sleep_timer">स्लीप टाइमर</string>
+    <string name="alarm_clock">अलार्म</string>
+    <string name="alarm_sheet">स्लीप टाइमर और अलार्म</string>
+    <string name="sleep_minutes">%d मिनट</string>
+    <string name="sleep_custom">अपने हिसाब से मिनट</string>
+    <string name="sleep_custom_hint">मिनट</string>
+    <string name="sleep_end_episode">इस एपिसोड के खत्म होने पर</string>
+    <string name="sleep_cancel">टाइमर रद्द करें</string>
+    <string name="sleep_remaining">स्लीप टाइमर %1$s</string>
+    <string name="alarm_once">एक बार</string>
+    <string name="alarm_weekdays">कामकाजी दिन</string>
+    <string name="alarm_station">स्टेशन</string>
+    <string name="alarm_no_station">पहले कोई स्टेशन चलाएं या पसंदीदा में जोड़ें</string>
+    <string name="alarm_enable">अलार्म चालू</string>
+    <string name="alarm_save">अलार्म सेव करें</string>
+    <string name="alarm_saved">अलार्म सेव हो गया</string>
+    <string name="alarm_permission">सटीक अलार्म बंद हैं, इसलिए यह अलार्म देर से बज सकता है. Radio Live FM AM के लिए अलार्म और रिमाइंडर की अनुमति दें.</string>
+    <string name="alarm_permission_action">सटीक अलार्म की अनुमति दें</string>
+    <string name="alarm_stop">बंद करें</string>
+    <string name="alarm_snooze">स्नूज़ करें</string>
+    <string name="alarm_playing">अलार्म</string>
+    <string name="alarm_failed">स्टेशन नहीं चल सका. इसके बजाय अलार्म की आवाज़ चल रही है.</string>
+    <string name="alarm_snoozed">10 मिनट के लिए स्नूज़ किया गया</string>
+    <string name="alarm_channel">जगाने वाला अलार्म</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">इस स्टेशन से कनेक्ट नहीं हो सका</string>
+    <string name="next_station">अगला स्टेशन</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">चलाया नहीं जा सका</string>
+    <string name="catalog_global">ग्लोबल</string>
+    <string name="catalog_scope">देश</string>
+    <string name="catalog_scope_search">देश खोजें</string>
+    <string name="catalog_rankings">रैंकिंग</string>
+    <string name="catalog_rank_votes">सबसे ज़्यादा वोट</string>
+    <string name="catalog_rank_clicks">सबसे ज़्यादा सुने गए</string>
+    <string name="catalog_rank_trend">ट्रेंडिंग</string>
+    <string name="catalog_section">श्रेणियां</string>
+    <string name="catalog_pop">पॉप</string>
+    <string name="catalog_news_talk">समाचार / टॉक</string>
+    <string name="catalog_music">संगीत</string>
+    <string name="catalog_decades">दशक</string>
+    <string name="catalog_languages">भाषाएं</string>
+    <string name="catalog_news">समाचार</string>
+    <string name="catalog_talk">टॉक</string>
+    <string name="catalog_sports">खेल</string>
+    <string name="catalog_religious">धार्मिक</string>
+    <string name="catalog_classical">क्लासिकल</string>
+    <string name="catalog_jazz">जैज़</string>
+    <string name="catalog_rock">रॉक</string>
+    <string name="catalog_electronic">इलेक्ट्रॉनिक</string>
+    <string name="catalog_hiphop">हिप-हॉप / R&amp;B</string>
+    <string name="catalog_country_music">कंट्री</string>
+    <string name="catalog_lofi">सुकून भरा संगीत / Lo-fi</string>
+    <string name="catalog_world_music">वर्ल्ड म्यूज़िक</string>
+    <string name="catalog_60s">60 का दशक</string>
+    <string name="catalog_70s">70 का दशक</string>
+    <string name="catalog_80s">80 का दशक</string>
+    <string name="catalog_90s">90 का दशक</string>
+    <string name="catalog_2000s">2000 का दशक</string>
+    <string name="catalog_oldies">पुराने गाने</string>
+    <string name="catalog_sort_clicks">लोकप्रिय</string>
+    <string name="catalog_sort_votes">वोट</string>
+    <string name="catalog_sort_name">नाम</string>
+    <string name="catalog_quality_all">सभी ऑडियो</string>
+    <string name="catalog_quality_high">128 kbps और उससे ज़्यादा</string>
+    <string name="catalog_language_all">सभी भाषाएं</string>
+    <string name="catalog_other_countries">अन्य देश</string>
+    <string name="catalog_count_plus">%d+ स्टेशन</string>
+    <string name="catalog_cached_error">श्रेणियां अपडेट नहीं हो सकीं. सेव की गई सूची दिखाई जा रही है.</string>
+    <string name="settings_language">भाषा</string>
+    <string name="settings_language_system">सिस्टम के मुताबिक</string>
+    <string name="media_volume">आवाज़</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">प्लेबैक</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">विज्ञापन हटाएं</string>
+    <string name="remove_ads_summary">एक बार की खरीदारी से बैनर, सूची और ऐप खुलने पर दिखने वाले विज्ञापन बंद हो जाते हैं.</string>
+    <string name="remove_ads_buy">खरीदें</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">खरीदारी वापस लाएं</string>
+    <string name="remove_ads_unavailable">कुछ समय के लिए उपलब्ध नहीं है</string>
+    <string name="remove_ads_pending">खरीदारी प्रोसेस हो रही है. पेमेंट पूरा होने तक विज्ञापन दिखते रहेंगे.</string>
+    <string name="remove_ads_thanks">विज्ञापन हटा दिए गए — आपके सहयोग के लिए धन्यवाद</string>
+    <string name="remove_ads_debug">डीबग: विज्ञापन हटाए जाने का सिम्युलेशन</string>
+    <string name="remove_ads_debug_summary">सिर्फ़ डीबग बिल्ड के लिए. मान लें कि विज्ञापन हटाने की खरीदारी हो चुकी है.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">स्टेशन</string>
+    <string name="favorites_section_podcasts">पॉडकास्ट शो</string>
+    <string name="empty_favorite_shows">अभी तक कोई पसंदीदा पॉडकास्ट शो नहीं. किसी शो को जोड़ने के लिए उस पर दिल के आइकॉन पर टैप करें.</string>
+    <string name="episode_previous">पिछला एपिसोड</string>
+    <string name="episode_next">अगला एपिसोड</string>
+    <string name="rewind_10">10 सेकंड पीछे</string>
+    <string name="forward_10">10 सेकंड आगे</string>
+    <string name="seek_position">प्लेबैक की जगह</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

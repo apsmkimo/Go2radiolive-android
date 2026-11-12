@@ -22,6 +22,18 @@ internal object AppLanguage {
     const val ITALIAN = "it"
     const val VIETNAMESE = "vi"
     // SMCPKG_SUPPORT<<<Cursor126
+    // SMCPKG_SUPPORT>>>Cursor127
+    const val THAI = "th"
+    const val HINDI = "hi"
+    const val ARABIC = "ar"
+    const val POLISH = "pl"
+    const val DUTCH = "nl"
+    const val UKRAINIAN = "uk"
+    const val MALAY = "ms"
+    const val FILIPINO = "fil"
+    const val BENGALI = "bn"
+    const val PERSIAN = "fa"
+    // SMCPKG_SUPPORT<<<Cursor127
 
     // SMCPKG_SUPPORT>>>Cursor126
     // val tags: List<String> = listOf(SYSTEM, ENGLISH, TRADITIONAL, SIMPLIFIED, JAPANESE)
@@ -41,6 +53,18 @@ internal object AppLanguage {
         TURKISH,
         ITALIAN,
         VIETNAMESE,
+        // SMCPKG_SUPPORT>>>Cursor127
+        THAI,
+        HINDI,
+        ARABIC,
+        POLISH,
+        DUTCH,
+        UKRAINIAN,
+        MALAY,
+        FILIPINO,
+        BENGALI,
+        PERSIAN,
+        // SMCPKG_SUPPORT<<<Cursor127
     )
 
     /** Each language's own name, so a user can find it whatever the current UI language is. */
@@ -59,6 +83,18 @@ internal object AppLanguage {
         TURKISH -> "Türkçe"
         ITALIAN -> "Italiano"
         VIETNAMESE -> "Tiếng Việt"
+        // SMCPKG_SUPPORT>>>Cursor127
+        THAI -> "ไทย"
+        HINDI -> "हिन्दी"
+        ARABIC -> "العربية"
+        POLISH -> "Polski"
+        DUTCH -> "Nederlands"
+        UKRAINIAN -> "Українська"
+        MALAY -> "Bahasa Melayu"
+        FILIPINO -> "Filipino"
+        BENGALI -> "বাংলা"
+        PERSIAN -> "فارسی"
+        // SMCPKG_SUPPORT<<<Cursor127
         else -> tag
     }
     // SMCPKG_SUPPORT<<<Cursor126
@@ -87,6 +123,19 @@ internal object AppLanguage {
             lang == "it" -> ITALIAN
             lang == "vi" -> VIETNAMESE
             // SMCPKG_SUPPORT<<<Cursor126
+            // SMCPKG_SUPPORT>>>Cursor127
+            lang == "th" -> THAI
+            lang == "hi" -> HINDI
+            lang == "ar" -> ARABIC
+            lang == "pl" -> POLISH
+            lang == "nl" -> DUTCH
+            lang == "uk" -> UKRAINIAN
+            lang == "ms" -> MALAY
+            lang == "bn" -> BENGALI
+            lang == "fa" -> PERSIAN
+            // Filipino may be reported as "fil" or the older "tl".
+            lang == "fil" || lang == "tl" -> FILIPINO
+            // SMCPKG_SUPPORT<<<Cursor127
             else -> SYSTEM
         }
     }

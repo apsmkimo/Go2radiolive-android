@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">ابحث في هذه القائمة</string>
+    <string name="refresh">تحديث</string>
+    <string name="alarm">المنبّه</string>
+    <string name="alarm_coming_soon">المنبّه غير متاح بعد</string>
+    <string name="tab_local">محلي</string>
+    <string name="tab_world">العالم</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">بودكاست</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">الفئات</string>
+    <string name="tab_favorites">المفضّلة</string>
+    <string name="favorite">مفضّلة</string>
+    <string name="online_radio">راديو الإنترنت</string>
+    <string name="retry">انقر لإعادة المحاولة</string>
+    <string name="empty_stations">لا توجد محطات</string>
+    <string name="empty_favorites">لا توجد محطات مفضّلة بعد</string>
+    <string name="empty_categories">لا توجد فئات</string>
+    <string name="empty_countries">لا توجد دول</string>
+    <string name="empty_podcasts">لا توجد بودكاستات</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">ابحث عن بودكاست</string>
+    <string name="podcast_search_empty">لا توجد بودكاستات مطابقة</string>
+    <string name="podcast_search_failed">تعذّر البحث عن البودكاستات</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">عرض المزيد</string>
+    <string name="episode_show_less">عرض أقل</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">لا يتوفر ترتيب بودكاست لهذه المنطقة، لذا تُعرض ترتيبات الولايات المتحدة.</string>
+    <string name="podcast_region">الدولة</string>
+    <string name="podcast_region_automatic">تلقائي (منطقة الجهاز)</string>
+    <string name="podcast_region_search">ابحث عن دولة</string>
+    <string name="podcast_region_device">منطقة الجهاز: %1$s</string>
+    <string name="close">إغلاق</string>
+    <string name="empty_episodes">لا توجد حلقات</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">الأحدث</string>
+    <string name="episode_sort_oldest">الأقدم</string>
+    <string name="episodes_loading_more">جارٍ تحميل المزيد من الحلقات…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">المحطات: %d</string>
+    <string name="no_station_playing">لا يوجد تشغيل</string>
+    <string name="buffering">جارٍ الاتصال…</string>
+    <string name="now_playing">قيد التشغيل</string>
+    <string name="paused">متوقف مؤقتًا</string>
+    <string name="tap_station_to_play">انقر على محطة لتشغيلها</string>
+    <string name="play">تشغيل</string>
+    <string name="pause">إيقاف مؤقت</string>
+    <string name="back">رجوع</string>
+    <string name="settings">الإعدادات</string>
+    <string name="settings_version_title">الإصدار</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">خيارات الخصوصية</string>
+    <string name="privacy_options_summary">إدارة طريقة تخصيص الإعلانات</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">سياسة الخصوصية</string>
+    <string name="privacy_policy_summary">كيف يتعامل هذا التطبيق مع المعلومات</string>
+    <string name="settings_section_audio">الصوت</string>
+    <string name="settings_section_general">عام</string>
+    <string name="settings_section_about">حول</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">إعلان</string>
+    <string name="audio_panel_button">زر لوحة الصوت</string>
+    <string name="audio_panel_button_summary">عرض زر لوحة الصوت بجانب زر التشغيل في شريط المشغّل</string>
+    <string name="voice_enhancement">تحسين الصوت البشري</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">تعزيز نطاق الصوت البشري وتقليل تعكّر الترددات المنخفضة</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">صوت مكاني ثلاثي الأبعاد</string>
+    <string name="spatial_off">إيقاف</string>
+    <string name="spatial_off_summary">إيقاف المعالجة المكانية واستعادة الصوت الأصلي</string>
+    <string name="spatial_natural">ثلاثي الأبعاد طبيعي</string>
+    <string name="spatial_natural_summary">صورة صوتية ثنائية الأذن لطيفة للاستماع الطويل دون إضعاف وضوح الأصوات</string>
+    <string name="spatial_surround">محيطي</string>
+    <string name="spatial_surround_summary">إشارات أمامية وجانبية وخلفية عبر التموضع ثنائي الأذن والانعكاسات المبكرة</string>
+    <string name="spatial_orbit">مدار</string>
+    <string name="spatial_orbit_summary">مصدر صوت افتراضي يدور ببطء في المستوى الأفقي</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">يدمج مكبّر الصوت القناتين اليسرى واليمنى. يظل هذا الوضع يضيف إحساسًا بالمساحة عبر الصدى والاتساع. تجعل سماعات الرأس الصورة بين اليسار واليمين أوضح.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">سرعة الدوران</string>
+    <string name="orbit_speed_value">%1$.0f ث/دورة</string>
+    <string name="orbit_direction">اتجاه الدوران</string>
+    <string name="orbit_clockwise">مع عقارب الساعة</string>
+    <string name="orbit_counterclockwise">عكس عقارب الساعة</string>
+    <string name="orbit_strength">قوة التأثير</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">المعادل والتوازن</string>
+    <string name="eq_shared_hint">تُطبَّق هذه الإعدادات فورًا وتتطابق مع لوحة الصوت في المشغّل</string>
+    <string name="eq_bass">الجهير (−12 إلى +15 dB)</string>
+    <string name="eq_low">منخفض</string>
+    <string name="eq_mid">متوسط</string>
+    <string name="eq_high">مرتفع</string>
+    <string name="balance">التوازن</string>
+    <string name="balance_left">يسار</string>
+    <string name="balance_right">يمين</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">إعادة الضبط</string>
+    <string name="audio_panel">لوحة الصوت</string>
+    <string name="open_audio_panel">فتح لوحة الصوت</string>
+    <string name="close_audio_panel">إغلاق لوحة الصوت</string>
+    <string name="load_failed">تعذّر التحميل. حاول مرة أخرى لاحقًا.</string>
+    <string name="refresh_updated">تم التحديث</string>
+    <string name="podcast_cached_error">تعذّر تحديث البودكاستات. تُعرض القائمة المحفوظة.</string>
+    <string name="retry_action">إعادة المحاولة</string>
+    <string name="sleep_timer">مؤقّت النوم</string>
+    <string name="alarm_clock">المنبّه</string>
+    <string name="alarm_sheet">مؤقّت النوم والمنبّه</string>
+    <string name="sleep_minutes">%d دقيقة</string>
+    <string name="sleep_custom">دقائق مخصّصة</string>
+    <string name="sleep_custom_hint">الدقائق</string>
+    <string name="sleep_end_episode">نهاية هذه الحلقة</string>
+    <string name="sleep_cancel">إلغاء المؤقّت</string>
+    <string name="sleep_remaining">مؤقّت النوم %1$s</string>
+    <string name="alarm_once">مرة واحدة</string>
+    <string name="alarm_weekdays">أيام العمل</string>
+    <string name="alarm_station">المحطة</string>
+    <string name="alarm_no_station">شغّل محطة أو أضف محطة مفضّلة أولًا</string>
+    <string name="alarm_enable">تشغيل المنبّه</string>
+    <string name="alarm_save">حفظ المنبّه</string>
+    <string name="alarm_saved">تم حفظ المنبّه</string>
+    <string name="alarm_permission">المنبّهات الدقيقة متوقفة، لذا قد يتأخر هذا المنبّه. اسمح بالمنبّهات والتذكيرات لتطبيق Radio Live FM AM.</string>
+    <string name="alarm_permission_action">السماح بالمنبّهات الدقيقة</string>
+    <string name="alarm_stop">إيقاف</string>
+    <string name="alarm_snooze">غفوة</string>
+    <string name="alarm_playing">المنبّه</string>
+    <string name="alarm_failed">تعذّر تشغيل المحطة. يتم تشغيل صوت منبّه بدلًا منها.</string>
+    <string name="alarm_snoozed">غفوة لمدة 10 دقائق</string>
+    <string name="alarm_channel">منبّه الاستيقاظ</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">يتعذّر الاتصال بهذه المحطة</string>
+    <string name="next_station">المحطة التالية</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">فشل التشغيل</string>
+    <string name="catalog_global">عالمي</string>
+    <string name="catalog_scope">الدولة</string>
+    <string name="catalog_scope_search">ابحث عن دولة</string>
+    <string name="catalog_rankings">الترتيب</string>
+    <string name="catalog_rank_votes">الأكثر تصويتًا</string>
+    <string name="catalog_rank_clicks">الأكثر استماعًا</string>
+    <string name="catalog_rank_trend">الرائجة</string>
+    <string name="catalog_section">الفئات</string>
+    <string name="catalog_pop">بوب</string>
+    <string name="catalog_news_talk">أخبار / حوارات</string>
+    <string name="catalog_music">موسيقى</string>
+    <string name="catalog_decades">العقود</string>
+    <string name="catalog_languages">اللغات</string>
+    <string name="catalog_news">أخبار</string>
+    <string name="catalog_talk">حوارات</string>
+    <string name="catalog_sports">رياضة</string>
+    <string name="catalog_religious">ديني</string>
+    <string name="catalog_classical">كلاسيكي</string>
+    <string name="catalog_jazz">جاز</string>
+    <string name="catalog_rock">روك</string>
+    <string name="catalog_electronic">إلكتروني</string>
+    <string name="catalog_hiphop">هيب هوب / R&amp;B</string>
+    <string name="catalog_country_music">كانتري</string>
+    <string name="catalog_lofi">استماع هادئ / Lo-fi</string>
+    <string name="catalog_world_music">موسيقى عالمية</string>
+    <string name="catalog_60s">الستينيات</string>
+    <string name="catalog_70s">السبعينيات</string>
+    <string name="catalog_80s">الثمانينيات</string>
+    <string name="catalog_90s">التسعينيات</string>
+    <string name="catalog_2000s">الألفينيات</string>
+    <string name="catalog_oldies">الأغاني القديمة</string>
+    <string name="catalog_sort_clicks">الأكثر شيوعًا</string>
+    <string name="catalog_sort_votes">الأصوات</string>
+    <string name="catalog_sort_name">الاسم</string>
+    <string name="catalog_quality_all">كل الجودات</string>
+    <string name="catalog_quality_high">128 kbps فأعلى</string>
+    <string name="catalog_language_all">كل اللغات</string>
+    <string name="catalog_other_countries">دول أخرى</string>
+    <string name="catalog_count_plus">المحطات: %d+</string>
+    <string name="catalog_cached_error">تعذّر تحديث الفئات. تُعرض القائمة المحفوظة.</string>
+    <string name="settings_language">اللغة</string>
+    <string name="settings_language_system">لغة النظام</string>
+    <string name="media_volume">مستوى الصوت</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">التشغيل</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">إزالة الإعلانات</string>
+    <string name="remove_ads_summary">شراء لمرة واحدة يوقف إعلانات البانر والقوائم وإعلانات فتح التطبيق.</string>
+    <string name="remove_ads_buy">شراء</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">استعادة الشراء</string>
+    <string name="remove_ads_unavailable">غير متاح مؤقتًا</string>
+    <string name="remove_ads_pending">الشراء قيد المعالجة. ستظل الإعلانات ظاهرة حتى اكتمال الدفع.</string>
+    <string name="remove_ads_thanks">تمت إزالة الإعلانات — شكرًا لدعمك</string>
+    <string name="remove_ads_debug">تصحيح: محاكاة إزالة الإعلانات</string>
+    <string name="remove_ads_debug_summary">لإصدارات التصحيح فقط. يُفترض أن شراء إزالة الإعلانات مملوك.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">المحطات</string>
+    <string name="favorites_section_podcasts">برامج البودكاست</string>
+    <string name="empty_favorite_shows">لا توجد برامج بودكاست مفضّلة بعد. انقر على رمز القلب في أي برنامج لإضافته.</string>
+    <string name="episode_previous">الحلقة السابقة</string>
+    <string name="episode_next">الحلقة التالية</string>
+    <string name="rewind_10">رجوع 10 ثوانٍ</string>
+    <string name="forward_10">تقديم 10 ثوانٍ</string>
+    <string name="seek_position">موضع التشغيل</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>
