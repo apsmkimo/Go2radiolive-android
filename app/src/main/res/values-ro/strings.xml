@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Caută în această listă</string>
+    <string name="refresh">Reîmprospătează</string>
+    <string name="alarm">Alarmă</string>
+    <string name="alarm_coming_soon">Alarma nu este încă disponibilă</string>
+    <string name="tab_local">Local</string>
+    <string name="tab_world">Lume</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcasturi</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Categorii</string>
+    <string name="tab_favorites">Favorite</string>
+    <string name="favorite">Favorit</string>
+    <string name="online_radio">Radio pe internet</string>
+    <string name="retry">Atinge pentru a reîncerca</string>
+    <string name="empty_stations">Niciun post</string>
+    <string name="empty_favorites">Încă nu ai posturi favorite</string>
+    <string name="empty_categories">Nicio categorie</string>
+    <string name="empty_countries">Nicio țară</string>
+    <string name="empty_podcasts">Niciun podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Caută podcasturi</string>
+    <string name="podcast_search_empty">Niciun podcast găsit</string>
+    <string name="podcast_search_failed">Nu s-au putut căuta podcasturi</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Vezi mai mult</string>
+    <string name="episode_show_less">Afișează mai puțin</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Această regiune nu are un clasament de podcasturi, așa că se afișează clasamentele din SUA.</string>
+    <string name="podcast_region">Țară</string>
+    <string name="podcast_region_automatic">Automat (regiunea dispozitivului)</string>
+    <string name="podcast_region_search">Caută țări</string>
+    <string name="podcast_region_device">Regiunea dispozitivului: %1$s</string>
+    <string name="close">Închide</string>
+    <string name="empty_episodes">Niciun episod</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Cele mai noi</string>
+    <string name="episode_sort_oldest">Cele mai vechi</string>
+    <string name="episodes_loading_more">Se încarcă mai multe episoade…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Posturi: %d</string>
+    <string name="no_station_playing">Nu se redă nimic</string>
+    <string name="buffering">Se conectează…</string>
+    <string name="now_playing">Se redă</string>
+    <string name="paused">Întrerupt</string>
+    <string name="tap_station_to_play">Atinge un post pentru a-l asculta</string>
+    <string name="play">Redă</string>
+    <string name="pause">Întrerupe</string>
+    <string name="back">Înapoi</string>
+    <string name="settings">Setări</string>
+    <string name="settings_version_title">Versiune</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Opțiuni de confidențialitate</string>
+    <string name="privacy_options_summary">Gestionează modul în care sunt personalizate reclamele</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Politica de confidențialitate</string>
+    <string name="privacy_policy_summary">Cum gestionează această aplicație informațiile</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_about">Despre</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Reclamă</string>
+    <string name="audio_panel_button">Buton panou audio</string>
+    <string name="audio_panel_button_summary">Afișează un buton pentru panoul audio lângă Redă, în bara playerului</string>
+    <string name="voice_enhancement">Îmbunătățirea vocii</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Amplifică gama vocii și reduce basul înfundat</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Audio spațial 3D</string>
+    <string name="spatial_off">Dezactivat</string>
+    <string name="spatial_off_summary">Dezactivează procesarea spațială și restabilește sunetul original</string>
+    <string name="spatial_natural">3D natural</string>
+    <string name="spatial_natural_summary">Imagine binaurală blândă pentru ascultare îndelungată, fără a estompa vocile</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Repere din față, din lateral și din spate, prin poziționare binaurală și reflexii timpurii</string>
+    <string name="spatial_orbit">Orbită</string>
+    <string name="spatial_orbit_summary">O sursă virtuală se rotește lent în planul orizontal</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Difuzorul amestecă stânga și dreapta. Acest mod adaugă totuși spațiu prin ecouri și lățime. Cu căștile, imaginea stânga-dreapta este mai clară.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Viteză de rotație</string>
+    <string name="orbit_speed_value">%1$.0f s/rotație</string>
+    <string name="orbit_direction">Sens de rotație</string>
+    <string name="orbit_clockwise">În sensul acelor de ceasornic</string>
+    <string name="orbit_counterclockwise">În sens invers acelor de ceasornic</string>
+    <string name="orbit_strength">Intensitatea efectului</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Egalizator și balans</string>
+    <string name="eq_shared_hint">Aceste comenzi se aplică imediat și corespund panoului audio din player</string>
+    <string name="eq_bass">Bas (−12 până la +15 dB)</string>
+    <string name="eq_low">Joase</string>
+    <string name="eq_mid">Medii</string>
+    <string name="eq_high">Înalte</string>
+    <string name="balance">Balans</string>
+    <string name="balance_left">Stânga</string>
+    <string name="balance_right">Dreapta</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Resetează</string>
+    <string name="audio_panel">Panou audio</string>
+    <string name="open_audio_panel">Deschide panoul audio</string>
+    <string name="close_audio_panel">Închide panoul audio</string>
+    <string name="load_failed">Nu s-a putut încărca. Încearcă din nou mai târziu.</string>
+    <string name="refresh_updated">Actualizat</string>
+    <string name="podcast_cached_error">Nu s-au putut actualiza podcasturile. Se afișează lista salvată.</string>
+    <string name="retry_action">Reîncearcă</string>
+    <string name="sleep_timer">Temporizator de oprire</string>
+    <string name="alarm_clock">Alarmă</string>
+    <string name="alarm_sheet">Temporizator de oprire și alarmă</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Minute personalizate</string>
+    <string name="sleep_custom_hint">Minute</string>
+    <string name="sleep_end_episode">La finalul acestui episod</string>
+    <string name="sleep_cancel">Anulează temporizatorul</string>
+    <string name="sleep_remaining">Temporizator de oprire: %1$s</string>
+    <string name="alarm_once">O singură dată</string>
+    <string name="alarm_weekdays">Zile lucrătoare</string>
+    <string name="alarm_station">Post</string>
+    <string name="alarm_no_station">Mai întâi redă un post sau adaugă unul la favorite</string>
+    <string name="alarm_enable">Alarmă activată</string>
+    <string name="alarm_save">Salvează alarma</string>
+    <string name="alarm_saved">Alarmă salvată</string>
+    <string name="alarm_permission">Alarmele exacte sunt dezactivate, așa că această alarmă poate întârzia. Permite alarmele și mementourile pentru Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Permite alarmele exacte</string>
+    <string name="alarm_stop">Oprește</string>
+    <string name="alarm_snooze">Amână</string>
+    <string name="alarm_playing">Alarmă</string>
+    <string name="alarm_failed">Nu s-a putut reda postul. Se redă în schimb un sunet de alarmă.</string>
+    <string name="alarm_snoozed">Amânată cu 10 minute</string>
+    <string name="alarm_channel">Alarmă de trezire</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Nu se poate conecta la acest post</string>
+    <string name="next_station">Postul următor</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Redarea a eșuat</string>
+    <string name="catalog_global">Global</string>
+    <string name="catalog_scope">Țară</string>
+    <string name="catalog_scope_search">Caută țări</string>
+    <string name="catalog_rankings">Clasamente</string>
+    <string name="catalog_rank_votes">Cele mai votate</string>
+    <string name="catalog_rank_clicks">Cele mai ascultate</string>
+    <string name="catalog_rank_trend">În tendințe</string>
+    <string name="catalog_section">Categorii</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Știri / Talk</string>
+    <string name="catalog_music">Muzică</string>
+    <string name="catalog_decades">Decenii</string>
+    <string name="catalog_languages">Limbi</string>
+    <string name="catalog_news">Știri</string>
+    <string name="catalog_talk">Talk</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Religios</string>
+    <string name="catalog_classical">Clasică</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Electronică</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Easy listening / Lo-fi</string>
+    <string name="catalog_world_music">World music</string>
+    <string name="catalog_60s">Anii \'60</string>
+    <string name="catalog_70s">Anii \'70</string>
+    <string name="catalog_80s">Anii \'80</string>
+    <string name="catalog_90s">Anii \'90</string>
+    <string name="catalog_2000s">Anii 2000</string>
+    <string name="catalog_oldies">Muzică veche</string>
+    <string name="catalog_sort_clicks">Populare</string>
+    <string name="catalog_sort_votes">Voturi</string>
+    <string name="catalog_sort_name">Nume</string>
+    <string name="catalog_quality_all">Orice calitate</string>
+    <string name="catalog_quality_high">128 kbps sau mai mult</string>
+    <string name="catalog_language_all">Toate limbile</string>
+    <string name="catalog_other_countries">Alte țări</string>
+    <string name="catalog_count_plus">Posturi: %d+</string>
+    <string name="catalog_cached_error">Nu s-au putut actualiza categoriile. Se afișează lista salvată.</string>
+    <string name="settings_language">Limbă</string>
+    <string name="settings_language_system">Limba sistemului</string>
+    <string name="media_volume">Volum</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Redare</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Elimină reclamele</string>
+    <string name="remove_ads_summary">O achiziție unică dezactivează reclamele banner, din listă și de la deschiderea aplicației.</string>
+    <string name="remove_ads_buy">Cumpără</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Restabilește achiziția</string>
+    <string name="remove_ads_unavailable">Indisponibil temporar</string>
+    <string name="remove_ads_pending">Achiziție în așteptare. Reclamele rămân active până la finalizarea plății.</string>
+    <string name="remove_ads_thanks">Reclame eliminate — îți mulțumim pentru sprijin</string>
+    <string name="remove_ads_debug">Depanare: simulează eliminarea reclamelor</string>
+    <string name="remove_ads_debug_summary">Doar pentru versiunile de depanare. Simulează că achiziția de eliminare a reclamelor este deținută.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Posturi</string>
+    <string name="favorites_section_podcasts">Emisiuni podcast</string>
+    <string name="empty_favorite_shows">Încă nu ai emisiuni podcast favorite. Atinge inima unei emisiuni pentru a o adăuga.</string>
+    <string name="episode_previous">Episodul anterior</string>
+    <string name="episode_next">Episodul următor</string>
+    <string name="rewind_10">Înapoi 10 secunde</string>
+    <string name="forward_10">Înainte 10 secunde</string>
+    <string name="seek_position">Poziția redării</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

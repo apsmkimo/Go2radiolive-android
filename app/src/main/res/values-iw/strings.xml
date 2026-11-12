@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">חיפוש ברשימה</string>
+    <string name="refresh">רענון</string>
+    <string name="alarm">שעון מעורר</string>
+    <string name="alarm_coming_soon">השעון המעורר עדיין לא זמין</string>
+    <string name="tab_local">מקומי</string>
+    <string name="tab_world">עולם</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">פודקאסט</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">קטגוריות</string>
+    <string name="tab_favorites">מועדפים</string>
+    <string name="favorite">מועדף</string>
+    <string name="online_radio">רדיו אינטרנט</string>
+    <string name="retry">יש להקיש כדי לנסות שוב</string>
+    <string name="empty_stations">אין תחנות</string>
+    <string name="empty_favorites">עדיין אין תחנות מועדפות</string>
+    <string name="empty_categories">אין קטגוריות</string>
+    <string name="empty_countries">אין מדינות</string>
+    <string name="empty_podcasts">אין פודקאסטים</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">חיפוש פודקאסטים</string>
+    <string name="podcast_search_empty">אין פודקאסטים תואמים</string>
+    <string name="podcast_search_failed">לא ניתן לחפש פודקאסטים</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">הצגת עוד</string>
+    <string name="episode_show_less">הצגת פחות</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">אין מצעד פודקאסטים לאזור הזה, לכן מוצגים המצעדים של ארה״ב.</string>
+    <string name="podcast_region">מדינה</string>
+    <string name="podcast_region_automatic">אוטומטי (אזור המכשיר)</string>
+    <string name="podcast_region_search">חיפוש מדינות</string>
+    <string name="podcast_region_device">אזור המכשיר: %1$s</string>
+    <string name="close">סגירה</string>
+    <string name="empty_episodes">אין פרקים</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">החדשים ביותר</string>
+    <string name="episode_sort_oldest">הישנים ביותר</string>
+    <string name="episodes_loading_more">טוען עוד פרקים…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">תחנות: %d</string>
+    <string name="no_station_playing">שום דבר לא מתנגן</string>
+    <string name="buffering">מתחבר…</string>
+    <string name="now_playing">מתנגן</string>
+    <string name="paused">מושהה</string>
+    <string name="tap_station_to_play">יש להקיש על תחנה כדי לנגן</string>
+    <string name="play">ניגון</string>
+    <string name="pause">השהיה</string>
+    <string name="back">חזרה</string>
+    <string name="settings">הגדרות</string>
+    <string name="settings_version_title">גרסה</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">אפשרויות פרטיות</string>
+    <string name="privacy_options_summary">ניהול ההתאמה האישית של מודעות</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">מדיניות פרטיות</string>
+    <string name="privacy_policy_summary">איך האפליקציה מטפלת במידע</string>
+    <string name="settings_section_audio">אודיו</string>
+    <string name="settings_section_general">כללי</string>
+    <string name="settings_section_about">מידע</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">מודעה</string>
+    <string name="audio_panel_button">לחצן לוח האודיו</string>
+    <string name="audio_panel_button_summary">הצגת לחצן לוח אודיו ליד לחצן הניגון בסרגל הנגן</string>
+    <string name="voice_enhancement">שיפור קול</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">הגברת טווח הקול והפחתת העמימות בתדרים הנמוכים</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">אודיו מרחבי בתלת־ממד</string>
+    <string name="spatial_off">כבוי</string>
+    <string name="spatial_off_summary">כיבוי העיבוד המרחבי ושחזור האודיו המקורי</string>
+    <string name="spatial_natural">תלת־ממד טבעי</string>
+    <string name="spatial_natural_summary">תמונה בינאורלית עדינה להאזנה ממושכת, בלי לעמעם קולות</string>
+    <string name="spatial_surround">סראונד</string>
+    <string name="spatial_surround_summary">רמזים מלפנים, מהצדדים ומאחור באמצעות מיקום בינאורלי והחזרים מוקדמים</string>
+    <string name="spatial_orbit">מסלול</string>
+    <string name="spatial_orbit_summary">מקור וירטואלי נע לאט סביב המישור האופקי</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">הרמקול ממזג את ימין ושמאל. המצב הזה עדיין מוסיף מרחב באמצעות הדים ורוחב. עם אוזניות ההפרדה בין ימין לשמאל ברורה יותר.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">מהירות סיבוב</string>
+    <string name="orbit_speed_value">%1$.0f שנ׳ לסיבוב</string>
+    <string name="orbit_direction">כיוון סיבוב</string>
+    <string name="orbit_clockwise">עם כיוון השעון</string>
+    <string name="orbit_counterclockwise">נגד כיוון השעון</string>
+    <string name="orbit_strength">עוצמת האפקט</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">אקולייזר ואיזון</string>
+    <string name="eq_shared_hint">הפקדים האלה חלים מיד ותואמים ללוח האודיו של הנגן</string>
+    <string name="eq_bass">בס (‎−12 עד ‎+15 dB)</string>
+    <string name="eq_low">נמוכים</string>
+    <string name="eq_mid">אמצעיים</string>
+    <string name="eq_high">גבוהים</string>
+    <string name="balance">איזון</string>
+    <string name="balance_left">שמאל</string>
+    <string name="balance_right">ימין</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">איפוס</string>
+    <string name="audio_panel">לוח אודיו</string>
+    <string name="open_audio_panel">פתיחת לוח האודיו</string>
+    <string name="close_audio_panel">סגירת לוח האודיו</string>
+    <string name="load_failed">הטעינה נכשלה. אפשר לנסות שוב מאוחר יותר.</string>
+    <string name="refresh_updated">עודכן</string>
+    <string name="podcast_cached_error">לא ניתן לעדכן את הפודקאסטים. מוצגת הרשימה השמורה.</string>
+    <string name="retry_action">ניסיון חוזר</string>
+    <string name="sleep_timer">טיימר שינה</string>
+    <string name="alarm_clock">שעון מעורר</string>
+    <string name="alarm_sheet">טיימר שינה ושעון מעורר</string>
+    <string name="sleep_minutes">%d דק׳</string>
+    <string name="sleep_custom">מספר דקות מותאם אישית</string>
+    <string name="sleep_custom_hint">דקות</string>
+    <string name="sleep_end_episode">סוף הפרק הזה</string>
+    <string name="sleep_cancel">ביטול הטיימר</string>
+    <string name="sleep_remaining">טיימר שינה %1$s</string>
+    <string name="alarm_once">פעם אחת</string>
+    <string name="alarm_weekdays">ימי חול</string>
+    <string name="alarm_station">תחנה</string>
+    <string name="alarm_no_station">קודם יש לנגן תחנה או להוסיף מועדף</string>
+    <string name="alarm_enable">שעון מעורר פועל</string>
+    <string name="alarm_save">שמירת השעון המעורר</string>
+    <string name="alarm_saved">השעון המעורר נשמר</string>
+    <string name="alarm_permission">התראות מדויקות כבויות, ולכן השעון המעורר עלול לאחר. יש לאפשר שעונים מעוררים ותזכורות עבור Radio Live FM AM.</string>
+    <string name="alarm_permission_action">הפעלת התראות מדויקות</string>
+    <string name="alarm_stop">עצירה</string>
+    <string name="alarm_snooze">נודניק</string>
+    <string name="alarm_playing">שעון מעורר</string>
+    <string name="alarm_failed">לא ניתן לנגן את התחנה. מושמע צליל התראה במקום.</string>
+    <string name="alarm_snoozed">נודניק ל־10 דקות</string>
+    <string name="alarm_channel">השכמה</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">לא ניתן להתחבר לתחנה הזו</string>
+    <string name="next_station">התחנה הבאה</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">הניגון נכשל</string>
+    <string name="catalog_global">גלובלי</string>
+    <string name="catalog_scope">מדינה</string>
+    <string name="catalog_scope_search">חיפוש מדינות</string>
+    <string name="catalog_rankings">דירוגים</string>
+    <string name="catalog_rank_votes">הכי הרבה הצבעות</string>
+    <string name="catalog_rank_clicks">הכי מושמעות</string>
+    <string name="catalog_rank_trend">פופולריות עכשיו</string>
+    <string name="catalog_section">קטגוריות</string>
+    <string name="catalog_pop">פופ</string>
+    <string name="catalog_news_talk">חדשות / שיחות</string>
+    <string name="catalog_music">מוזיקה</string>
+    <string name="catalog_decades">עשורים</string>
+    <string name="catalog_languages">שפות</string>
+    <string name="catalog_news">חדשות</string>
+    <string name="catalog_talk">שיחות</string>
+    <string name="catalog_sports">ספורט</string>
+    <string name="catalog_religious">דת</string>
+    <string name="catalog_classical">קלאסית</string>
+    <string name="catalog_jazz">ג׳אז</string>
+    <string name="catalog_rock">רוק</string>
+    <string name="catalog_electronic">אלקטרונית</string>
+    <string name="catalog_hiphop">היפ־הופ / R&amp;B</string>
+    <string name="catalog_country_music">קאנטרי</string>
+    <string name="catalog_lofi">האזנה קלה / Lo-fi</string>
+    <string name="catalog_world_music">מוזיקת עולם</string>
+    <string name="catalog_60s">שנות ה־60</string>
+    <string name="catalog_70s">שנות ה־70</string>
+    <string name="catalog_80s">שנות ה־80</string>
+    <string name="catalog_90s">שנות ה־90</string>
+    <string name="catalog_2000s">שנות ה־2000</string>
+    <string name="catalog_oldies">נוסטלגיה</string>
+    <string name="catalog_sort_clicks">פופולרי</string>
+    <string name="catalog_sort_votes">הצבעות</string>
+    <string name="catalog_sort_name">שם</string>
+    <string name="catalog_quality_all">כל איכויות האודיו</string>
+    <string name="catalog_quality_high">מ־128 kbps ומעלה</string>
+    <string name="catalog_language_all">כל השפות</string>
+    <string name="catalog_other_countries">מדינות אחרות</string>
+    <string name="catalog_count_plus">תחנות: %d+</string>
+    <string name="catalog_cached_error">לא ניתן לעדכן את הקטגוריות. מוצגת הרשימה השמורה.</string>
+    <string name="settings_language">שפה</string>
+    <string name="settings_language_system">לפי המערכת</string>
+    <string name="media_volume">עוצמת קול</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">ניגון</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">הסרת מודעות</string>
+    <string name="remove_ads_summary">רכישה חד־פעמית מכבה את מודעות הבאנר, המודעות ברשימות והמודעות בפתיחת האפליקציה.</string>
+    <string name="remove_ads_buy">קנייה</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">שחזור רכישה</string>
+    <string name="remove_ads_unavailable">לא זמין באופן זמני</string>
+    <string name="remove_ads_pending">הרכישה בהמתנה. המודעות יוצגו עד להשלמת התשלום.</string>
+    <string name="remove_ads_thanks">המודעות הוסרו — תודה על התמיכה</string>
+    <string name="remove_ads_debug">ניפוי באגים: הדמיית הסרת מודעות</string>
+    <string name="remove_ads_debug_summary">בגרסאות ניפוי באגים בלבד. מדמה בעלות על רכישת הסרת המודעות.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">תחנות</string>
+    <string name="favorites_section_podcasts">תוכניות פודקאסט</string>
+    <string name="empty_favorite_shows">עדיין אין תוכניות פודקאסט מועדפות. יש להקיש על הלב בתוכנית כדי להוסיף אותה.</string>
+    <string name="episode_previous">הפרק הקודם</string>
+    <string name="episode_next">הפרק הבא</string>
+    <string name="rewind_10">10 שניות אחורה</string>
+    <string name="forward_10">10 שניות קדימה</string>
+    <string name="seek_position">מיקום הניגון</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

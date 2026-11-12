@@ -34,6 +34,18 @@ internal object AppLanguage {
     const val BENGALI = "bn"
     const val PERSIAN = "fa"
     // SMCPKG_SUPPORT<<<Cursor127
+    // SMCPKG_SUPPORT>>>Cursor128
+    const val PORTUGUESE_PT = "pt-PT"
+    const val ROMANIAN = "ro"
+    const val CZECH = "cs"
+    const val GREEK = "el"
+    const val HUNGARIAN = "hu"
+    const val SWEDISH = "sv"
+    const val HEBREW = "he"
+    const val DANISH = "da"
+    const val NORWEGIAN = "nb"
+    const val FINNISH = "fi"
+    // SMCPKG_SUPPORT<<<Cursor128
 
     // SMCPKG_SUPPORT>>>Cursor126
     // val tags: List<String> = listOf(SYSTEM, ENGLISH, TRADITIONAL, SIMPLIFIED, JAPANESE)
@@ -65,6 +77,18 @@ internal object AppLanguage {
         BENGALI,
         PERSIAN,
         // SMCPKG_SUPPORT<<<Cursor127
+        // SMCPKG_SUPPORT>>>Cursor128
+        PORTUGUESE_PT,
+        ROMANIAN,
+        CZECH,
+        GREEK,
+        HUNGARIAN,
+        SWEDISH,
+        HEBREW,
+        DANISH,
+        NORWEGIAN,
+        FINNISH,
+        // SMCPKG_SUPPORT<<<Cursor128
     )
 
     /** Each language's own name, so a user can find it whatever the current UI language is. */
@@ -95,6 +119,18 @@ internal object AppLanguage {
         BENGALI -> "বাংলা"
         PERSIAN -> "فارسی"
         // SMCPKG_SUPPORT<<<Cursor127
+        // SMCPKG_SUPPORT>>>Cursor128
+        PORTUGUESE_PT -> "Português (Portugal)"
+        ROMANIAN -> "Română"
+        CZECH -> "Čeština"
+        GREEK -> "Ελληνικά"
+        HUNGARIAN -> "Magyar"
+        SWEDISH -> "Svenska"
+        HEBREW -> "עברית"
+        DANISH -> "Dansk"
+        NORWEGIAN -> "Norsk bokmål"
+        FINNISH -> "Suomi"
+        // SMCPKG_SUPPORT<<<Cursor128
         else -> tag
     }
     // SMCPKG_SUPPORT<<<Cursor126
@@ -112,6 +148,9 @@ internal object AppLanguage {
             lang == "zh" -> SIMPLIFIED
             // SMCPKG_SUPPORT>>>Cursor126
             lang == "es" -> SPANISH
+            // SMCPKG_SUPPORT>>>Cursor128
+            lang == "pt" && region == "PT" -> PORTUGUESE_PT
+            // SMCPKG_SUPPORT<<<Cursor128
             lang == "pt" -> PORTUGUESE_BR
             lang == "fr" -> FRENCH
             lang == "de" -> GERMAN
@@ -136,6 +175,19 @@ internal object AppLanguage {
             // Filipino may be reported as "fil" or the older "tl".
             lang == "fil" || lang == "tl" -> FILIPINO
             // SMCPKG_SUPPORT<<<Cursor127
+            // SMCPKG_SUPPORT>>>Cursor128
+            lang == "ro" -> ROMANIAN
+            lang == "cs" -> CZECH
+            lang == "el" -> GREEK
+            lang == "hu" -> HUNGARIAN
+            lang == "sv" -> SWEDISH
+            // Android reports Hebrew with the legacy code "iw".
+            lang == "he" || lang == "iw" -> HEBREW
+            lang == "da" -> DANISH
+            // Norwegian may come as "nb" or the generic "no".
+            lang == "nb" || lang == "no" -> NORWEGIAN
+            lang == "fi" -> FINNISH
+            // SMCPKG_SUPPORT<<<Cursor128
             else -> SYSTEM
         }
     }

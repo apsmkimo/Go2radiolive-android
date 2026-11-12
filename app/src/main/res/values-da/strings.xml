@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Søg i listen</string>
+    <string name="refresh">Opdater</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_coming_soon">Alarm er ikke tilgængelig endnu</string>
+    <string name="tab_local">Lokalt</string>
+    <string name="tab_world">Verden</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategorier</string>
+    <string name="tab_favorites">Favoritter</string>
+    <string name="favorite">Favorit</string>
+    <string name="online_radio">Netradio</string>
+    <string name="retry">Tryk for at prøve igen</string>
+    <string name="empty_stations">Ingen stationer</string>
+    <string name="empty_favorites">Ingen favoritstationer endnu</string>
+    <string name="empty_categories">Ingen kategorier</string>
+    <string name="empty_countries">Ingen lande</string>
+    <string name="empty_podcasts">Ingen podcasts</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Søg efter podcasts</string>
+    <string name="podcast_search_empty">Ingen matchende podcasts</string>
+    <string name="podcast_search_failed">Kunne ikke søge efter podcasts</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Se mere</string>
+    <string name="episode_show_less">Vis mindre</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Denne region har ingen podcasthitliste, så amerikanske hitlister vises.</string>
+    <string name="podcast_region">Land</string>
+    <string name="podcast_region_automatic">Automatisk (enhedens region)</string>
+    <string name="podcast_region_search">Søg efter lande</string>
+    <string name="podcast_region_device">Enhedens region: %1$s</string>
+    <string name="close">Luk</string>
+    <string name="empty_episodes">Ingen afsnit</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Nyeste</string>
+    <string name="episode_sort_oldest">Ældste</string>
+    <string name="episodes_loading_more">Indlæser flere afsnit…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Stationer: %d</string>
+    <string name="no_station_playing">Intet afspilles</string>
+    <string name="buffering">Opretter forbindelse…</string>
+    <string name="now_playing">Afspiller</string>
+    <string name="paused">Sat på pause</string>
+    <string name="tap_station_to_play">Tryk på en station for at afspille</string>
+    <string name="play">Afspil</string>
+    <string name="pause">Pause</string>
+    <string name="back">Tilbage</string>
+    <string name="settings">Indstillinger</string>
+    <string name="settings_version_title">Version</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Privatlivsindstillinger</string>
+    <string name="privacy_options_summary">Administrer, hvordan annoncer tilpasses</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Privatlivspolitik</string>
+    <string name="privacy_policy_summary">Sådan håndterer appen oplysninger</string>
+    <string name="settings_section_audio">Lyd</string>
+    <string name="settings_section_general">Generelt</string>
+    <string name="settings_section_about">Om</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Annonce</string>
+    <string name="audio_panel_button">Knap til lydpanel</string>
+    <string name="audio_panel_button_summary">Vis en knap til lydpanelet ved siden af Afspil i afspillerlinjen</string>
+    <string name="voice_enhancement">Stemmeforbedring</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Fremhæv stemmeområdet, og reducer mudret bas</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D-rumlyd</string>
+    <string name="spatial_off">Fra</string>
+    <string name="spatial_off_summary">Slå rumlig behandling fra, og gendan den originale lyd</string>
+    <string name="spatial_natural">Naturlig 3D</string>
+    <string name="spatial_natural_summary">Blidt binauralt lydbillede til lang lytning uden at sløre stemmer</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Lyd forfra, fra siden og bagfra via binaural placering og tidlige refleksioner</string>
+    <string name="spatial_orbit">Kredsløb</string>
+    <string name="spatial_orbit_summary">En virtuel lydkilde bevæger sig langsomt rundt i det vandrette plan</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Højttaleren blander venstre og højre. Denne tilstand tilføjer stadig rumfølelse med ekko og bredde. Med hovedtelefoner bliver adskillelsen mellem venstre og højre tydeligere.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Rotationshastighed</string>
+    <string name="orbit_speed_value">%1$.0f sek./omgang</string>
+    <string name="orbit_direction">Rotationsretning</string>
+    <string name="orbit_clockwise">Med uret</string>
+    <string name="orbit_counterclockwise">Mod uret</string>
+    <string name="orbit_strength">Effektstyrke</string>
+    <string name="orbit_strength_value">%1$.0f %%</string>
+    <string name="eq_section">Equalizer og balance</string>
+    <string name="eq_shared_hint">Disse indstillinger træder i kraft med det samme og svarer til afspillerens lydpanel</string>
+    <string name="eq_bass">Bas (−12 til +15 dB)</string>
+    <string name="eq_low">Lav</string>
+    <string name="eq_mid">Mellem</string>
+    <string name="eq_high">Høj</string>
+    <string name="balance">Balance</string>
+    <string name="balance_left">Venstre</string>
+    <string name="balance_right">Højre</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Nulstil</string>
+    <string name="audio_panel">Lydpanel</string>
+    <string name="open_audio_panel">Åbn lydpanel</string>
+    <string name="close_audio_panel">Luk lydpanel</string>
+    <string name="load_failed">Kunne ikke indlæse. Prøv igen senere.</string>
+    <string name="refresh_updated">Opdateret</string>
+    <string name="podcast_cached_error">Kunne ikke opdatere podcasts. Viser den gemte liste.</string>
+    <string name="retry_action">Prøv igen</string>
+    <string name="sleep_timer">Sovetimer</string>
+    <string name="alarm_clock">Alarm</string>
+    <string name="alarm_sheet">Sovetimer og alarm</string>
+    <string name="sleep_minutes">%d min.</string>
+    <string name="sleep_custom">Brugerdefinerede minutter</string>
+    <string name="sleep_custom_hint">Minutter</string>
+    <string name="sleep_end_episode">Når afsnittet slutter</string>
+    <string name="sleep_cancel">Annuller timer</string>
+    <string name="sleep_remaining">Sovetimer %1$s</string>
+    <string name="alarm_once">Én gang</string>
+    <string name="alarm_weekdays">Hverdage</string>
+    <string name="alarm_station">Station</string>
+    <string name="alarm_no_station">Afspil en station, eller tilføj en favorit først</string>
+    <string name="alarm_enable">Alarm til</string>
+    <string name="alarm_save">Gem alarm</string>
+    <string name="alarm_saved">Alarmen er gemt</string>
+    <string name="alarm_permission">Præcise alarmer er slået fra, så alarmen kan komme for sent. Tillad alarmer og påmindelser for Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Tillad præcise alarmer</string>
+    <string name="alarm_stop">Stop</string>
+    <string name="alarm_snooze">Udsæt</string>
+    <string name="alarm_playing">Alarm</string>
+    <string name="alarm_failed">Kunne ikke afspille stationen. Afspiller en alarmlyd i stedet.</string>
+    <string name="alarm_snoozed">Udsat i 10 minutter</string>
+    <string name="alarm_channel">Vækkealarm</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Kan ikke oprette forbindelse til stationen</string>
+    <string name="next_station">Næste station</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Afspilningen mislykkedes</string>
+    <string name="catalog_global">Globalt</string>
+    <string name="catalog_scope">Land</string>
+    <string name="catalog_scope_search">Søg efter lande</string>
+    <string name="catalog_rankings">Ranglister</string>
+    <string name="catalog_rank_votes">Flest stemmer</string>
+    <string name="catalog_rank_clicks">Mest lyttet</string>
+    <string name="catalog_rank_trend">Populært lige nu</string>
+    <string name="catalog_section">Kategorier</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Nyheder / Snak</string>
+    <string name="catalog_music">Musik</string>
+    <string name="catalog_decades">Årtier</string>
+    <string name="catalog_languages">Sprog</string>
+    <string name="catalog_news">Nyheder</string>
+    <string name="catalog_talk">Snak</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Religion</string>
+    <string name="catalog_classical">Klassisk</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronisk</string>
+    <string name="catalog_hiphop">Hiphop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Easy listening / Lo-fi</string>
+    <string name="catalog_world_music">Verdensmusik</string>
+    <string name="catalog_60s">60\'erne</string>
+    <string name="catalog_70s">70\'erne</string>
+    <string name="catalog_80s">80\'erne</string>
+    <string name="catalog_90s">90\'erne</string>
+    <string name="catalog_2000s">2000\'erne</string>
+    <string name="catalog_oldies">Oldies</string>
+    <string name="catalog_sort_clicks">Populære</string>
+    <string name="catalog_sort_votes">Stemmer</string>
+    <string name="catalog_sort_name">Navn</string>
+    <string name="catalog_quality_all">Alle kvaliteter</string>
+    <string name="catalog_quality_high">128 kbps og derover</string>
+    <string name="catalog_language_all">Alle sprog</string>
+    <string name="catalog_other_countries">Andre lande</string>
+    <string name="catalog_count_plus">Stationer: %d+</string>
+    <string name="catalog_cached_error">Kunne ikke opdatere kategorier. Viser den gemte liste.</string>
+    <string name="settings_language">Sprog</string>
+    <string name="settings_language_system">Følg systemet</string>
+    <string name="media_volume">Lydstyrke</string>
+    <string name="volume_percent">%1$d %%</string>
+    <string name="playback_channel">Afspilning</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Fjern annoncer</string>
+    <string name="remove_ads_summary">Et engangskøb slår banner-, liste- og app-åbningsannoncer fra.</string>
+    <string name="remove_ads_buy">Køb</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Gendan køb</string>
+    <string name="remove_ads_unavailable">Midlertidigt utilgængelig</string>
+    <string name="remove_ads_pending">Købet afventer. Annoncerne vises, indtil betalingen er gennemført.</string>
+    <string name="remove_ads_thanks">Annoncerne er fjernet – tak for din støtte</string>
+    <string name="remove_ads_debug">Debug: simuler fjernede annoncer</string>
+    <string name="remove_ads_debug_summary">Kun til debug-builds. Lader som om købet af annoncefjernelse er ejet.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Stationer</string>
+    <string name="favorites_section_podcasts">Podcastprogrammer</string>
+    <string name="empty_favorite_shows">Ingen favoritpodcasts endnu. Tryk på hjertet ved et program for at tilføje det.</string>
+    <string name="episode_previous">Forrige afsnit</string>
+    <string name="episode_next">Næste afsnit</string>
+    <string name="rewind_10">10 sekunder tilbage</string>
+    <string name="forward_10">10 sekunder frem</string>
+    <string name="seek_position">Afspilningsposition</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

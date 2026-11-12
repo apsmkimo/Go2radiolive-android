@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Hae tästä luettelosta</string>
+    <string name="refresh">Päivitä</string>
+    <string name="alarm">Herätys</string>
+    <string name="alarm_coming_soon">Herätys ei ole vielä käytettävissä</string>
+    <string name="tab_local">Paikalliset</string>
+    <string name="tab_world">Maailma</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcastit</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategoriat</string>
+    <string name="tab_favorites">Suosikit</string>
+    <string name="favorite">Suosikki</string>
+    <string name="online_radio">Nettiradio</string>
+    <string name="retry">Yritä uudelleen napauttamalla</string>
+    <string name="empty_stations">Ei asemia</string>
+    <string name="empty_favorites">Ei vielä suosikkiasemia</string>
+    <string name="empty_categories">Ei kategorioita</string>
+    <string name="empty_countries">Ei maita</string>
+    <string name="empty_podcasts">Ei podcasteja</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Hae podcasteja</string>
+    <string name="podcast_search_empty">Ei vastaavia podcasteja</string>
+    <string name="podcast_search_failed">Podcastien haku epäonnistui</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Näytä lisää</string>
+    <string name="episode_show_less">Näytä vähemmän</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Tällä alueella ei ole podcastlistaa, joten näytetään Yhdysvaltain listat.</string>
+    <string name="podcast_region">Maa</string>
+    <string name="podcast_region_automatic">Automaattinen (laitteen alue)</string>
+    <string name="podcast_region_search">Hae maita</string>
+    <string name="podcast_region_device">Laitteen alue: %1$s</string>
+    <string name="close">Sulje</string>
+    <string name="empty_episodes">Ei jaksoja</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Uusimmat</string>
+    <string name="episode_sort_oldest">Vanhimmat</string>
+    <string name="episodes_loading_more">Ladataan lisää jaksoja…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Asemia: %d</string>
+    <string name="no_station_playing">Mitään ei toisteta</string>
+    <string name="buffering">Yhdistetään…</string>
+    <string name="now_playing">Toistetaan</string>
+    <string name="paused">Keskeytetty</string>
+    <string name="tap_station_to_play">Toista asema napauttamalla sitä</string>
+    <string name="play">Toista</string>
+    <string name="pause">Tauko</string>
+    <string name="back">Takaisin</string>
+    <string name="settings">Asetukset</string>
+    <string name="settings_version_title">Versio</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Tietosuoja-asetukset</string>
+    <string name="privacy_options_summary">Hallitse mainosten personointia</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Tietosuojakäytäntö</string>
+    <string name="privacy_policy_summary">Miten tämä sovellus käsittelee tietoja</string>
+    <string name="settings_section_audio">Ääni</string>
+    <string name="settings_section_general">Yleiset</string>
+    <string name="settings_section_about">Tietoja</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Mainos</string>
+    <string name="audio_panel_button">Äänipaneelin painike</string>
+    <string name="audio_panel_button_summary">Näytä äänipaneelin painike toistopainikkeen vieressä soitinpalkissa</string>
+    <string name="voice_enhancement">Puheen korostus</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Korosta puhealuetta ja vähennä bassojen puuroutumista</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D-tilaääni</string>
+    <string name="spatial_off">Pois</string>
+    <string name="spatial_off_summary">Poista tilaäänikäsittely käytöstä ja palauta alkuperäinen ääni</string>
+    <string name="spatial_natural">Luonnollinen 3D</string>
+    <string name="spatial_natural_summary">Pehmeä binauraalinen äänikuva pitkään kuunteluun vaimentamatta puhetta</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Suuntavihjeitä edestä, sivuilta ja takaa binauraalisen sijoittelun ja varhaisten heijastusten avulla</string>
+    <string name="spatial_orbit">Kierto</string>
+    <string name="spatial_orbit_summary">Virtuaalinen äänilähde kiertää hitaasti vaakatasossa</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Kaiutin sekoittaa vasemman ja oikean kanavan. Tämä tila lisää silti tilan tuntua kaiuilla ja leveydellä. Kuulokkeilla vasen–oikea-äänikuva on selkeämpi.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Kiertonopeus</string>
+    <string name="orbit_speed_value">%1$.0f s/kierros</string>
+    <string name="orbit_direction">Kiertosuunta</string>
+    <string name="orbit_clockwise">Myötäpäivään</string>
+    <string name="orbit_counterclockwise">Vastapäivään</string>
+    <string name="orbit_strength">Tehosteen voimakkuus</string>
+    <string name="orbit_strength_value">%1$.0f %%</string>
+    <string name="eq_section">Taajuuskorjain ja tasapaino</string>
+    <string name="eq_shared_hint">Nämä säätimet tulevat voimaan heti ja vastaavat soittimen äänipaneelia</string>
+    <string name="eq_bass">Basso (−12…+15 dB)</string>
+    <string name="eq_low">Matala</string>
+    <string name="eq_mid">Keski</string>
+    <string name="eq_high">Korkea</string>
+    <string name="balance">Tasapaino</string>
+    <string name="balance_left">Vasen</string>
+    <string name="balance_right">Oikea</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Palauta</string>
+    <string name="audio_panel">Äänipaneeli</string>
+    <string name="open_audio_panel">Avaa äänipaneeli</string>
+    <string name="close_audio_panel">Sulje äänipaneeli</string>
+    <string name="load_failed">Lataus epäonnistui. Yritä myöhemmin uudelleen.</string>
+    <string name="refresh_updated">Päivitetty</string>
+    <string name="podcast_cached_error">Podcastien päivitys epäonnistui. Näytetään tallennettu luettelo.</string>
+    <string name="retry_action">Yritä uudelleen</string>
+    <string name="sleep_timer">Uniajastin</string>
+    <string name="alarm_clock">Herätys</string>
+    <string name="alarm_sheet">Uniajastin ja herätys</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Oma minuuttimäärä</string>
+    <string name="sleep_custom_hint">Minuutit</string>
+    <string name="sleep_end_episode">Tämän jakson loppuun</string>
+    <string name="sleep_cancel">Peruuta ajastin</string>
+    <string name="sleep_remaining">Uniajastin %1$s</string>
+    <string name="alarm_once">Kerran</string>
+    <string name="alarm_weekdays">Arkipäivät</string>
+    <string name="alarm_station">Asema</string>
+    <string name="alarm_no_station">Toista ensin asema tai lisää suosikki</string>
+    <string name="alarm_enable">Herätys käytössä</string>
+    <string name="alarm_save">Tallenna herätys</string>
+    <string name="alarm_saved">Herätys tallennettu</string>
+    <string name="alarm_permission">Tarkat hälytykset ovat pois päältä, joten tämä herätys voi myöhästyä. Salli hälytykset ja muistutukset sovellukselle Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Salli tarkat hälytykset</string>
+    <string name="alarm_stop">Lopeta</string>
+    <string name="alarm_snooze">Torkku</string>
+    <string name="alarm_playing">Herätys</string>
+    <string name="alarm_failed">Aseman toisto epäonnistui. Toistetaan herätysääni sen sijaan.</string>
+    <string name="alarm_snoozed">Torkku 10 minuuttia</string>
+    <string name="alarm_channel">Herätyshälytys</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Asemaan ei saada yhteyttä</string>
+    <string name="next_station">Seuraava asema</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Toisto epäonnistui</string>
+    <string name="catalog_global">Maailmanlaajuinen</string>
+    <string name="catalog_scope">Maa</string>
+    <string name="catalog_scope_search">Hae maita</string>
+    <string name="catalog_rankings">Listat</string>
+    <string name="catalog_rank_votes">Eniten ääniä</string>
+    <string name="catalog_rank_clicks">Kuunnelluimmat</string>
+    <string name="catalog_rank_trend">Nousussa</string>
+    <string name="catalog_section">Kategoriat</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Uutiset / puhe</string>
+    <string name="catalog_music">Musiikki</string>
+    <string name="catalog_decades">Vuosikymmenet</string>
+    <string name="catalog_languages">Kielet</string>
+    <string name="catalog_news">Uutiset</string>
+    <string name="catalog_talk">Puhe</string>
+    <string name="catalog_sports">Urheilu</string>
+    <string name="catalog_religious">Uskonnolliset</string>
+    <string name="catalog_classical">Klassinen</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektroninen</string>
+    <string name="catalog_hiphop">Hiphop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Kevyt musiikki / Lo-fi</string>
+    <string name="catalog_world_music">Maailmanmusiikki</string>
+    <string name="catalog_60s">60-luku</string>
+    <string name="catalog_70s">70-luku</string>
+    <string name="catalog_80s">80-luku</string>
+    <string name="catalog_90s">90-luku</string>
+    <string name="catalog_2000s">2000-luku</string>
+    <string name="catalog_oldies">Vanhat hitit</string>
+    <string name="catalog_sort_clicks">Suositut</string>
+    <string name="catalog_sort_votes">Äänet</string>
+    <string name="catalog_sort_name">Nimi</string>
+    <string name="catalog_quality_all">Kaikki laadut</string>
+    <string name="catalog_quality_high">128 kbps tai enemmän</string>
+    <string name="catalog_language_all">Kaikki kielet</string>
+    <string name="catalog_other_countries">Muut maat</string>
+    <string name="catalog_count_plus">Asemia: %d+</string>
+    <string name="catalog_cached_error">Kategorioiden päivitys epäonnistui. Näytetään tallennettu luettelo.</string>
+    <string name="settings_language">Kieli</string>
+    <string name="settings_language_system">Järjestelmän kieli</string>
+    <string name="media_volume">Äänenvoimakkuus</string>
+    <string name="volume_percent">%1$d %%</string>
+    <string name="playback_channel">Toisto</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Poista mainokset</string>
+    <string name="remove_ads_summary">Kertaostos poistaa banneri-, luettelo- ja avausmainokset.</string>
+    <string name="remove_ads_buy">Osta</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Palauta ostos</string>
+    <string name="remove_ads_unavailable">Tilapäisesti poissa käytöstä</string>
+    <string name="remove_ads_pending">Ostos odottaa. Mainokset näkyvät, kunnes maksu on valmis.</string>
+    <string name="remove_ads_thanks">Mainokset poistettu — kiitos tuestasi</string>
+    <string name="remove_ads_debug">Virheenkorjaus: simuloi mainosten poisto</string>
+    <string name="remove_ads_debug_summary">Vain virheenkorjausversioissa. Toimii kuin mainosten poisto olisi ostettu.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Asemat</string>
+    <string name="favorites_section_podcasts">Podcast-sarjat</string>
+    <string name="empty_favorite_shows">Ei vielä suosikkipodcasteja. Lisää sarja napauttamalla sen sydäntä.</string>
+    <string name="episode_previous">Edellinen jakso</string>
+    <string name="episode_next">Seuraava jakso</string>
+    <string name="rewind_10">10 sekuntia taaksepäin</string>
+    <string name="forward_10">10 sekuntia eteenpäin</string>
+    <string name="seek_position">Toistokohta</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

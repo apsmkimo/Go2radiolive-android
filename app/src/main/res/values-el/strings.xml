@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Αναζήτηση στη λίστα</string>
+    <string name="refresh">Ανανέωση</string>
+    <string name="alarm">Ξυπνητήρι</string>
+    <string name="alarm_coming_soon">Το ξυπνητήρι δεν είναι ακόμη διαθέσιμο</string>
+    <string name="tab_local">Τοπικά</string>
+    <string name="tab_world">Κόσμος</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Κατηγορίες</string>
+    <string name="tab_favorites">Αγαπημένα</string>
+    <string name="favorite">Αγαπημένο</string>
+    <string name="online_radio">Διαδικτυακό ραδιόφωνο</string>
+    <string name="retry">Πατήστε για επανάληψη</string>
+    <string name="empty_stations">Δεν υπάρχουν σταθμοί</string>
+    <string name="empty_favorites">Δεν υπάρχουν ακόμη αγαπημένοι σταθμοί</string>
+    <string name="empty_categories">Δεν υπάρχουν κατηγορίες</string>
+    <string name="empty_countries">Δεν υπάρχουν χώρες</string>
+    <string name="empty_podcasts">Δεν υπάρχουν podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Αναζήτηση podcast</string>
+    <string name="podcast_search_empty">Δεν βρέθηκαν podcast</string>
+    <string name="podcast_search_failed">Δεν ήταν δυνατή η αναζήτηση podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Περισσότερα</string>
+    <string name="episode_show_less">Λιγότερα</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Αυτή η περιοχή δεν έχει λίστα κορυφαίων podcast, οπότε εμφανίζονται οι λίστες των ΗΠΑ.</string>
+    <string name="podcast_region">Χώρα</string>
+    <string name="podcast_region_automatic">Αυτόματα (περιοχή συσκευής)</string>
+    <string name="podcast_region_search">Αναζήτηση χωρών</string>
+    <string name="podcast_region_device">Περιοχή συσκευής: %1$s</string>
+    <string name="close">Κλείσιμο</string>
+    <string name="empty_episodes">Δεν υπάρχουν επεισόδια</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Νεότερα</string>
+    <string name="episode_sort_oldest">Παλαιότερα</string>
+    <string name="episodes_loading_more">Φόρτωση περισσότερων επεισοδίων…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Σταθμοί: %d</string>
+    <string name="no_station_playing">Δεν παίζει τίποτα</string>
+    <string name="buffering">Σύνδεση…</string>
+    <string name="now_playing">Αναπαραγωγή</string>
+    <string name="paused">Σε παύση</string>
+    <string name="tap_station_to_play">Πατήστε έναν σταθμό για αναπαραγωγή</string>
+    <string name="play">Αναπαραγωγή</string>
+    <string name="pause">Παύση</string>
+    <string name="back">Πίσω</string>
+    <string name="settings">Ρυθμίσεις</string>
+    <string name="settings_version_title">Έκδοση</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Επιλογές απορρήτου</string>
+    <string name="privacy_options_summary">Διαχείριση εξατομίκευσης διαφημίσεων</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Πολιτική απορρήτου</string>
+    <string name="privacy_policy_summary">Πώς χειρίζεται η εφαρμογή τις πληροφορίες</string>
+    <string name="settings_section_audio">Ήχος</string>
+    <string name="settings_section_general">Γενικά</string>
+    <string name="settings_section_about">Πληροφορίες</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Διαφήμιση</string>
+    <string name="audio_panel_button">Κουμπί πίνακα ήχου</string>
+    <string name="audio_panel_button_summary">Εμφάνιση κουμπιού πίνακα ήχου δίπλα στην αναπαραγωγή στη γραμμή του player</string>
+    <string name="voice_enhancement">Βελτίωση φωνής</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Ενισχύει το εύρος της φωνής και μειώνει τη θολότητα στα χαμηλά</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Τρισδιάστατος χωρικός ήχος</string>
+    <string name="spatial_off">Απενεργοποίηση</string>
+    <string name="spatial_off_summary">Απενεργοποιεί τη χωρική επεξεργασία και επαναφέρει τον αρχικό ήχο</string>
+    <string name="spatial_natural">Φυσικό 3D</string>
+    <string name="spatial_natural_summary">Απαλή binaural εικόνα για πολύωρη ακρόαση, χωρίς να θαμπώνει τις φωνές</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Αίσθηση μπροστά, στο πλάι και πίσω με binaural τοποθέτηση και πρώιμες ανακλάσεις</string>
+    <string name="spatial_orbit">Τροχιά</string>
+    <string name="spatial_orbit_summary">Μια εικονική πηγή κινείται αργά γύρω στο οριζόντιο επίπεδο</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Το ηχείο αναμιγνύει αριστερό και δεξί κανάλι. Αυτή η λειτουργία προσθέτει και πάλι χώρο με αντηχήσεις και εύρος. Με ακουστικά η στερεοφωνική εικόνα είναι πιο καθαρή.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Ταχύτητα περιστροφής</string>
+    <string name="orbit_speed_value">%1$.0f δευτ./περιστροφή</string>
+    <string name="orbit_direction">Κατεύθυνση περιστροφής</string>
+    <string name="orbit_clockwise">Δεξιόστροφα</string>
+    <string name="orbit_counterclockwise">Αριστερόστροφα</string>
+    <string name="orbit_strength">Ένταση εφέ</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Ισοσταθμιστής και ισορροπία</string>
+    <string name="eq_shared_hint">Οι ρυθμίσεις εφαρμόζονται αμέσως και ταυτίζονται με τον πίνακα ήχου του player</string>
+    <string name="eq_bass">Μπάσα (−12 έως +15 dB)</string>
+    <string name="eq_low">Χαμηλά</string>
+    <string name="eq_mid">Μεσαία</string>
+    <string name="eq_high">Υψηλά</string>
+    <string name="balance">Ισορροπία</string>
+    <string name="balance_left">Αριστερά</string>
+    <string name="balance_right">Δεξιά</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Επαναφορά</string>
+    <string name="audio_panel">Πίνακας ήχου</string>
+    <string name="open_audio_panel">Άνοιγμα πίνακα ήχου</string>
+    <string name="close_audio_panel">Κλείσιμο πίνακα ήχου</string>
+    <string name="load_failed">Η φόρτωση απέτυχε. Δοκιμάστε ξανά αργότερα.</string>
+    <string name="refresh_updated">Ενημερώθηκε</string>
+    <string name="podcast_cached_error">Δεν ήταν δυνατή η ενημέρωση των podcast. Εμφανίζεται η αποθηκευμένη λίστα.</string>
+    <string name="retry_action">Επανάληψη</string>
+    <string name="sleep_timer">Χρονοδιακόπτης ύπνου</string>
+    <string name="alarm_clock">Ξυπνητήρι</string>
+    <string name="alarm_sheet">Χρονοδιακόπτης ύπνου και ξυπνητήρι</string>
+    <string name="sleep_minutes">%d λεπ.</string>
+    <string name="sleep_custom">Προσαρμοσμένα λεπτά</string>
+    <string name="sleep_custom_hint">Λεπτά</string>
+    <string name="sleep_end_episode">Τέλος του επεισοδίου</string>
+    <string name="sleep_cancel">Ακύρωση χρονοδιακόπτη</string>
+    <string name="sleep_remaining">Χρονοδιακόπτης ύπνου %1$s</string>
+    <string name="alarm_once">Μία φορά</string>
+    <string name="alarm_weekdays">Καθημερινές</string>
+    <string name="alarm_station">Σταθμός</string>
+    <string name="alarm_no_station">Παίξτε πρώτα έναν σταθμό ή προσθέστε ένα αγαπημένο</string>
+    <string name="alarm_enable">Ξυπνητήρι ενεργό</string>
+    <string name="alarm_save">Αποθήκευση ξυπνητηριού</string>
+    <string name="alarm_saved">Το ξυπνητήρι αποθηκεύτηκε</string>
+    <string name="alarm_permission">Τα ακριβή ξυπνητήρια είναι απενεργοποιημένα, οπότε το ξυπνητήρι μπορεί να καθυστερήσει. Επιτρέψτε ξυπνητήρια και υπενθυμίσεις για το Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Να επιτρέπονται ακριβή ξυπνητήρια</string>
+    <string name="alarm_stop">Διακοπή</string>
+    <string name="alarm_snooze">Αναβολή</string>
+    <string name="alarm_playing">Ξυπνητήρι</string>
+    <string name="alarm_failed">Δεν ήταν δυνατή η αναπαραγωγή του σταθμού. Παίζει ήχος ξυπνητηριού.</string>
+    <string name="alarm_snoozed">Αναβολή για 10 λεπτά</string>
+    <string name="alarm_channel">Ξυπνητήρι αφύπνισης</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Δεν είναι δυνατή η σύνδεση με τον σταθμό</string>
+    <string name="next_station">Επόμενος σταθμός</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Η αναπαραγωγή απέτυχε</string>
+    <string name="catalog_global">Παγκόσμια</string>
+    <string name="catalog_scope">Χώρα</string>
+    <string name="catalog_scope_search">Αναζήτηση χωρών</string>
+    <string name="catalog_rankings">Κατατάξεις</string>
+    <string name="catalog_rank_votes">Περισσότερες ψήφοι</string>
+    <string name="catalog_rank_clicks">Περισσότερες ακροάσεις</string>
+    <string name="catalog_rank_trend">Σε άνοδο</string>
+    <string name="catalog_section">Κατηγορίες</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Ειδήσεις / Συζήτηση</string>
+    <string name="catalog_music">Μουσική</string>
+    <string name="catalog_decades">Δεκαετίες</string>
+    <string name="catalog_languages">Γλώσσες</string>
+    <string name="catalog_news">Ειδήσεις</string>
+    <string name="catalog_talk">Συζήτηση</string>
+    <string name="catalog_sports">Αθλητικά</string>
+    <string name="catalog_religious">Θρησκευτικά</string>
+    <string name="catalog_classical">Κλασική</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Ηλεκτρονική</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Χαλαρή μουσική / Lo-fi</string>
+    <string name="catalog_world_music">Έθνικ μουσική</string>
+    <string name="catalog_60s">Δεκαετία του ’60</string>
+    <string name="catalog_70s">Δεκαετία του ’70</string>
+    <string name="catalog_80s">Δεκαετία του ’80</string>
+    <string name="catalog_90s">Δεκαετία του ’90</string>
+    <string name="catalog_2000s">Δεκαετία του 2000</string>
+    <string name="catalog_oldies">Παλιές επιτυχίες</string>
+    <string name="catalog_sort_clicks">Δημοφιλή</string>
+    <string name="catalog_sort_votes">Ψήφοι</string>
+    <string name="catalog_sort_name">Όνομα</string>
+    <string name="catalog_quality_all">Όλος ο ήχος</string>
+    <string name="catalog_quality_high">128 kbps και άνω</string>
+    <string name="catalog_language_all">Όλες οι γλώσσες</string>
+    <string name="catalog_other_countries">Άλλες χώρες</string>
+    <string name="catalog_count_plus">Σταθμοί: %d+</string>
+    <string name="catalog_cached_error">Δεν ήταν δυνατή η ενημέρωση των κατηγοριών. Εμφανίζεται η αποθηκευμένη λίστα.</string>
+    <string name="settings_language">Γλώσσα</string>
+    <string name="settings_language_system">Γλώσσα συστήματος</string>
+    <string name="media_volume">Ένταση</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Αναπαραγωγή</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Κατάργηση διαφημίσεων</string>
+    <string name="remove_ads_summary">Μια εφάπαξ αγορά απενεργοποιεί τις διαφημίσεις banner, λίστας και ανοίγματος εφαρμογής.</string>
+    <string name="remove_ads_buy">Αγορά</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Επαναφορά αγοράς</string>
+    <string name="remove_ads_unavailable">Προσωρινά μη διαθέσιμο</string>
+    <string name="remove_ads_pending">Η αγορά εκκρεμεί. Οι διαφημίσεις παραμένουν μέχρι να ολοκληρωθεί η πληρωμή.</string>
+    <string name="remove_ads_thanks">Οι διαφημίσεις καταργήθηκαν — ευχαριστούμε για την υποστήριξη</string>
+    <string name="remove_ads_debug">Debug: προσομοίωση κατάργησης διαφημίσεων</string>
+    <string name="remove_ads_debug_summary">Μόνο για εκδόσεις debug. Προσποιείται ότι η αγορά κατάργησης διαφημίσεων έχει γίνει.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Σταθμοί</string>
+    <string name="favorites_section_podcasts">Εκπομπές podcast</string>
+    <string name="empty_favorite_shows">Δεν υπάρχουν ακόμη αγαπημένες εκπομπές podcast. Πατήστε την καρδιά σε μια εκπομπή για να την προσθέσετε.</string>
+    <string name="episode_previous">Προηγούμενο επεισόδιο</string>
+    <string name="episode_next">Επόμενο επεισόδιο</string>
+    <string name="rewind_10">Πίσω 10 δευτερόλεπτα</string>
+    <string name="forward_10">Μπροστά 10 δευτερόλεπτα</string>
+    <string name="seek_position">Θέση αναπαραγωγής</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>
