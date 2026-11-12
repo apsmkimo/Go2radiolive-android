@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Cari dalam senarai ini</string>
+    <string name="refresh">Muat semula</string>
+    <string name="alarm">Penggera</string>
+    <string name="alarm_coming_soon">Penggera belum tersedia</string>
+    <string name="tab_local">Tempatan</string>
+    <string name="tab_world">Dunia</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Kategori</string>
+    <string name="tab_favorites">Kegemaran</string>
+    <string name="favorite">Kegemaran</string>
+    <string name="online_radio">Radio Internet</string>
+    <string name="retry">Ketik untuk cuba lagi</string>
+    <string name="empty_stations">Tiada stesen</string>
+    <string name="empty_favorites">Belum ada stesen kegemaran</string>
+    <string name="empty_categories">Tiada kategori</string>
+    <string name="empty_countries">Tiada negara</string>
+    <string name="empty_podcasts">Tiada podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Cari podcast</string>
+    <string name="podcast_search_empty">Tiada podcast yang sepadan</string>
+    <string name="podcast_search_failed">Tidak dapat mencari podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Lihat lagi</string>
+    <string name="episode_show_less">Tunjukkan kurang</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Rantau ini tiada carta podcast, jadi carta AS ditunjukkan.</string>
+    <string name="podcast_region">Negara</string>
+    <string name="podcast_region_automatic">Automatik (rantau peranti)</string>
+    <string name="podcast_region_search">Cari negara</string>
+    <string name="podcast_region_device">Rantau peranti: %1$s</string>
+    <string name="close">Tutup</string>
+    <string name="empty_episodes">Tiada episod</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Terbaharu</string>
+    <string name="episode_sort_oldest">Terlama</string>
+    <string name="episodes_loading_more">Memuatkan lebih banyak episod…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d stesen</string>
+    <string name="no_station_playing">Tiada apa-apa dimainkan</string>
+    <string name="buffering">Menyambung…</string>
+    <string name="now_playing">Sedang dimainkan</string>
+    <string name="paused">Dijeda</string>
+    <string name="tap_station_to_play">Ketik stesen untuk memainkannya</string>
+    <string name="play">Main</string>
+    <string name="pause">Jeda</string>
+    <string name="back">Kembali</string>
+    <string name="settings">Tetapan</string>
+    <string name="settings_version_title">Versi</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Pilihan privasi</string>
+    <string name="privacy_options_summary">Urus cara iklan diperibadikan</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Dasar privasi</string>
+    <string name="privacy_policy_summary">Cara apl ini mengendalikan maklumat</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_general">Umum</string>
+    <string name="settings_section_about">Perihal</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Iklan</string>
+    <string name="audio_panel_button">Butang panel audio</string>
+    <string name="audio_panel_button_summary">Tunjukkan butang panel audio di sebelah butang main pada bar pemain</string>
+    <string name="voice_enhancement">Peningkatan suara</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Tingkatkan julat suara dan kurangkan bunyi rendah yang keruh</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">Audio Ruang 3D</string>
+    <string name="spatial_off">Mati</string>
+    <string name="spatial_off_summary">Matikan pemprosesan ruang dan pulihkan audio asal</string>
+    <string name="spatial_natural">3D Semula Jadi</string>
+    <string name="spatial_natural_summary">Imej binaural yang lembut untuk mendengar lama, tanpa melemahkan suara</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Isyarat depan, sisi dan belakang daripada penempatan binaural dan pantulan awal</string>
+    <string name="spatial_orbit">Orbit</string>
+    <string name="spatial_orbit_summary">Sumber maya bergerak perlahan mengelilingi satah mendatar</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Pembesar suara mencampurkan kiri dan kanan. Mod ini tetap menambah ruang dengan gema dan kelebaran. Fon kepala menjadikan imej kiri-kanan lebih jelas.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Kelajuan putaran</string>
+    <string name="orbit_speed_value">%1$.0f saat/pusingan</string>
+    <string name="orbit_direction">Arah putaran</string>
+    <string name="orbit_clockwise">Ikut arah jam</string>
+    <string name="orbit_counterclockwise">Lawan arah jam</string>
+    <string name="orbit_strength">Kekuatan kesan</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Penyama dan imbangan</string>
+    <string name="eq_shared_hint">Kawalan ini digunakan serta-merta dan sepadan dengan panel audio pemain</string>
+    <string name="eq_bass">Bes (−12 hingga +15 dB)</string>
+    <string name="eq_low">Rendah</string>
+    <string name="eq_mid">Tengah</string>
+    <string name="eq_high">Tinggi</string>
+    <string name="balance">Imbangan</string>
+    <string name="balance_left">Kiri</string>
+    <string name="balance_right">Kanan</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Tetapkan semula</string>
+    <string name="audio_panel">Panel audio</string>
+    <string name="open_audio_panel">Buka panel audio</string>
+    <string name="close_audio_panel">Tutup panel audio</string>
+    <string name="load_failed">Tidak dapat dimuatkan. Cuba lagi nanti.</string>
+    <string name="refresh_updated">Dikemas kini</string>
+    <string name="podcast_cached_error">Tidak dapat mengemas kini podcast. Menunjukkan senarai yang disimpan.</string>
+    <string name="retry_action">Cuba lagi</string>
+    <string name="sleep_timer">Pemasa tidur</string>
+    <string name="alarm_clock">Penggera</string>
+    <string name="alarm_sheet">Pemasa tidur dan penggera</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Minit tersuai</string>
+    <string name="sleep_custom_hint">Minit</string>
+    <string name="sleep_end_episode">Hujung episod ini</string>
+    <string name="sleep_cancel">Batalkan pemasa</string>
+    <string name="sleep_remaining">Pemasa tidur %1$s</string>
+    <string name="alarm_once">Sekali</string>
+    <string name="alarm_weekdays">Hari bekerja</string>
+    <string name="alarm_station">Stesen</string>
+    <string name="alarm_no_station">Mainkan stesen atau tambah kegemaran dahulu</string>
+    <string name="alarm_enable">Penggera hidup</string>
+    <string name="alarm_save">Simpan penggera</string>
+    <string name="alarm_saved">Penggera disimpan</string>
+    <string name="alarm_permission">Penggera tepat dimatikan, jadi penggera ini mungkin lewat. Benarkan penggera dan peringatan untuk Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Benarkan penggera tepat</string>
+    <string name="alarm_stop">Henti</string>
+    <string name="alarm_snooze">Tunda</string>
+    <string name="alarm_playing">Penggera</string>
+    <string name="alarm_failed">Tidak dapat memainkan stesen. Memainkan bunyi penggera sebagai ganti.</string>
+    <string name="alarm_snoozed">Ditunda selama 10 minit</string>
+    <string name="alarm_channel">Penggera bangun</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Tidak dapat menyambung ke stesen ini</string>
+    <string name="next_station">Stesen seterusnya</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Main balik gagal</string>
+    <string name="catalog_global">Global</string>
+    <string name="catalog_scope">Negara</string>
+    <string name="catalog_scope_search">Cari negara</string>
+    <string name="catalog_rankings">Kedudukan</string>
+    <string name="catalog_rank_votes">Paling banyak undian</string>
+    <string name="catalog_rank_clicks">Paling banyak didengar</string>
+    <string name="catalog_rank_trend">Sohor kini</string>
+    <string name="catalog_section">Kategori</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Berita / Bual bicara</string>
+    <string name="catalog_music">Muzik</string>
+    <string name="catalog_decades">Dekad</string>
+    <string name="catalog_languages">Bahasa</string>
+    <string name="catalog_news">Berita</string>
+    <string name="catalog_talk">Bual bicara</string>
+    <string name="catalog_sports">Sukan</string>
+    <string name="catalog_religious">Keagamaan</string>
+    <string name="catalog_classical">Klasik</string>
+    <string name="catalog_jazz">Jaz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronik</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Santai / Lo-fi</string>
+    <string name="catalog_world_music">Muzik dunia</string>
+    <string name="catalog_60s">Era 60-an</string>
+    <string name="catalog_70s">Era 70-an</string>
+    <string name="catalog_80s">Era 80-an</string>
+    <string name="catalog_90s">Era 90-an</string>
+    <string name="catalog_2000s">Era 2000-an</string>
+    <string name="catalog_oldies">Lagu lama</string>
+    <string name="catalog_sort_clicks">Popular</string>
+    <string name="catalog_sort_votes">Undian</string>
+    <string name="catalog_sort_name">Nama</string>
+    <string name="catalog_quality_all">Semua audio</string>
+    <string name="catalog_quality_high">128 kbps ke atas</string>
+    <string name="catalog_language_all">Semua bahasa</string>
+    <string name="catalog_other_countries">Negara lain</string>
+    <string name="catalog_count_plus">%d+ stesen</string>
+    <string name="catalog_cached_error">Tidak dapat mengemas kini kategori. Menunjukkan senarai yang disimpan.</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_language_system">Ikut sistem</string>
+    <string name="media_volume">Kelantangan</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Main balik</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Buang iklan</string>
+    <string name="remove_ads_summary">Pembelian sekali sahaja mematikan iklan sepanduk, senarai dan pembukaan apl.</string>
+    <string name="remove_ads_buy">Beli</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Pulihkan pembelian</string>
+    <string name="remove_ads_unavailable">Tidak tersedia buat sementara</string>
+    <string name="remove_ads_pending">Pembelian belum selesai. Iklan kekal hidup sehingga pembayaran selesai.</string>
+    <string name="remove_ads_thanks">Iklan dibuang — terima kasih atas sokongan anda</string>
+    <string name="remove_ads_debug">Nyahpepijat: simulasi iklan dibuang</string>
+    <string name="remove_ads_debug_summary">Binaan nyahpepijat sahaja. Anggap pembelian buang iklan telah dimiliki.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Stesen</string>
+    <string name="favorites_section_podcasts">Rancangan podcast</string>
+    <string name="empty_favorite_shows">Belum ada rancangan podcast kegemaran. Ketik ikon hati pada rancangan untuk menambahnya.</string>
+    <string name="episode_previous">Episod sebelumnya</string>
+    <string name="episode_next">Episod seterusnya</string>
+    <string name="rewind_10">Undur 10 saat</string>
+    <string name="forward_10">Maju 10 saat</string>
+    <string name="seek_position">Kedudukan main balik</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

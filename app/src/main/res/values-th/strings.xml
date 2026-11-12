@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">ค้นหาในรายการนี้</string>
+    <string name="refresh">รีเฟรช</string>
+    <string name="alarm">นาฬิกาปลุก</string>
+    <string name="alarm_coming_soon">ยังไม่พร้อมใช้งานนาฬิกาปลุก</string>
+    <string name="tab_local">ในประเทศ</string>
+    <string name="tab_world">ทั่วโลก</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">พอดแคสต์</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">หมวดหมู่</string>
+    <string name="tab_favorites">รายการโปรด</string>
+    <string name="favorite">รายการโปรด</string>
+    <string name="online_radio">วิทยุออนไลน์</string>
+    <string name="retry">แตะเพื่อลองอีกครั้ง</string>
+    <string name="empty_stations">ไม่มีสถานี</string>
+    <string name="empty_favorites">ยังไม่มีสถานีโปรด</string>
+    <string name="empty_categories">ไม่มีหมวดหมู่</string>
+    <string name="empty_countries">ไม่มีประเทศ</string>
+    <string name="empty_podcasts">ไม่มีพอดแคสต์</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">ค้นหาพอดแคสต์</string>
+    <string name="podcast_search_empty">ไม่พบพอดแคสต์ที่ตรงกัน</string>
+    <string name="podcast_search_failed">ค้นหาพอดแคสต์ไม่ได้</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">ดูเพิ่มเติม</string>
+    <string name="episode_show_less">แสดงน้อยลง</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">ภูมิภาคนี้ไม่มีชาร์ตพอดแคสต์ จึงแสดงชาร์ตของสหรัฐอเมริกาแทน</string>
+    <string name="podcast_region">ประเทศ</string>
+    <string name="podcast_region_automatic">อัตโนมัติ (ภูมิภาคของอุปกรณ์)</string>
+    <string name="podcast_region_search">ค้นหาประเทศ</string>
+    <string name="podcast_region_device">ภูมิภาคของอุปกรณ์: %1$s</string>
+    <string name="close">ปิด</string>
+    <string name="empty_episodes">ไม่มีตอน</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">ใหม่สุด</string>
+    <string name="episode_sort_oldest">เก่าสุด</string>
+    <string name="episodes_loading_more">กำลังโหลดตอนเพิ่มเติม…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d สถานี</string>
+    <string name="no_station_playing">ไม่มีสิ่งที่กำลังเล่น</string>
+    <string name="buffering">กำลังเชื่อมต่อ…</string>
+    <string name="now_playing">กำลังเล่น</string>
+    <string name="paused">หยุดชั่วคราว</string>
+    <string name="tap_station_to_play">แตะสถานีเพื่อเล่น</string>
+    <string name="play">เล่น</string>
+    <string name="pause">หยุดชั่วคราว</string>
+    <string name="back">กลับ</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="settings_version_title">เวอร์ชัน</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">ตัวเลือกความเป็นส่วนตัว</string>
+    <string name="privacy_options_summary">จัดการการปรับโฆษณาให้เหมาะกับคุณ</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">นโยบายความเป็นส่วนตัว</string>
+    <string name="privacy_policy_summary">วิธีที่แอปนี้จัดการข้อมูล</string>
+    <string name="settings_section_audio">เสียง</string>
+    <string name="settings_section_general">ทั่วไป</string>
+    <string name="settings_section_about">เกี่ยวกับ</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">โฆษณา</string>
+    <string name="audio_panel_button">ปุ่มแผงเสียง</string>
+    <string name="audio_panel_button_summary">แสดงปุ่มแผงเสียงข้างปุ่มเล่นในแถบเพลเยอร์</string>
+    <string name="voice_enhancement">เพิ่มความชัดของเสียงพูด</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">เพิ่มช่วงเสียงพูดและลดความขุ่นของเสียงต่ำ</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">เสียงรอบทิศทาง 3D</string>
+    <string name="spatial_off">ปิด</string>
+    <string name="spatial_off_summary">ปิดการประมวลผลเสียงรอบทิศทางและคืนค่าเสียงต้นฉบับ</string>
+    <string name="spatial_natural">3D แบบธรรมชาติ</string>
+    <string name="spatial_natural_summary">มิติเสียงแบบไบนอรัลที่นุ่มนวล ฟังได้นาน โดยเสียงพูดไม่ทึบ</string>
+    <string name="spatial_surround">เซอร์ราวด์</string>
+    <string name="spatial_surround_summary">ให้ทิศทางเสียงด้านหน้า ด้านข้าง และด้านหลัง จากการวางตำแหน่งแบบไบนอรัลและเสียงสะท้อนช่วงแรก</string>
+    <string name="spatial_orbit">โคจร</string>
+    <string name="spatial_orbit_summary">แหล่งเสียงเสมือนเคลื่อนที่ช้าๆ รอบตัวในแนวระนาบ</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">ลำโพงจะผสมเสียงซ้ายและขวาเข้าด้วยกัน โหมดนี้ยังคงเพิ่มมิติด้วยเสียงก้องและความกว้าง ใช้หูฟังจะได้ภาพเสียงซ้าย-ขวาที่ชัดเจนกว่า</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">ความเร็วการหมุน</string>
+    <string name="orbit_speed_value">%1$.0f วินาที/รอบ</string>
+    <string name="orbit_direction">ทิศทางการหมุน</string>
+    <string name="orbit_clockwise">ตามเข็มนาฬิกา</string>
+    <string name="orbit_counterclockwise">ทวนเข็มนาฬิกา</string>
+    <string name="orbit_strength">ความแรงของเอฟเฟกต์</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">อีควอไลเซอร์และความสมดุล</string>
+    <string name="eq_shared_hint">การควบคุมเหล่านี้มีผลทันทีและตรงกับแผงเสียงในเพลเยอร์</string>
+    <string name="eq_bass">เบส (−12 ถึง +15 dB)</string>
+    <string name="eq_low">ต่ำ</string>
+    <string name="eq_mid">กลาง</string>
+    <string name="eq_high">สูง</string>
+    <string name="balance">ความสมดุล</string>
+    <string name="balance_left">ซ้าย</string>
+    <string name="balance_right">ขวา</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">รีเซ็ต</string>
+    <string name="audio_panel">แผงเสียง</string>
+    <string name="open_audio_panel">เปิดแผงเสียง</string>
+    <string name="close_audio_panel">ปิดแผงเสียง</string>
+    <string name="load_failed">โหลดไม่ได้ โปรดลองอีกครั้งในภายหลัง</string>
+    <string name="refresh_updated">อัปเดตแล้ว</string>
+    <string name="podcast_cached_error">อัปเดตพอดแคสต์ไม่ได้ กำลังแสดงรายการที่บันทึกไว้</string>
+    <string name="retry_action">ลองอีกครั้ง</string>
+    <string name="sleep_timer">ตั้งเวลาปิด</string>
+    <string name="alarm_clock">นาฬิกาปลุก</string>
+    <string name="alarm_sheet">ตั้งเวลาปิดและนาฬิกาปลุก</string>
+    <string name="sleep_minutes">%d นาที</string>
+    <string name="sleep_custom">กำหนดนาทีเอง</string>
+    <string name="sleep_custom_hint">นาที</string>
+    <string name="sleep_end_episode">เมื่อจบตอนนี้</string>
+    <string name="sleep_cancel">ยกเลิกตัวตั้งเวลา</string>
+    <string name="sleep_remaining">ตั้งเวลาปิด %1$s</string>
+    <string name="alarm_once">ครั้งเดียว</string>
+    <string name="alarm_weekdays">วันธรรมดา</string>
+    <string name="alarm_station">สถานี</string>
+    <string name="alarm_no_station">เล่นสถานีหรือเพิ่มรายการโปรดก่อน</string>
+    <string name="alarm_enable">เปิดนาฬิกาปลุก</string>
+    <string name="alarm_save">บันทึกนาฬิกาปลุก</string>
+    <string name="alarm_saved">บันทึกนาฬิกาปลุกแล้ว</string>
+    <string name="alarm_permission">การปลุกที่แม่นยำปิดอยู่ นาฬิกาปลุกนี้จึงอาจดังช้า โปรดอนุญาตการปลุกและการช่วยเตือนให้กับ Radio Live FM AM</string>
+    <string name="alarm_permission_action">อนุญาตการปลุกที่แม่นยำ</string>
+    <string name="alarm_stop">หยุด</string>
+    <string name="alarm_snooze">เลื่อนปลุก</string>
+    <string name="alarm_playing">นาฬิกาปลุก</string>
+    <string name="alarm_failed">เล่นสถานีไม่ได้ จึงเล่นเสียงปลุกแทน</string>
+    <string name="alarm_snoozed">เลื่อนปลุก 10 นาที</string>
+    <string name="alarm_channel">นาฬิกาปลุกตื่นนอน</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">เชื่อมต่อสถานีนี้ไม่ได้</string>
+    <string name="next_station">สถานีถัดไป</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">เล่นไม่สำเร็จ</string>
+    <string name="catalog_global">ทั่วโลก</string>
+    <string name="catalog_scope">ประเทศ</string>
+    <string name="catalog_scope_search">ค้นหาประเทศ</string>
+    <string name="catalog_rankings">อันดับ</string>
+    <string name="catalog_rank_votes">โหวตมากที่สุด</string>
+    <string name="catalog_rank_clicks">ฟังมากที่สุด</string>
+    <string name="catalog_rank_trend">กำลังมาแรง</string>
+    <string name="catalog_section">หมวดหมู่</string>
+    <string name="catalog_pop">ป๊อป</string>
+    <string name="catalog_news_talk">ข่าว / ทอล์ก</string>
+    <string name="catalog_music">เพลง</string>
+    <string name="catalog_decades">ยุคสมัย</string>
+    <string name="catalog_languages">ภาษา</string>
+    <string name="catalog_news">ข่าว</string>
+    <string name="catalog_talk">ทอล์ก</string>
+    <string name="catalog_sports">กีฬา</string>
+    <string name="catalog_religious">ศาสนา</string>
+    <string name="catalog_classical">คลาสสิก</string>
+    <string name="catalog_jazz">แจ๊ส</string>
+    <string name="catalog_rock">ร็อก</string>
+    <string name="catalog_electronic">อิเล็กทรอนิกส์</string>
+    <string name="catalog_hiphop">ฮิปฮอป / R&amp;B</string>
+    <string name="catalog_country_music">คันทรี</string>
+    <string name="catalog_lofi">ฟังสบาย / Lo-fi</string>
+    <string name="catalog_world_music">เวิลด์มิวสิก</string>
+    <string name="catalog_60s">ยุค 60</string>
+    <string name="catalog_70s">ยุค 70</string>
+    <string name="catalog_80s">ยุค 80</string>
+    <string name="catalog_90s">ยุค 90</string>
+    <string name="catalog_2000s">ยุค 2000</string>
+    <string name="catalog_oldies">เพลงเก่า</string>
+    <string name="catalog_sort_clicks">ยอดนิยม</string>
+    <string name="catalog_sort_votes">คะแนนโหวต</string>
+    <string name="catalog_sort_name">ชื่อ</string>
+    <string name="catalog_quality_all">เสียงทั้งหมด</string>
+    <string name="catalog_quality_high">128 kbps ขึ้นไป</string>
+    <string name="catalog_language_all">ทุกภาษา</string>
+    <string name="catalog_other_countries">ประเทศอื่นๆ</string>
+    <string name="catalog_count_plus">%d+ สถานี</string>
+    <string name="catalog_cached_error">อัปเดตหมวดหมู่ไม่ได้ กำลังแสดงรายการที่บันทึกไว้</string>
+    <string name="settings_language">ภาษา</string>
+    <string name="settings_language_system">ตามระบบ</string>
+    <string name="media_volume">ระดับเสียง</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">การเล่น</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">ลบโฆษณา</string>
+    <string name="remove_ads_summary">ซื้อครั้งเดียวเพื่อปิดโฆษณาแบนเนอร์ โฆษณาในรายการ และโฆษณาเมื่อเปิดแอป</string>
+    <string name="remove_ads_buy">ซื้อ</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">กู้คืนการซื้อ</string>
+    <string name="remove_ads_unavailable">ไม่พร้อมใช้งานชั่วคราว</string>
+    <string name="remove_ads_pending">การซื้อรอดำเนินการ โฆษณาจะยังแสดงจนกว่าการชำระเงินจะเสร็จสมบูรณ์</string>
+    <string name="remove_ads_thanks">ลบโฆษณาแล้ว — ขอบคุณที่สนับสนุน</string>
+    <string name="remove_ads_debug">ดีบัก: จำลองการลบโฆษณา</string>
+    <string name="remove_ads_debug_summary">เฉพาะบิลด์ดีบักเท่านั้น จำลองว่าได้ซื้อการลบโฆษณาแล้ว</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">สถานี</string>
+    <string name="favorites_section_podcasts">รายการพอดแคสต์</string>
+    <string name="empty_favorite_shows">ยังไม่มีรายการพอดแคสต์โปรด แตะรูปหัวใจบนรายการเพื่อเพิ่ม</string>
+    <string name="episode_previous">ตอนก่อนหน้า</string>
+    <string name="episode_next">ตอนถัดไป</string>
+    <string name="rewind_10">ย้อนกลับ 10 วินาที</string>
+    <string name="forward_10">ข้ามไป 10 วินาที</string>
+    <string name="seek_position">ตำแหน่งการเล่น</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

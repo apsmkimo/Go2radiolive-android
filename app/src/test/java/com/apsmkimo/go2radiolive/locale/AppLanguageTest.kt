@@ -17,8 +17,14 @@ class AppLanguageTest {
         assertEquals(AppLanguage.PORTUGUESE_BR, AppLanguage.selection("pt", "BR", ""))
         assertEquals(AppLanguage.INDONESIAN, AppLanguage.selection("in", "ID", ""))
         assertEquals(AppLanguage.INDONESIAN, AppLanguage.selection("id", "ID", ""))
-        assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("ar", "EG", ""))
+        // assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("ar", "EG", ""))
         // SMCPKG_SUPPORT<<<Cursor126
+        // SMCPKG_SUPPORT>>>Cursor127
+        assertEquals(AppLanguage.ARABIC, AppLanguage.selection("ar", "EG", ""))
+        assertEquals(AppLanguage.FILIPINO, AppLanguage.selection("tl", "PH", ""))
+        assertEquals(AppLanguage.FILIPINO, AppLanguage.selection("fil", "PH", ""))
+        assertEquals(AppLanguage.SYSTEM, AppLanguage.selection("he", "IL", ""))
+        // SMCPKG_SUPPORT<<<Cursor127
     }
 
     // SMCPKG_SUPPORT>>>Cursor126

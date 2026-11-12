@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Zoeken in deze lijst</string>
+    <string name="refresh">Vernieuwen</string>
+    <string name="alarm">Wekker</string>
+    <string name="alarm_coming_soon">Wekker is nog niet beschikbaar</string>
+    <string name="tab_local">Lokaal</string>
+    <string name="tab_world">Wereld</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcasts</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Categorieën</string>
+    <string name="tab_favorites">Favorieten</string>
+    <string name="favorite">Favoriet</string>
+    <string name="online_radio">Internetradio</string>
+    <string name="retry">Tik om opnieuw te proberen</string>
+    <string name="empty_stations">Geen zenders</string>
+    <string name="empty_favorites">Nog geen favoriete zenders</string>
+    <string name="empty_categories">Geen categorieën</string>
+    <string name="empty_countries">Geen landen</string>
+    <string name="empty_podcasts">Geen podcasts</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Podcasts zoeken</string>
+    <string name="podcast_search_empty">Geen podcasts gevonden</string>
+    <string name="podcast_search_failed">Kan podcasts niet zoeken</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Meer weergeven</string>
+    <string name="episode_show_less">Minder weergeven</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Deze regio heeft geen podcastlijst, dus de Amerikaanse lijsten worden getoond.</string>
+    <string name="podcast_region">Land</string>
+    <string name="podcast_region_automatic">Automatisch (apparaatregio)</string>
+    <string name="podcast_region_search">Landen zoeken</string>
+    <string name="podcast_region_device">Apparaatregio: %1$s</string>
+    <string name="close">Sluiten</string>
+    <string name="empty_episodes">Geen afleveringen</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Nieuwste</string>
+    <string name="episode_sort_oldest">Oudste</string>
+    <string name="episodes_loading_more">Meer afleveringen laden…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">Zenders: %d</string>
+    <string name="no_station_playing">Er wordt niets afgespeeld</string>
+    <string name="buffering">Verbinden…</string>
+    <string name="now_playing">Speelt af</string>
+    <string name="paused">Gepauzeerd</string>
+    <string name="tap_station_to_play">Tik op een zender om af te spelen</string>
+    <string name="play">Afspelen</string>
+    <string name="pause">Pauzeren</string>
+    <string name="back">Terug</string>
+    <string name="settings">Instellingen</string>
+    <string name="settings_version_title">Versie</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Privacyopties</string>
+    <string name="privacy_options_summary">Beheren hoe advertenties worden gepersonaliseerd</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Privacybeleid</string>
+    <string name="privacy_policy_summary">Hoe deze app met gegevens omgaat</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_general">Algemeen</string>
+    <string name="settings_section_about">Over</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Advertentie</string>
+    <string name="audio_panel_button">Knop voor audiopaneel</string>
+    <string name="audio_panel_button_summary">Toon een knop voor het audiopaneel naast Afspelen in de spelerbalk</string>
+    <string name="voice_enhancement">Stemverbetering</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Versterkt het stembereik en vermindert modderig laag</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D-ruimtelijke audio</string>
+    <string name="spatial_off">Uit</string>
+    <string name="spatial_off_summary">Ruimtelijke verwerking uitzetten en de originele audio herstellen</string>
+    <string name="spatial_natural">Natuurlijk 3D</string>
+    <string name="spatial_natural_summary">Subtiel binauraal beeld voor lang luisteren, zonder stemmen dof te maken</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Geluid van voren, opzij en achter dankzij binaurale plaatsing en vroege reflecties</string>
+    <string name="spatial_orbit">Baan</string>
+    <string name="spatial_orbit_summary">Een virtuele bron draait langzaam rond in het horizontale vlak</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">De luidspreker mengt links en rechts. Deze modus voegt toch ruimte toe met echo\'s en breedte. Met een koptelefoon is het links-rechtsbeeld duidelijker.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Draaisnelheid</string>
+    <string name="orbit_speed_value">%1$.0f sec/omwenteling</string>
+    <string name="orbit_direction">Draairichting</string>
+    <string name="orbit_clockwise">Met de klok mee</string>
+    <string name="orbit_counterclockwise">Tegen de klok in</string>
+    <string name="orbit_strength">Effectsterkte</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Equalizer en balans</string>
+    <string name="eq_shared_hint">Deze instellingen worden direct toegepast en komen overeen met het audiopaneel van de speler</string>
+    <string name="eq_bass">Bas (−12 tot +15 dB)</string>
+    <string name="eq_low">Laag</string>
+    <string name="eq_mid">Midden</string>
+    <string name="eq_high">Hoog</string>
+    <string name="balance">Balans</string>
+    <string name="balance_left">Links</string>
+    <string name="balance_right">Rechts</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">Resetten</string>
+    <string name="audio_panel">Audiopaneel</string>
+    <string name="open_audio_panel">Audiopaneel openen</string>
+    <string name="close_audio_panel">Audiopaneel sluiten</string>
+    <string name="load_failed">Kan niet laden. Probeer het later opnieuw.</string>
+    <string name="refresh_updated">Bijgewerkt</string>
+    <string name="podcast_cached_error">Kan podcasts niet bijwerken. De opgeslagen lijst wordt getoond.</string>
+    <string name="retry_action">Opnieuw proberen</string>
+    <string name="sleep_timer">Slaaptimer</string>
+    <string name="alarm_clock">Wekker</string>
+    <string name="alarm_sheet">Slaaptimer en wekker</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Aantal minuten kiezen</string>
+    <string name="sleep_custom_hint">Minuten</string>
+    <string name="sleep_end_episode">Einde van deze aflevering</string>
+    <string name="sleep_cancel">Timer annuleren</string>
+    <string name="sleep_remaining">Slaaptimer %1$s</string>
+    <string name="alarm_once">Eenmalig</string>
+    <string name="alarm_weekdays">Werkdagen</string>
+    <string name="alarm_station">Zender</string>
+    <string name="alarm_no_station">Speel eerst een zender af of voeg een favoriet toe</string>
+    <string name="alarm_enable">Wekker aan</string>
+    <string name="alarm_save">Wekker opslaan</string>
+    <string name="alarm_saved">Wekker opgeslagen</string>
+    <string name="alarm_permission">Exacte wekkers staan uit, dus deze wekker kan te laat afgaan. Sta wekkers en herinneringen toe voor Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Exacte wekkers toestaan</string>
+    <string name="alarm_stop">Stoppen</string>
+    <string name="alarm_snooze">Sluimeren</string>
+    <string name="alarm_playing">Wekker</string>
+    <string name="alarm_failed">Kan de zender niet afspelen. Er wordt een wekkergeluid afgespeeld.</string>
+    <string name="alarm_snoozed">Gesluimerd voor 10 minuten</string>
+    <string name="alarm_channel">Wekalarm</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Kan geen verbinding maken met deze zender</string>
+    <string name="next_station">Volgende zender</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Afspelen mislukt</string>
+    <string name="catalog_global">Wereldwijd</string>
+    <string name="catalog_scope">Land</string>
+    <string name="catalog_scope_search">Landen zoeken</string>
+    <string name="catalog_rankings">Ranglijsten</string>
+    <string name="catalog_rank_votes">Meeste stemmen</string>
+    <string name="catalog_rank_clicks">Meest beluisterd</string>
+    <string name="catalog_rank_trend">Trending</string>
+    <string name="catalog_section">Categorieën</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Nieuws / Talk</string>
+    <string name="catalog_music">Muziek</string>
+    <string name="catalog_decades">Decennia</string>
+    <string name="catalog_languages">Talen</string>
+    <string name="catalog_news">Nieuws</string>
+    <string name="catalog_talk">Talk</string>
+    <string name="catalog_sports">Sport</string>
+    <string name="catalog_religious">Religieus</string>
+    <string name="catalog_classical">Klassiek</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Elektronisch</string>
+    <string name="catalog_hiphop">Hiphop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Easy listening / Lo-fi</string>
+    <string name="catalog_world_music">Wereldmuziek</string>
+    <string name="catalog_60s">Jaren 60</string>
+    <string name="catalog_70s">Jaren 70</string>
+    <string name="catalog_80s">Jaren 80</string>
+    <string name="catalog_90s">Jaren 90</string>
+    <string name="catalog_2000s">Jaren 2000</string>
+    <string name="catalog_oldies">Oldies</string>
+    <string name="catalog_sort_clicks">Populair</string>
+    <string name="catalog_sort_votes">Stemmen</string>
+    <string name="catalog_sort_name">Naam</string>
+    <string name="catalog_quality_all">Alle audio</string>
+    <string name="catalog_quality_high">128 kbps en hoger</string>
+    <string name="catalog_language_all">Alle talen</string>
+    <string name="catalog_other_countries">Andere landen</string>
+    <string name="catalog_count_plus">Zenders: %d+</string>
+    <string name="catalog_cached_error">Kan categorieën niet bijwerken. De opgeslagen lijst wordt getoond.</string>
+    <string name="settings_language">Taal</string>
+    <string name="settings_language_system">Systeemtaal volgen</string>
+    <string name="media_volume">Volume</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Afspelen</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Advertenties verwijderen</string>
+    <string name="remove_ads_summary">Met een eenmalige aankoop zet je banner-, lijst- en openingsadvertenties uit.</string>
+    <string name="remove_ads_buy">Kopen</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">Aankoop herstellen</string>
+    <string name="remove_ads_unavailable">Tijdelijk niet beschikbaar</string>
+    <string name="remove_ads_pending">Aankoop in behandeling. Advertenties blijven aan tot de betaling is voltooid.</string>
+    <string name="remove_ads_thanks">Advertenties verwijderd — bedankt voor je steun</string>
+    <string name="remove_ads_debug">Debug: verwijderde advertenties simuleren</string>
+    <string name="remove_ads_debug_summary">Alleen in debugbuilds. Doet alsof de aankoop voor advertentievrij in bezit is.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Zenders</string>
+    <string name="favorites_section_podcasts">Podcastshows</string>
+    <string name="empty_favorite_shows">Nog geen favoriete podcastshows. Tik op het hartje bij een show om die toe te voegen.</string>
+    <string name="episode_previous">Vorige aflevering</string>
+    <string name="episode_next">Volgende aflevering</string>
+    <string name="rewind_10">10 seconden terug</string>
+    <string name="forward_10">10 seconden vooruit</string>
+    <string name="seek_position">Afspeelpositie</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

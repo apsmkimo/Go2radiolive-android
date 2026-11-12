@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Radio Live FM AM</string>
+    <string name="search_hint">Hanapin sa listahang ito</string>
+    <string name="refresh">I-refresh</string>
+    <string name="alarm">Alarm</string>
+    <string name="alarm_coming_soon">Hindi pa available ang alarm</string>
+    <string name="tab_local">Lokal</string>
+    <string name="tab_world">Mundo</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor070 -->
+    <!-- <string name="tab_reserved">Reserved</string> -->
+    <string name="tab_podcast">Podcast</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor070 -->
+    <string name="tab_categories">Mga Kategorya</string>
+    <string name="tab_favorites">Mga Paborito</string>
+    <string name="favorite">Paborito</string>
+    <string name="online_radio">Internet radio</string>
+    <string name="retry">I-tap para subukang muli</string>
+    <string name="empty_stations">Walang istasyon</string>
+    <string name="empty_favorites">Wala pang paboritong istasyon</string>
+    <string name="empty_categories">Walang kategorya</string>
+    <string name="empty_countries">Walang bansa</string>
+    <string name="empty_podcasts">Walang podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor115 -->
+    <string name="podcast_search_hint">Maghanap ng podcast</string>
+    <string name="podcast_search_empty">Walang tugmang podcast</string>
+    <string name="podcast_search_failed">Hindi makapaghanap ng podcast</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor118 -->
+    <string name="episode_see_more">Tingnan pa</string>
+    <string name="episode_show_less">Ipakita nang mas kaunti</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor118 -->
+    <!-- SMCPKG_SUPPORT<<<Cursor115 -->
+    <string name="podcast_us_fallback">Walang podcast chart ang rehiyong ito, kaya US charts ang ipinapakita.</string>
+    <string name="podcast_region">Bansa</string>
+    <string name="podcast_region_automatic">Awtomatiko (rehiyon ng device)</string>
+    <string name="podcast_region_search">Maghanap ng bansa</string>
+    <string name="podcast_region_device">Rehiyon ng device: %1$s</string>
+    <string name="close">Isara</string>
+    <string name="empty_episodes">Walang episode</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor122 -->
+    <string name="episode_sort_newest">Pinakabago</string>
+    <string name="episode_sort_oldest">Pinakaluma</string>
+    <string name="episodes_loading_more">Naglo-load ng higit pang episode…</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor122 -->
+    <string name="station_count">%d istasyon</string>
+    <string name="no_station_playing">Walang tumutugtog</string>
+    <string name="buffering">Kumokonekta…</string>
+    <string name="now_playing">Tumutugtog</string>
+    <string name="paused">Naka-pause</string>
+    <string name="tap_station_to_play">Mag-tap ng istasyon para patugtugin</string>
+    <string name="play">I-play</string>
+    <string name="pause">I-pause</string>
+    <string name="back">Bumalik</string>
+    <string name="settings">Mga Setting</string>
+    <string name="settings_version_title">Bersyon</string>
+    <string name="settings_version_value">%1$s (versionCode %2$d)</string>
+    <string name="privacy_options">Mga opsyon sa privacy</string>
+    <string name="privacy_options_summary">Pamahalaan kung paano pine-personalize ang mga ad</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor121 -->
+    <string name="privacy_policy">Patakaran sa privacy</string>
+    <string name="privacy_policy_summary">Paano pinangangasiwaan ng app na ito ang impormasyon</string>
+    <string name="settings_section_audio">Audio</string>
+    <string name="settings_section_general">Pangkalahatan</string>
+    <string name="settings_section_about">Tungkol sa app</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor121 -->
+    <string name="ad_label">Ad</string>
+    <string name="audio_panel_button">Button ng audio panel</string>
+    <string name="audio_panel_button_summary">Ipakita ang button ng audio panel sa tabi ng play sa player bar</string>
+    <string name="voice_enhancement">Pagpapalinaw ng boses</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <!-- <string name="voice_enhancement_summary">Boost the voice range and ease low-end mud</string> -->
+    <string name="voice_enhancement_summary">Palakasin ang saklaw ng boses at bawasan ang labo ng mababang tono</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="spatial_section">3D Spatial Audio</string>
+    <string name="spatial_off">Naka-off</string>
+    <string name="spatial_off_summary">I-off ang spatial processing at ibalik ang orihinal na audio</string>
+    <string name="spatial_natural">Natural na 3D</string>
+    <string name="spatial_natural_summary">Banayad na binaural na tunog para sa matagal na pakikinig, nang hindi pinalalabo ang mga boses</string>
+    <string name="spatial_surround">Surround</string>
+    <string name="spatial_surround_summary">Tunog sa harap, gilid, at likod mula sa binaural placement at early reflections</string>
+    <string name="spatial_orbit">Orbit</string>
+    <string name="spatial_orbit_summary">Dahan-dahang umiikot ang isang virtual na source sa pahalang na eroplano</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor116 -->
+    <string name="spatial_speaker_note">Pinaghahalo ng speaker ang kaliwa at kanan. Nagdaragdag pa rin ng espasyo ang mode na ito gamit ang echo at lapad. Mas malinaw ang kaliwa-kanan na tunog sa headphones.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor116 -->
+    <string name="orbit_speed">Bilis ng pag-ikot</string>
+    <string name="orbit_speed_value">%1$.0f seg/ikot</string>
+    <string name="orbit_direction">Direksyon ng pag-ikot</string>
+    <string name="orbit_clockwise">Clockwise</string>
+    <string name="orbit_counterclockwise">Counterclockwise</string>
+    <string name="orbit_strength">Lakas ng epekto</string>
+    <string name="orbit_strength_value">%1$.0f%%</string>
+    <string name="eq_section">Equalizer at balanse</string>
+    <string name="eq_shared_hint">Agad na gumagana ang mga kontrol na ito at tugma sa audio panel ng player</string>
+    <string name="eq_bass">Bass (−12 hanggang +15 dB)</string>
+    <string name="eq_low">Mababa</string>
+    <string name="eq_mid">Gitna</string>
+    <string name="eq_high">Mataas</string>
+    <string name="balance">Balanse</string>
+    <string name="balance_left">Kaliwa</string>
+    <string name="balance_right">Kanan</string>
+    <string name="balance_value">%1$+.2f</string>
+    <string name="db_value">%1$+.1f dB</string>
+    <string name="reset">I-reset</string>
+    <string name="audio_panel">Audio panel</string>
+    <string name="open_audio_panel">Buksan ang audio panel</string>
+    <string name="close_audio_panel">Isara ang audio panel</string>
+    <string name="load_failed">Hindi ma-load. Subukang muli mamaya.</string>
+    <string name="refresh_updated">Na-update</string>
+    <string name="podcast_cached_error">Hindi ma-update ang mga podcast. Ipinapakita ang naka-save na listahan.</string>
+    <string name="retry_action">Subukang muli</string>
+    <string name="sleep_timer">Sleep timer</string>
+    <string name="alarm_clock">Alarm</string>
+    <string name="alarm_sheet">Sleep timer at alarm</string>
+    <string name="sleep_minutes">%d min</string>
+    <string name="sleep_custom">Custom na minuto</string>
+    <string name="sleep_custom_hint">Minuto</string>
+    <string name="sleep_end_episode">Pagtapos ng episode na ito</string>
+    <string name="sleep_cancel">Kanselahin ang timer</string>
+    <string name="sleep_remaining">Sleep timer %1$s</string>
+    <string name="alarm_once">Isang beses</string>
+    <string name="alarm_weekdays">Lunes–Biyernes</string>
+    <string name="alarm_station">Istasyon</string>
+    <string name="alarm_no_station">Magpatugtog muna ng istasyon o magdagdag ng paborito</string>
+    <string name="alarm_enable">Naka-on ang alarm</string>
+    <string name="alarm_save">I-save ang alarm</string>
+    <string name="alarm_saved">Na-save ang alarm</string>
+    <string name="alarm_permission">Naka-off ang exact alarms, kaya maaaring maantala ang alarm na ito. Payagan ang mga alarm at paalala para sa Radio Live FM AM.</string>
+    <string name="alarm_permission_action">Payagan ang exact alarms</string>
+    <string name="alarm_stop">Ihinto</string>
+    <string name="alarm_snooze">I-snooze</string>
+    <string name="alarm_playing">Alarm</string>
+    <string name="alarm_failed">Hindi ma-play ang istasyon. Alarm sound ang ipe-play sa halip.</string>
+    <string name="alarm_snoozed">Naka-snooze nang 10 minuto</string>
+    <string name="alarm_channel">Alarm sa paggising</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor119 -->
+    <string name="cannot_connect">Hindi makakonekta sa istasyong ito</string>
+    <string name="next_station">Susunod na istasyon</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor119 -->
+    <string name="playback_failed">Nabigo ang pag-play</string>
+    <string name="catalog_global">Pandaigdig</string>
+    <string name="catalog_scope">Bansa</string>
+    <string name="catalog_scope_search">Maghanap ng bansa</string>
+    <string name="catalog_rankings">Mga Ranggo</string>
+    <string name="catalog_rank_votes">Pinakamaraming boto</string>
+    <string name="catalog_rank_clicks">Pinakapinakikinggan</string>
+    <string name="catalog_rank_trend">Trending</string>
+    <string name="catalog_section">Mga Kategorya</string>
+    <string name="catalog_pop">Pop</string>
+    <string name="catalog_news_talk">Balita / Talk</string>
+    <string name="catalog_music">Musika</string>
+    <string name="catalog_decades">Mga Dekada</string>
+    <string name="catalog_languages">Mga Wika</string>
+    <string name="catalog_news">Balita</string>
+    <string name="catalog_talk">Talk</string>
+    <string name="catalog_sports">Sports</string>
+    <string name="catalog_religious">Relihiyoso</string>
+    <string name="catalog_classical">Klasikal</string>
+    <string name="catalog_jazz">Jazz</string>
+    <string name="catalog_rock">Rock</string>
+    <string name="catalog_electronic">Electronic</string>
+    <string name="catalog_hiphop">Hip-hop / R&amp;B</string>
+    <string name="catalog_country_music">Country</string>
+    <string name="catalog_lofi">Easy listening / Lo-fi</string>
+    <string name="catalog_world_music">World music</string>
+    <string name="catalog_60s">60s</string>
+    <string name="catalog_70s">70s</string>
+    <string name="catalog_80s">80s</string>
+    <string name="catalog_90s">90s</string>
+    <string name="catalog_2000s">2000s</string>
+    <string name="catalog_oldies">Oldies</string>
+    <string name="catalog_sort_clicks">Sikat</string>
+    <string name="catalog_sort_votes">Mga boto</string>
+    <string name="catalog_sort_name">Pangalan</string>
+    <string name="catalog_quality_all">Lahat ng audio</string>
+    <string name="catalog_quality_high">128 kbps pataas</string>
+    <string name="catalog_language_all">Lahat ng wika</string>
+    <string name="catalog_other_countries">Ibang bansa</string>
+    <string name="catalog_count_plus">%d+ istasyon</string>
+    <string name="catalog_cached_error">Hindi ma-update ang mga kategorya. Ipinapakita ang naka-save na listahan.</string>
+    <string name="settings_language">Wika</string>
+    <string name="settings_language_system">Sundin ang system</string>
+    <string name="media_volume">Volume</string>
+    <string name="volume_percent">%1$d%%</string>
+    <string name="playback_channel">Playback</string>
+    <!-- SMCPKG_SUPPORT>>>Cursor113 -->
+    <string name="remove_ads_title">Alisin ang mga ad</string>
+    <string name="remove_ads_summary">Isang beses na pagbili para i-off ang banner, list, at app-open ads.</string>
+    <string name="remove_ads_buy">Bilhin</string>
+    <string name="remove_ads_price">%1$s</string>
+    <string name="remove_ads_restore">I-restore ang pagbili</string>
+    <string name="remove_ads_unavailable">Pansamantalang hindi available</string>
+    <string name="remove_ads_pending">Nakabinbin ang pagbili. Mananatili ang mga ad hanggang makumpleto ang bayad.</string>
+    <string name="remove_ads_thanks">Naalis na ang mga ad — salamat sa iyong suporta</string>
+    <string name="remove_ads_debug">Debug: gayahin na naalis ang mga ad</string>
+    <string name="remove_ads_debug_summary">Para lang sa debug builds. Ituring na pagmamay-ari na ang remove-ads purchase.</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor113 -->
+    <!-- SMCPKG_SUPPORT>>>Cursor123 -->
+    <string name="favorites_section_stations">Mga Istasyon</string>
+    <string name="favorites_section_podcasts">Mga Podcast show</string>
+    <string name="empty_favorite_shows">Wala pang paboritong podcast show. I-tap ang puso sa isang show para idagdag ito.</string>
+    <string name="episode_previous">Nakaraang episode</string>
+    <string name="episode_next">Susunod na episode</string>
+    <string name="rewind_10">Atras nang 10 segundo</string>
+    <string name="forward_10">Abante nang 10 segundo</string>
+    <string name="seek_position">Posisyon ng playback</string>
+    <!-- SMCPKG_SUPPORT<<<Cursor123 -->
+</resources>

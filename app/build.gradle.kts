@@ -112,9 +112,13 @@ android {
         // versionCode = 20
         // versionName = "1.0.8"
         // SMCPKG_SUPPORT>>>Cursor126
-        versionCode = 21
-        versionName = "1.0.9"
+        // versionCode = 21
+        // versionName = "1.0.9"
         // SMCPKG_SUPPORT<<<Cursor126
+        // SMCPKG_SUPPORT>>>Cursor127
+        versionCode = 22
+        versionName = "1.0.10"
+        // SMCPKG_SUPPORT<<<Cursor127
         // SMCPKG_SUPPORT<<<Cursor124
 
         vectorDrawables {
